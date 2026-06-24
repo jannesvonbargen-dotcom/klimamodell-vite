@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jannes von Bargen – Langzeitprognose des Klimawandels</title>
+<meta name="description" content="Langzeitprognose des Klimawandels durch ein fundiertes und transparentes Modell." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="logo">Jannes<span>.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#projekte">Projekte</a>
+      <a href="#ueber">Über mich</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="modell.html" class="btn btn-primary nav-cta">Klimamodell</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menü">☰</button>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero" style="padding:0">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">Klimaforschung · Jugend forscht</span>
+        <h1>Langzeitprognose des <span class="grad">Klimawandels</span></h1>
+        <p class="lead">Durch ein fundiertes und transparentes Modell – nachvollziehbar, datenbasiert und interaktiv erlebbar.</p>
+        <div class="hero-actions">
+          <a href="modell.html" class="btn btn-primary">Modell ausprobieren</a>
+          <a href="#projekte" class="btn btn-ghost">Projekte ansehen</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 520 430" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#00786a" stop-opacity="0.28"/>
+              <stop offset="1" stop-color="#00786a" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="proj" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#2d9d00"/><stop offset="1" stop-color="#00786a"/>
+            </linearGradient>
+          </defs>
+          <!-- Karte -->
+          <rect x="8" y="8" width="504" height="414" rx="22" fill="#ffffff" stroke="#dee2e6"/>
+          <text x="40" y="48" fill="#003936" font-family="Poppins, sans-serif" font-size="18" font-weight="600">Globale Erwärmung</text>
+          <text x="40" y="68" fill="#6c757d" font-family="Inter, sans-serif" font-size="13">seit der Industrialisierung [°C]</text>
+          <!-- Gitter -->
+          <g stroke="#e6efed" stroke-width="1">
+            <line x1="56" y1="130" x2="486" y2="130"/><line x1="56" y1="200" x2="486" y2="200"/>
+            <line x1="56" y1="270" x2="486" y2="270"/><line x1="56" y1="340" x2="486" y2="340"/>
+          </g>
+          <!-- Fläche unter der Kurve -->
+          <path d="M56 332 C 120 326, 180 316, 240 300 C 320 278, 400 196, 486 118 L486 360 L56 360 Z" fill="url(#area)"/>
+          <!-- 1,5 °C Paris-Linie -->
+          <line x1="56" y1="200" x2="486" y2="200" stroke="#e8a35a" stroke-width="1.6" stroke-dasharray="6 5"/>
+          <text x="482" y="194" text-anchor="end" fill="#c4844a" font-family="Inter, sans-serif" font-size="12">1,5 °C (Paris)</text>
+          <!-- historischer Verlauf -->
+          <path d="M56 332 C 120 326, 180 316, 240 300" fill="none" stroke="#003936" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Prognose -->
+          <path d="M240 300 C 320 278, 400 196, 486 118" fill="none" stroke="url(#proj)" stroke-width="4" stroke-linecap="round"/>
+          <!-- Punkte -->
+          <circle cx="240" cy="300" r="5" fill="#00786a"/>
+          <circle cx="486" cy="118" r="6" fill="#00786a"/>
+          <rect x="404" y="86" width="86" height="26" rx="13" fill="#00786a"/>
+          <text x="447" y="104" text-anchor="middle" fill="#fff" font-family="Inter, sans-serif" font-size="13" font-weight="600">+2,3 °C</text>
+          <!-- x-Achse -->
+          <g fill="#8a99ab" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">
+            <text x="56" y="380">1958</text><text x="200" y="380">2000</text>
+            <text x="345" y="380">2050</text><text x="486" y="380">2100</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="container">
+    <span>Jugend-forscht-Projekt · Aufsatz für die Deutsche Physikalische Gesellschaft (DPG)</span>
+    <a href="modell.html">Modell entdecken →</a>
+  </div>
+</div>
+
+<!-- ============ HAUPTINHALT: VIER BAUSTEINE ============ -->
+<section id="projekte">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Meine Arbeit</span>
+      <h2>Drei Bausteine eines transparenten Modells</h2>
+      <p>Vom Forschungsprojekt über die wissenschaftliche Ausarbeitung bis zum interaktiven Modell.</p>
+    </div>
+    <div class="cards">
+      <div class="card card-click" data-modal="modal-jf" role="button" tabindex="0">
+        <div class="preview logo"><img src="/dateien/jugend-forscht-logo.svg" alt="Jugend forscht Logo"></div>
+        <h3>Jugend forscht</h3>
+        <p>Informationen über mein Forschungsprojekt und den Weg von der Idee zum Modell.</p>
+        <span class="more" style="margin-top:auto; padding-top:16px; font-weight:600; color:var(--accent);">Mehr erfahren →</span>
+      </div>
+      <div class="card card-click" data-modal="modal-dpg" role="button" tabindex="0">
+        <div class="preview"><img src="/dateien/dpg-plakat.png" alt="Vorschau des DPG-Plakats" loading="lazy"></div>
+        <h3>DPG</h3>
+        <p>Ein Aufsatz auf Englisch für die Deutsche Physikalische Gesellschaft – als PDF.</p>
+        <span class="more" style="margin-top:auto; padding-top:16px; font-weight:600; color:var(--accent);">Aufsatz ansehen →</span>
+      </div>
+      <a href="modell.html" class="card card-cta">
+        <div class="preview">
+          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" fill="#003936"/>
+            <line x1="0" y1="20" x2="48" y2="20" stroke="#e8a35a" stroke-width="1.3" stroke-dasharray="4 3"/>
+            <path d="M9 38 C 16 36, 22 32, 25 28" fill="none" stroke="#9bbdb8" stroke-width="2.8" stroke-linecap="round"/>
+            <path d="M25 28 C 31 22, 35 14, 40 10" fill="none" stroke="#2d9d00" stroke-width="3.2" stroke-linecap="round"/>
+            <circle cx="40" cy="10" r="3" fill="#2d9d00"/>
+          </svg>
+        </div>
+        <h3>Interaktives Klimamodell</h3>
+        <p>Reale Keeling-Daten und deine eigene Prognose – direkt im Browser zum Ausprobieren.</p>
+        <span class="more">Modell öffnen →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ÜBER MICH ============ -->
+<section id="ueber">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="eyebrow">Über mich</span>
+        <h2>Jannes von Bargen</h2>
+        <p>Ich beschäftige mich mit der Langzeitprognose des Klimawandels – mit dem Anspruch, sie <strong>fundiert und transparent</strong> zu machen. Statt einer Blackbox steht ein nachvollziehbares Modell im Mittelpunkt, das jeder selbst durchrechnen und hinterfragen kann.</p>
+        <p>Das Modell verbindet reale Messdaten der Keeling-Kurve mit einer physikalisch begründeten Temperaturberechnung – aufbereitet für Jugend forscht und die Deutsche Physikalische Gesellschaft.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="n">1958</div><div class="l">Beginn der Messdaten</div></div>
+          <div class="stat"><div class="n">2100</div><div class="l">Prognosehorizont</div></div>
+          <div class="stat"><div class="n">1,5 °C</div><div class="l">Pariser Ziel</div></div>
+        </div>
+      </div>
+      <div class="about-card">
+        <h3>Warum transparent?</h3>
+        <ul>
+          <li>Jede Formel und jeder Parameter ist offengelegt.</li>
+          <li>Reale CO₂-Daten statt geschlossener Annahmen.</li>
+          <li>Jeder kann Szenarien selbst durchspielen.</li>
+          <li>Klimasensitivität an echte Modelle (IPCC) kalibriert.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="kontakt">
+  <div class="container">
+    <div class="cta-band" style="margin-bottom:50px">
+      <span class="eyebrow" style="color:#7fd0c4">Kontakt</span>
+      <h2 style="color:#fff; letter-spacing:-1px; margin:8px 0 10px;">Fragen oder Feedback zum Modell?</h2>
+      <p>Ich freue mich über Austausch rund um Klimamodellierung und das Projekt.</p>
+      <a href="mailto:jannes.vonbargen@gmail.com" class="btn btn-primary" style="margin-top:8px">jannes.vonbargen@gmail.com</a>
+    </div>
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="font-size:1.4rem; margin-bottom:12px;">Jannes von Bargen</div>
+        <p style="max-width:36ch; color:#b3c7c3;">Langzeitprognose des Klimawandels durch ein fundiertes und transparentes Modell.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <a href="#projekte">Projekte</a>
+        <a href="modell.html">Klimamodell</a>
+        <a href="#ueber">Über mich</a>
+      </div>
+      <div>
+        <h4>Projekt</h4>
+        <a href="#projekte">Jugend forscht</a>
+        <a href="#projekte">DPG-Aufsatz</a>
+        <a href="mailto:jannes.vonbargen@gmail.com">E-Mail</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Jannes von Bargen</span>
+      <span>Interaktives Klimamodell · reale Keeling-Daten 1958–2025</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ OVERLAYS ============ -->
+<div class="modal-overlay" id="modal-jf">
+  <div class="modal-box">
+    <button class="modal-close" data-close aria-label="Schließen">✕</button>
+    <span class="eyebrow">Jugend forscht</span>
+    <h3>Mein Forschungsprojekt</h3>
+    <p>Im Rahmen von Jugend forscht habe ich ein Modell zur Langzeitprognose des Klimawandels entwickelt. Ziel war es, die Erwärmung nicht aus einer Blackbox, sondern aus wenigen, klar nachvollziehbaren physikalischen Zusammenhängen herzuleiten – von den realen CO₂-Messdaten der Keeling-Kurve bis zur Temperatur über das Stefan-Boltzmann-Gesetz.</p>
+    <p>Das Projekt verbindet reale Daten, eine transparente Berechnung und die Möglichkeit, eigene Szenarien durchzuspielen. So lässt sich anschaulich zeigen, wie stark die künftige Erwärmung davon abhängt, wie schnell die Emissionen sinken – genau das kannst du im interaktiven Klimamodell selbst ausprobieren.</p>
+
+    <h4>Erfolge bei Jugend forscht</h4>
+    <ul class="jf-awards">
+      <li>
+        <span class="jf-year">2020</span>
+        <div><strong>2. Preis</strong> – Geo- und Raumwissenschaften (Regionalwettbewerb)<br>
+        <span class="jf-proj">„Der anthropogene Klimawandel"</span></div>
+      </li>
+      <li>
+        <span class="jf-year">2021</span>
+        <div><strong>1. Preis</strong> – Geo- und Raumwissenschaften, plus Sonderpreis (Regionalwettbewerb); <strong>Sonderpreis plusMINT</strong> für interdisziplinäre Projekte (Landeswettbewerb)<br>
+        <span class="jf-proj">„Langzeitprognose des anthropogenen Treibhauseffekts"</span></div>
+      </li>
+      <li>
+        <span class="jf-year">2022</span>
+        <div><strong>2. Preis</strong> – Geo- und Raumwissenschaften (Regionalwettbewerb)<br>
+        <span class="jf-proj">„Langzeitprognose des Klimawandels durch ein fundiertes und transparentes Modell"</span></div>
+      </li>
+      <li>
+        <span class="jf-year">2024</span>
+        <div><strong>3. Preis</strong> – Mathematik und Informatik (Regionalwettbewerb)<br>
+        <span class="jf-proj">„Mathematische und physikalische allgemein nachvollziehbare und überprüfbare Klimaprognose"</span></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-dpg">
+  <div class="modal-box">
+    <button class="modal-close" data-close aria-label="Schließen">✕</button>
+    <span class="eyebrow">DPG</span>
+    <h3>Aufsatz für die Deutsche Physikalische Gesellschaft</h3>
+    <p>Die wissenschaftliche Ausarbeitung des Modells auf Englisch (von Bargen &amp; Carmesin, 2024).</p>
+    <div class="file-actions">
+      <a href="/dateien/DPG-Aufsatz.pdf" target="_blank" rel="noopener" class="btn btn-ghost">In neuem Tab öffnen ↗</a>
+      <a href="/dateien/DPG-Aufsatz.pdf" download class="btn btn-primary">PDF herunterladen ↓</a>
+    </div>
+    <iframe class="pdf-frame" src="/dateien/DPG-Aufsatz.pdf" title="DPG-Aufsatz"></iframe>
+  </div>
+</div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Klimamodell – Jannes von Bargen</title>
+<meta name="description" content="Interaktives Klimamodell: reale Keeling-Daten 1958–2025 und eigene Prognose mit zwei Reglern." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">Jannes<span>.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#projekte">Projekte</a>
+      <a href="index.html#ueber">Über mich</a>
+      <a href="index.html#kontakt">Kontakt</a>
+    </nav>
+    <a href="index.html" class="btn btn-primary nav-cta">← Startseite</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menü">☰</button>
+  </div>
+</header>
+
+<section class="page-head">
+  <div class="container">
+    <a href="index.html" class="back">← Zurück zur Startseite</a>
+    <span class="eyebrow">Interaktiv</span>
+    <h1>Das Klimamodell zum Ausprobieren</h1>
+    <p>Reale CO₂-Messdaten (Keeling-Kurve, 1958–2025) und ab 2026 deine eigene Prognose. Verstelle den Wachstumsfaktor und ab wann Maßnahmen greifen – die Kurve reagiert sofort.</p>
+  </div>
+</section>
+
+<section class="model-section">
+  <div class="container">
+    <div class="model-wrap">
+      <div id="klimamodell-widget">
+        <div class="km-chart-box"><canvas class="km-chart"></canvas></div>
+        <div class="km-controls">
+
+          <div class="km-ctl">
+            <div class="km-ctl-head">
+              <label>1 · Wachstumsfaktor des CO₂-Ausstoßes</label>
+              <span class="km-val km-factorVal">1.0031</span>
+            </div>
+            <input type="range" class="km-slider" min="0.95" max="1.01" step="0.0001" value="1.0031" />
+            <div class="km-scale"><span>0,95 – Einsparung</span><span>1,0031 – Keeling-Trend</span><span>1,01 – mehr Anstieg</span></div>
+            <div class="km-row">
+              <input type="number" class="km-numFactor" min="0.9" max="1.05" step="0.0001" value="1.0031" />
+              <button class="km-keelingBtn">Keeling-Trend (1,0031)</button>
+            </div>
+          </div>
+
+          <div class="km-ctl">
+            <div class="km-ctl-head">
+              <label>2 · Maßnahmen ab Jahr</label>
+              <span class="km-val km-yearVal">2026</span>
+            </div>
+            <input type="range" class="km-year" min="2026" max="2080" step="1" value="2026" />
+            <div class="km-scale"><span>2026 – sofort</span><span>bis dahin gilt der Keeling-Trend</span><span>2080 – spät</span></div>
+          </div>
+
+          <div class="km-readout"></div>
+        </div>
+      </div>
+    </div>
+    <p class="hint">Hinweis: CO₂ kann nur dazukommen, nie entfernt werden – auch bei starker Einsparung steigen die ppm nur langsamer und bleiben dann konstant. Die Temperatur wird über die an echte Klimamodelle (IPCC) kalibrierte Klimasensitivität berechnet.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="font-size:1.4rem; margin-bottom:12px;">Jannes von Bargen</div>
+        <p style="max-width:36ch; color:#b3c7c3;">Langzeitprognose des Klimawandels durch ein fundiertes und transparentes Modell.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <a href="index.html#projekte">Projekte</a>
+        <a href="modell.html">Klimamodell</a>
+        <a href="index.html#ueber">Über mich</a>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <a href="mailto:jannes.vonbargen@gmail.com">jannes.vonbargen@gmail.com</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Jannes von Bargen</span>
+      <span>Reale Keeling-Daten 1958–2025</span>
+    </div>
+  </div>
+</footer>
+  <script type="module" src="/src/modell.js"></script>
+</body>
+</html>

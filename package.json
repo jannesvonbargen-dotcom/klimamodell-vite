@@ -1,0 +1,15 @@
+{
+  "name": "klimamodell-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Langzeitprognose des Klimawandels – Website mit interaktivem Klimamodell",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
