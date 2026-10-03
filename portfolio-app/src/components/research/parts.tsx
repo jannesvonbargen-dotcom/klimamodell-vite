@@ -175,7 +175,12 @@ export function SourceLinks({ sources, className }: { sources: ResearchCompany["
     <ul className={cn("flex flex-col gap-1.5 text-[13px]", className)}>
       {sources.map((s) => (
         <li key={s.url} className="flex flex-wrap items-baseline gap-x-2">
-          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-accent underline-offset-4 hover:underline">
+          <a
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent underline decoration-accent/40 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-accent"
+          >
             {s.label}
           </a>
           <span className="tnum text-[12px] text-subtle">abgerufen {formatDate(s.retrieved)}</span>

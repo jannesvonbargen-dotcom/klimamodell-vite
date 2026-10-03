@@ -269,8 +269,11 @@ export default async function ResearchDetailPage(props: PageProps<"/wachstumswer
                 hint="Kurs ÷ geschätzter Gewinn je Aktie"
               />
               <KV label="PEG" value={m.peg ? formatNumber(m.peg, 2) : null} hint="KGV ÷ Gewinnwachstum" />
-              <Divider />
-              <KV label={`Umsatz p. a. (${m.cagrYears} J.)`} value={m.revenueCagr ? formatPercent(m.revenueCagr, { digits: 1 }) : null} />
+              <KV
+                separated
+                label={`Umsatz p. a. (${m.cagrYears} J.)`}
+                value={m.revenueCagr ? formatPercent(m.revenueCagr, { digits: 1 }) : null}
+              />
               <KV label={`Gewinn je Aktie p. a. (${m.cagrYears} J.)`} value={m.epsCagr ? formatPercent(m.epsCagr, { digits: 1 }) : null} />
               <KV
                 label="Erwartetes Umsatzwachstum"
@@ -282,8 +285,8 @@ export default async function ResearchDetailPage(props: PageProps<"/wachstumswer
                 value={m.expectedEpsGrowth ? formatPercent(m.expectedEpsGrowth, { digits: 1 }) : null}
                 hint="nächstes GJ"
               />
-              <Divider />
               <KV
+                separated
                 label="Bruttomarge"
                 value={financial ? "nicht aussagekräftig" : formatPercent(String(c.ratios.grossMargin), { signed: false, digits: 1 })}
               />
@@ -295,8 +298,8 @@ export default async function ResearchDetailPage(props: PageProps<"/wachstumswer
                 label="Free Cashflow (letztes GJ)"
                 value={financial ? "nicht aussagekräftig" : m.freeCashFlow ? formatCompact(m.freeCashFlow, c.income.currency) : null}
               />
-              <Divider />
               <KV
+                separated
                 label="Dividendenrendite"
                 value={
                   c.ratios.dividendYield > 0
@@ -318,8 +321,7 @@ export default async function ResearchDetailPage(props: PageProps<"/wachstumswer
               {m.maxDrawdown && (
                 <KV label="Max. Rückgang (12 M.)" value={`−${formatPercent(m.maxDrawdown, { signed: false, digits: 1 })}`} />
               )}
-              <Divider />
-              <KV label="Mitarbeitende" value={c.profile.employees ? formatNumber(c.profile.employees, 0) : null} />
+              <KV separated label="Mitarbeitende" value={c.profile.employees ? formatNumber(c.profile.employees, 0) : null} />
               <KV label="CEO" value={c.profile.ceo || null} />
             </dl>
           </Card>
@@ -381,9 +383,9 @@ function ThesisBlock({ title, blocks }: { title: string; blocks: Parameters<type
   );
 }
 
-function KV({ label, value, hint }: { label: string; value: string | null; hint?: string }) {
+function KV({ label, value, hint, separated }: { label: string; value: string | null; hint?: string; separated?: boolean }) {
   return (
-    <div className="flex items-baseline justify-between gap-4 py-1.5">
+    <div className={cn("flex items-baseline justify-between gap-4 py-1.5", separated && "mt-1.5 border-t border-border pt-3")}>
       <dt className="text-muted">
         {label}
         {hint && <span className="sr-only"> ({hint})</span>}
@@ -400,10 +402,6 @@ function KV({ label, value, hint }: { label: string; value: string | null; hint?
       </dd>
     </div>
   );
-}
-
-function Divider() {
-  return <div className="my-1.5 border-t border-border" role="separator" />;
 }
 
 function CriterionRow({ r }: { r: CriterionResult }) {

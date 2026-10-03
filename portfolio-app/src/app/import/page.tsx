@@ -29,7 +29,10 @@ export default function ImportPage() {
         <HelpCard title="Andere Broker">
           Jede CSV mit Kopfzeile funktioniert: Spalten zuordnen, Typen zuordnen, Vorschau prüfen. Duplikate werden über Datum, ISIN,
           Stückzahl und Betrag erkannt. Die CSV-Sicherung aus den{" "}
-          <Link href="/einstellungen" className="text-accent underline-offset-4 hover:underline">
+          <Link
+            href="/einstellungen"
+            className="text-accent underline decoration-accent/40 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-accent"
+          >
             Einstellungen
           </Link>{" "}
           wird automatisch erkannt.

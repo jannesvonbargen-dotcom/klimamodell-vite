@@ -17,19 +17,20 @@
   --border-strong: rgba(11, 11, 11, 0.14);
   --foreground: #0b0b0c;
   --muted-foreground: #5f5e5a;
-  --subtle-foreground: #8a8984;
+  --subtle-foreground: #6f6e69;
   --primary: #0b0b0c;
   --primary-foreground: #ffffff;
-  --accent: #2563eb;
-  --up: #0a7d43;
+  --accent: #2158d6;
+  --up: #08723d;
   --up-soft: rgba(10, 125, 67, 0.1);
   --down: #c8291e;
   --down-soft: rgba(200, 41, 30, 0.09);
-  --warn: #a15c00;
+  --down-foreground: #ffffff;
+  --warn: #955400;
   --warn-soft: rgba(237, 161, 0, 0.14);
   --ring: rgba(37, 99, 235, 0.55);
   --chart-grid: #e6e5e0;
-  --chart-axis: #8a8984;
+  --chart-axis: #6f6e69;
   --overlay: rgba(10, 10, 10, 0.32);
   --shadow-pop: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.08);
   /* Diagrammfarben (dataviz-Referenzpalette, validiert) */
@@ -53,7 +54,7 @@
   --border-strong: rgba(255, 255, 255, 0.13);
   --foreground: #f4f4f2;
   --muted-foreground: #a3a29d;
-  --subtle-foreground: #75746f;
+  --subtle-foreground: #85847f;
   --primary: #f4f4f2;
   --primary-foreground: #0a0a0b;
   --accent: #5b9bf0;
@@ -61,11 +62,12 @@
   --up-soft: rgba(61, 214, 140, 0.12);
   --down: #ff6b5e;
   --down-soft: rgba(255, 107, 94, 0.12);
+  --down-foreground: #1c0a08;
   --warn: #f2b23a;
   --warn-soft: rgba(242, 178, 58, 0.13);
   --ring: rgba(91, 155, 240, 0.6);
   --chart-grid: #232326;
-  --chart-axis: #75746f;
+  --chart-axis: #85847f;
   --overlay: rgba(0, 0, 0, 0.6);
   --shadow-pop: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
   --series-1: #3987e5;
@@ -95,6 +97,7 @@
   --color-up-soft: var(--up-soft);
   --color-down: var(--down);
   --color-down-soft: var(--down-soft);
+  --color-down-foreground: var(--down-foreground);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
   --color-ring: var(--ring);

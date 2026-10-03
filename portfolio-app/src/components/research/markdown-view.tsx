@@ -25,7 +25,13 @@ export function InlineView({ nodes }: { nodes: Inline[] }) {
             );
           case "link":
             return (
-              <a key={i} href={n.href} target="_blank" rel="noopener noreferrer" className="text-accent underline-offset-4 hover:underline">
+              <a
+                key={i}
+                href={n.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline decoration-accent/40 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-accent"
+              >
                 <InlineView nodes={n.children} />
               </a>
             );

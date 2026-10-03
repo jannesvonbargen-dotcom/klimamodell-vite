@@ -58,6 +58,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Tabellenansicht für alle Charts („Werte als Tabelle“, ausklappbar)
 - [x] Kontrastprüfung mit dem dataviz-Validator: alle Checks bestanden; drei helle Farben unter 3:1 im Hell-Modus nur im Donut mit Beschriftung
 
+- [x] Barrierefreiheits-Audit (axe-core, WCAG 2.1 AA) auf allen Seiten in hell und dunkel: Kontraste der dezenten Schrift, Status- und Avatarfarben angehoben, Datei-Feld beschriftet, Links im Text unterstrichen, Definitionsliste korrigiert – 0 Verstöße, als E2E-Test abgesichert
+
 ## 6. Extras
 
 - [x] Kursalarme zusätzlich als Hinweis bzw. Systembenachrichtigung (nur wenn die App offen ist, Opt-in)

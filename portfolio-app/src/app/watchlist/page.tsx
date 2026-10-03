@@ -64,7 +64,10 @@ export default async function WatchlistPage() {
             <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Noch nichts auf der Watchlist</h2>
             <p className="text-[14px] text-muted">
               Füge Aktien oder ETFs hinzu, die du beobachten möchtest – zum Beispiel aus den{" "}
-              <Link href="/wachstumswerte" className="text-accent underline-offset-4 hover:underline">
+              <Link
+                href="/wachstumswerte"
+                className="text-accent underline decoration-accent/40 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-accent"
+              >
                 soliden Wachstumswerten
               </Link>
               .

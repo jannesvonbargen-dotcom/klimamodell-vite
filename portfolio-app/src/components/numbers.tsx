@@ -145,7 +145,7 @@ export function InstrumentAvatar({
     <span
       aria-hidden
       className={cn("inline-flex shrink-0 items-center justify-center rounded-full font-semibold tracking-tight text-white", className)}
-      style={{ width: size, height: size, fontSize: size * 0.36, background: `color-mix(in srgb, ${color} 88%, black)` }}
+      style={{ width: size, height: size, fontSize: size * 0.36, background: `color-mix(in srgb, ${color} 62%, black)` }}
     >
       {initials || symbol.slice(0, 2)}
     </span>

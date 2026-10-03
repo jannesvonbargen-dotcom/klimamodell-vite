@@ -262,7 +262,7 @@ function RejectedRow({ entry: e }: { entry: ResearchEntry }) {
               r.required ? "bg-down-soft text-down" : "bg-warn-soft text-warn",
             )}
           >
-            {r.label}: {r.value ?? "—"} <span className="opacity-70">(Ziel {r.threshold})</span>
+            {r.label}: {r.value ?? "—"} <span>(Ziel {r.threshold})</span>
           </span>
         ))}
         <ArrowRightIcon

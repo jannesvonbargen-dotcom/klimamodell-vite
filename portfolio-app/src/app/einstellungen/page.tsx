@@ -160,7 +160,10 @@ export default function SettingsPage() {
           description={
             <>
               Transaktionsexport aus der App als CSV über{" "}
-              <Link href="/import" className="text-accent underline-offset-4 hover:underline">
+              <Link
+                href="/import"
+                className="text-accent underline decoration-accent/40 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-accent"
+              >
                 Import
               </Link>{" "}
               einlesen. Es gibt keine automatische Verbindung zum Konto, Zugangsdaten werden nie gespeichert.

@@ -156,6 +156,7 @@ export function ImportWizard() {
             accept=".csv,text/csv,text/plain"
             className="sr-only"
             id="csv-file"
+            aria-label="CSV-Datei auswählen"
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) void handleFile(file);
@@ -534,7 +535,7 @@ function PreviewStep({
                           href={`/position/${encodeURIComponent(s.action.isin)}?split=${s.action.date}`}
                           target="_blank"
                           rel="noopener"
-                          className="ml-2 font-medium whitespace-nowrap text-accent underline-offset-4 hover:underline"
+                          className="ml-2 font-medium whitespace-nowrap text-accent underline decoration-accent/40 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-accent"
                         >
                           Split erfassen
                         </a>
