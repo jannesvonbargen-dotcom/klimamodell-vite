@@ -3,6 +3,7 @@
 import { Command } from "cmdk";
 import {
   ArrowLeftRightIcon,
+  CoinsIcon,
   CommandIcon,
   EyeIcon,
   LayoutGridIcon,
@@ -48,6 +49,7 @@ const NAV = [
   { href: "/", label: "Übersicht", icon: LayoutGridIcon },
   { href: "/transaktionen", label: "Transaktionen", icon: ArrowLeftRightIcon },
   { href: "/sparplaene", label: "Sparpläne", icon: RepeatIcon },
+  { href: "/ertraege", label: "Erträge", icon: CoinsIcon },
   { href: "/import", label: "Import", icon: UploadIcon },
   { href: "/wachstumswerte", label: "Wachstumswerte", icon: SproutIcon },
   { href: "/watchlist", label: "Watchlist", icon: EyeIcon },

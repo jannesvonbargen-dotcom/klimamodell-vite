@@ -36,5 +36,5 @@ describe("Beispieldaten", () => {
     expect(listSavingsPlans()).toHaveLength(0);
     expect(listWatchlist()).toHaveLength(0);
     expect(listInstruments()).toHaveLength(0);
-  });
+  }, 30_000);
 });

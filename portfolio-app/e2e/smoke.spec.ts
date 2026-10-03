@@ -149,6 +149,15 @@ test("Sicherung herunterladen und Farbschema wechseln", async ({ page }) => {
   await expect(html).not.toHaveClass(/dark/);
 });
 
+test("Erträge: Dividendenkalender mit Schätzung und Jahresübersicht", async ({ page }) => {
+  await page.goto("/ertraege");
+  await expect(page.getByRole("heading", { level: 1, name: "Erträge & Steuern" })).toBeVisible();
+  await expect(page.getByText("Erwartet nächste 12 Monate")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Dividendenkalender/ })).toBeVisible();
+  await expect(page.getByText(/wie am \d{2}\.\d{2}\.\d{4}/).first()).toBeVisible();
+  await expect(page.getByRole("table", { name: /je Jahr/ }).getByRole("row")).not.toHaveCount(1);
+});
+
 test("Befehlspalette öffnet Seiten und Positionen", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Control+k");

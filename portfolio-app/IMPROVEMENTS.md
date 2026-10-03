@@ -10,14 +10,15 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Beispieldepot zeitweise mit negativem Cash – angepasst und per Test abgesichert
 - [x] Wertpapier-Suchfeld ohne zugänglichen Namen (cmdk überschreibt die ID) – Label über cmdk
 - [x] Befehlspalette wählte bei asynchronen Treffern den falschen Eintrag – Depot-Treffer zuerst
-- [ ] 2 Cent Rundungsdifferenz zwischen Tagesveränderung (Summe gerundeter Positionen) und Endpunkt der 1T-Kurve
+- [x] 2 Cent Rundungsdifferenz zwischen Tagesveränderung und Endpunkt der 1T-Kurve – Wertverlauf rundet je Position wie die Bewertung
 
 ## 2. Fehlende Funktionen
 
 - [x] Einstellungen: Sicherung/Wiederherstellung (JSON), CSV-Export, Beispieldaten, Daten löschen
 - [x] Watchlist mit Kursalarmen
-- [ ] Dividendenkalender: erwartete Ausschüttungen der nächsten 12 Monate (aus bisherigen Zahlungen hochgerechnet, klar als Schätzung)
-- [ ] Steuerübersicht je Jahr: gezahlte Kapitalertragsteuer, Soli, Erträge; Hinweis auf FIFO-Abweichung
+- [x] Dividendenkalender: erwartete Ausschüttungen der nächsten 12 Monate (aus bisherigen Zahlungen hochgerechnet, klar als Schätzung)
+- [x] Steuerübersicht je Jahr: Erträge, Gebühren, gezahlte Steuern; Hinweis auf FIFO-Abweichung
+- [ ] Steuerübersicht: Kapitalertragsteuer, Soli und Kirchensteuer getrennt (braucht getrennte Erfassung)
 - [ ] Benchmark-Vergleich (z. B. MSCI World über EUNL.DE) im Wertverlauf, als indexierte zweite Linie
 - [ ] Mehrere Depots/Konten (z. B. TR + zweiter Broker) mit Filter
 - [ ] Kapitalmaßnahmen: Spin-off und Umtausch (ISIN-Wechsel) geführt erfassen

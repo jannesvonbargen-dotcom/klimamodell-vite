@@ -20,6 +20,9 @@ Orders** auf. Alle Daten liegen in einer SQLite-Datei auf deinem Rechner.
   Spaltenzuordnung. Vor dem Import gibt es eine Vorschau mit Warnungen. Duplikate werden über Datum, ISIN, Stückzahl und Betrag
   erkannt, jeder Import lässt sich rückgängig machen.
 - **Sparpläne:** Fällige Ausführungen erscheinen als Vorschlag zum Bestätigen oder Überspringen.
+- **Erträge & Steuern:** Dividenden je Monat, Dividendenkalender mit transparenter Hochrechnung der nächsten zwölf Monate (klar als
+  Schätzung gekennzeichnet), Verteilung nach Wertpapier, Rendite auf Einstand und eine Jahresübersicht mit Dividenden, Zinsen,
+  realisierten Gewinnen, Gebühren und gezahlten Steuern.
 - **Solide Wachstumswerte:** Transparente, anpassbare Kriterien mit Begründungskarten (Kennzahlen, Analystenkonsens, Risiken, Quellen
   mit Stand). Detailseiten zeigen These, Risiken und „Was müsste passieren, damit die These falsch ist?“.
 - **Watchlist:** Werte beobachten, mit Kursalarm über bzw. unter einer Schwelle.

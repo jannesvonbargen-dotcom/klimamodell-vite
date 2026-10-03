@@ -133,9 +133,9 @@ export function buildValueSeries(input: BuildSeriesInput): SeriesPoint[] {
       }
       // Kein Kurs bekannt (z. B. vor Beginn der Kurshistorie): letzter Transaktionskurs
       if (!priceEUR) priceEUR = p.lastPriceEUR;
-      if (priceEUR) depot = depot.plus(p.quantity.times(priceEUR));
+      // Je Position auf Cent runden – wie bei der Bewertung, damit Kopfzahl und Kurvenende übereinstimmen
+      if (priceEUR) depot = depot.plus(roundMoney(p.quantity.times(priceEUR)));
     }
-    depot = roundMoney(depot);
     const cash = ledger.cashEUR;
     const total = depot.plus(cash);
 
