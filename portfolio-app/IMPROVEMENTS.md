@@ -39,11 +39,11 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Horizontaler Überlauf auf dem Handy (Sparpläne, Import, Erträge) behoben; E2E-Test prüft alle Seiten bei 390 px
 - [x] Positionsliste: Sparkline je Position (30 Tage), sortierbar
 - [x] Monatsüberschriften der Transaktionsliste mit Summe der Kontobewegungen
-- [ ] Leerer Zustand der Wachstumswerte-Detailseite ohne Text schöner gestalten
+- [x] Leerer Zustand der Wachstumswerte-Detailseite ohne Text mit Anleitung zum Entwurf
 
 ## 4. Randfälle
 
-- [ ] Buchungen in GBp/GBX (London) im Formular explizit unterstützen
+- [x] Buchungen in GBp/GBX (London): Kursvorschlag lieferte den Pfund- statt Pence-Wechselkurs (Faktor 100) – behoben und getestet
 - [x] Kauf/Verkauf am Tag eines Splits: Split wirkt zu Tagesbeginn (per Test abgesichert)
 - [x] Import: Teilausführungen mit gleicher Transaktions-ID werden einzeln gebucht und beim erneuten Import als Duplikat erkannt (geprüft)
 - [x] Zeitzonen: Trade-Republic-Buchungen kurz vor Mitternacht UTC behalten ihr Buchungsdatum (sonst z. B. Zinsen vom 31.12. im falschen Steuerjahr)

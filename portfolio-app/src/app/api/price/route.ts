@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { d } from "@/domain/decimal";
 import { todayInBerlin } from "@/domain/market-hours";
 import { getDailyHistory, getFxHistory, getQuotes } from "@/server/market";
 
@@ -37,9 +38,11 @@ export async function GET(request: Request) {
   }
   let fx: { rate: string; date: string } | null = null;
   if (currency && currency !== "EUR") {
-    const series = (await getFxHistory([currency], fromIso, date)).get(currency === "GBp" ? "GBP" : currency) ?? [];
+    // Londoner Kurse in Pence (GBp/GBX): Wechselkurs in Pence je Euro, sonst wäre die Umrechnung um den Faktor 100 falsch
+    const pence = currency === "GBp" || currency === "GBX";
+    const series = (await getFxHistory([currency], fromIso, date)).get(pence ? "GBP" : currency) ?? [];
     const last = series.filter((p) => p.key <= date).at(-1);
-    if (last) fx = { rate: last.close, date: last.key };
+    if (last) fx = { rate: pence ? d(last.close).times(100).toString() : last.close, date: last.key };
   }
   return NextResponse.json({ symbol, close, priceDate, kind, fx });
 }

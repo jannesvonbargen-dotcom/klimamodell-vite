@@ -167,7 +167,17 @@ export default async function ResearchDetailPage(props: PageProps<"/wachstumswer
               </p>
             </Card>
           ) : (
-            <Card className="p-5 text-[14px] text-subtle">Kein redaktioneller Text vorhanden – keine Daten.</Card>
+            <Card className="flex flex-col gap-2 p-5 text-[14px]">
+              <h2 className="text-[15px] font-semibold">Noch kein redaktioneller Text</h2>
+              <p className="text-muted">
+                Für {c.profile.name} gibt es noch keine These – Kennzahlen, Expertenurteile und Kriterien unten stammen direkt aus den
+                Anbieterdaten.
+              </p>
+              <p className="text-[13px] text-subtle">
+                Entwurf erstellen mit <code className="rounded bg-surface-2 px-1 py-0.5">npm run research:texts -- {c.symbol}</code>, prüfen
+                und als <code className="rounded bg-surface-2 px-1 py-0.5">content/theses/{c.symbol}.md</code> speichern.
+              </p>
+            </Card>
           )}
 
           <Card className="flex flex-col gap-4 p-5">

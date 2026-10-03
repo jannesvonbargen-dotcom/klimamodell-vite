@@ -50,6 +50,21 @@ describe("valuePortfolio", () => {
     expect(p.dayChangeEUR).toBe("80");
   });
 
+  it("bewertet Londoner Kurse in Pence (GBp) mit dem Pfundkurs × 100", () => {
+    const result = valuePortfolio({
+      // Kauf: 10 Stück à 1.400 Pence, Wechselkurs 85 Pence je Euro
+      transactions: [deposit("2026-01-01", "1000"), buy("2026-01-05", 3, "10", "1400", "0", { currency: "GBp", fxRate: "85" })],
+      instruments: new Map([[3, instrument(3, "ULVR.L", "GBp")]]),
+      quotes: new Map([["ULVR.L", quote("ULVR.L", "1530", "1500", "GBp")]]),
+      fx: new Map([["GBP", "0.85"]]),
+      today: "2026-10-05",
+    });
+    const [p] = result.positions;
+    expect(p.costEUR).toBe("164.71"); // 14.000 / 85
+    expect(p.marketValueEUR).toBe("180"); // 10 × 1.530 / 85
+    expect(p.dayChangeEUR).toBe("3.53"); // 10 × 30 / 85
+  });
+
   it("berücksichtigt Währungsbewegungen in der Tagesveränderung", () => {
     const result = valuePortfolio({
       transactions: [deposit("2026-01-01", "5000"), buy("2026-01-05", 2, "10", "200", "0", { currency: "USD", fxRate: "1.25" })],
