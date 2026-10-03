@@ -146,3 +146,22 @@ describe("Ersatzanbieter je Symbol", () => {
     overrideProvidersForTest(null);
   });
 });
+
+describe("Leere Antworten", () => {
+  it("fragt bei leerem Kursverlauf den Ersatzanbieter", async () => {
+    const { getDailyHistory, overrideProvidersForTest } = await import("./market");
+    overrideProvidersForTest({
+      primary: provider({ id: "haupt", dailyHistory: async () => [] }),
+      fallback: provider({
+        id: "ersatz",
+        dailyHistory: async (): Promise<PricePoint[]> => [
+          { key: "2026-09-30", close: "10" },
+          { key: "2026-10-01", close: "11" },
+        ],
+      }),
+    });
+    const points = await getDailyHistory("LEER.DE", "2026-09-28", "2026-10-02");
+    expect(points.map((p) => p.close)).toEqual(["10", "11"]);
+    overrideProvidersForTest(null);
+  });
+});

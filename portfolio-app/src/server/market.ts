@@ -112,6 +112,11 @@ function limited<T>(provider: { id: string; minIntervalMs?: number }, fn: () => 
 }
 
 /** Führt eine Fähigkeit beim Hauptanbieter aus, bei Fehlen/Fehler beim Ersatzanbieter. */
+/** Leere Antworten (keine Kurse, keine Kennzahlen) zählen als „nicht gefunden“ → nächster Anbieter. */
+function isEmptyResult(value: unknown): boolean {
+  return value === null || value === undefined || (Array.isArray(value) && value.length === 0);
+}
+
 async function withProviders<T>(
   capability: keyof MarketDataProvider,
   fn: (p: MarketDataProvider) => Promise<T>,
@@ -119,13 +124,17 @@ async function withProviders<T>(
   const { primary, fallback } = getProviders();
   const candidates = [primary, fallback].filter((p): p is MarketDataProvider => !!p && typeof p[capability] === "function");
   let lastError: unknown = new Error("Kein Anbieter unterstützt diese Funktion.");
+  let empty: { value: T; source: string } | null = null;
   for (const p of candidates) {
     try {
-      return { value: await limited(p, () => fn(p)), source: p.id };
+      const value = await limited(p, () => fn(p));
+      if (!isEmptyResult(value)) return { value, source: p.id };
+      empty ??= { value, source: p.id };
     } catch (error) {
       lastError = error;
     }
   }
+  if (empty) return empty;
   throw lastError;
 }
 
