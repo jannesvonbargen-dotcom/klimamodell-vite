@@ -205,6 +205,20 @@ export async function getQuotes(symbols: string[], options: { force?: boolean } 
   return { quotes, errors, lastFetchedAt: lastFetched ? new Date(lastFetched).toISOString() : null };
 }
 
+/**
+ * Gleicht die gespeicherte Währung der Instrumente an die Notierungswährung
+ * des Kursanbieters an – Kurse und Wechselkurse passen dann immer zusammen.
+ */
+export function syncInstrumentCurrencies(quotes: Map<string, Quote>): void {
+  const db = getDb();
+  for (const row of db.select().from(instruments).all()) {
+    const q = quotes.get(row.symbol);
+    if (q && !q.stale && q.currency && q.currency !== row.currency) {
+      db.update(instruments).set({ currency: q.currency }).where(eq(instruments.id, row.id)).run();
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Tageskurse (Snapshots)
 

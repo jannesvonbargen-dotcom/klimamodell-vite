@@ -177,7 +177,13 @@ function currentSession(symbol: string, now: Date): { day: string; prevIdx: numb
   return { day: path.days[idx], prevIdx: idx - 1, idx };
 }
 
+/** Simuliert nur bekannte Werte – für unbekannte Symbole gibt es bewusst keine erfundenen Kurse. */
+export function isSimulated(symbol: string): boolean {
+  return symbol in LEVELS || !!catalogBySymbol(symbol);
+}
+
 export function mockQuote(symbol: string, now: Date = new Date()): ProviderQuote | null {
+  if (!isSimulated(symbol)) return null;
   const session = currentSession(symbol, now);
   if (!session) return null;
   const path = dailyPath(symbol);
@@ -211,6 +217,7 @@ export class MockProvider implements MarketDataProvider {
   }
 
   async dailyHistory(symbol: string, from: string, to: string): Promise<PricePoint[]> {
+    if (!isSimulated(symbol)) return [];
     const path = dailyPath(symbol);
     const today = nowInBerlin().slice(0, 10);
     const session = currentSession(symbol, new Date());
@@ -226,6 +233,7 @@ export class MockProvider implements MarketDataProvider {
   }
 
   async intraday(symbol: string, days: 1 | 5): Promise<PricePoint[]> {
+    if (!isSimulated(symbol)) return [];
     const now = new Date();
     const session = currentSession(symbol, now);
     if (!session) return [];
@@ -245,6 +253,7 @@ export class MockProvider implements MarketDataProvider {
   }
 
   async fundamentals(symbol: string): Promise<Fundamentals | null> {
+    if (!isSimulated(symbol)) return null;
     const history = await this.dailyHistory(symbol, oneYearAgo(), nowInBerlin().slice(0, 10));
     const closes = history.map((p) => Number(p.close));
     const entry = catalogBySymbol(symbol);

@@ -29,6 +29,8 @@ export function dec(value: unknown, scale = 1): string | null {
 export function inferCurrency(symbol: string): string {
   const entry = catalogBySymbol(symbol);
   if (entry) return entry.currency;
+  // ISIN als Platzhalter-Symbol: Währung unbekannt, Trade Republic bucht in EUR
+  if (/^[A-Z]{2}[A-Z0-9]{9}\d$/.test(symbol)) return "EUR";
   const suffix = symbol.split(".")[1]?.toUpperCase();
   switch (suffix) {
     case undefined:

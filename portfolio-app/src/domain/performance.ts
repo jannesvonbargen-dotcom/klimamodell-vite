@@ -62,6 +62,8 @@ export interface BuildSeriesInput {
   keys: readonly string[];
   /** Optional: aktueller Kurs pro Symbol für den letzten Punkt (z. B. Live-Kurs). */
   latestPrices?: ReadonlyMap<string, string>;
+  /** Optional: aktuelle Wechselkurse für den letzten Punkt. */
+  latestFx?: ReadonlyMap<string, string>;
 }
 
 export function buildValueSeries(input: BuildSeriesInput): SeriesPoint[] {
@@ -108,12 +110,13 @@ export function buildValueSeries(input: BuildSeriesInput): SeriesPoint[] {
       eventIndex++;
     }
 
-    // Aktuelle Wechselkurse für diesen Zeitpunkt
+    // Wechselkurse für diesen Zeitpunkt (am letzten Punkt die aktuellen)
     const fxNow = new Map<string, string>();
     for (const [ccy, cursor] of fxCursors) {
       const v = cursor.valueAt(key);
       if (v) fxNow.set(ccy, v);
     }
+    if (k === keys.length - 1 && input.latestFx) for (const [ccy, v] of input.latestFx) fxNow.set(ccy, v);
 
     let depot = ZERO;
     let invested = ZERO;

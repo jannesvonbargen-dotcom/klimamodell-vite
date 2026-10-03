@@ -1,13 +1,13 @@
 import { d, roundMoney, sum, ZERO } from "@/domain/decimal";
 import type { LedgerIssue, YearStats } from "@/domain/ledger";
-import { EXCHANGES, type ExchangeId, marketStatus, todayInBerlin } from "@/domain/market-hours";
+import { EXCHANGES, type ExchangeId, marketStatus, nowInBerlin, todayInBerlin } from "@/domain/market-hours";
 import { buildValueSeries, businessDays, type KeyedSeries, type RangeKey, rangeStart } from "@/domain/performance";
 import { dueExecutionDates } from "@/domain/savings-plan";
 import { germanHolidaySet } from "@/domain/market-hours";
 import type { Instrument, Split, Transaction } from "@/domain/types";
 import { type PortfolioTotals, type PositionValuation, valuePortfolio } from "@/domain/valuation";
 import { catalogByIsin } from "@/market/catalog";
-import { getDailyHistory, getFxHistory, getFxRates, getIntraday, getQuotes, providerInfo, type ProviderInfo } from "./market";
+import { getDailyHistory, getFxHistory, getFxRates, getIntraday, getQuotes, providerInfo, type ProviderInfo, syncInstrumentCurrencies } from "./market";
 import { instrumentMap, listExecutions, listSavingsPlans, listSplits, listTransactions } from "./repo";
 
 /** Serverseitige Aufbereitung der Depotdaten für die Oberfläche. */
@@ -94,10 +94,12 @@ export async function getOverview(): Promise<OverviewData> {
   const today = todayInBerlin();
   const transactions = listTransactions();
   const splits = listSplits();
-  const instruments = instrumentMap();
+  let instruments = instrumentMap();
   const heldIds = new Set(transactions.filter((t) => t.instrumentId !== null).map((t) => t.instrumentId!));
   const symbols = [...heldIds].map((id) => instruments.get(id)?.symbol).filter((s): s is string => !!s);
   const [quotes, fx] = await Promise.all([getQuotes(symbols), getFxRates()]);
+  syncInstrumentCurrencies(quotes.quotes);
+  instruments = instrumentMap();
   const valuation = valuePortfolio({ transactions, splits, instruments, quotes: quotes.quotes, fx: fx.rates, today });
 
   const positions: PositionRow[] = valuation.positions.map((p) => ({ ...p, instrument: instruments.get(p.instrumentId)! }));
@@ -216,18 +218,23 @@ export async function getPerformance(range: RangeKey): Promise<PerformanceData> 
       const intra = (intraday.get(symbol) ?? []).map((p) => ({ key: p.key, value: p.close }));
       merged.set(symbol, [...daily.filter((p) => p.key < sessionDays[0]), ...intra]);
     }
-    const quotes = await getQuotes(symbols);
+    const [quotes, fxNow] = await Promise.all([getQuotes(symbols), getFxRates()]);
     const latestPrices = new Map([...quotes.quotes.entries()].map(([s, q]) => [s, q.price]));
-    const series = buildValueSeries({ transactions, splits, instruments, prices: merged, fx, keys: [baseline, ...keys], latestPrices });
+    // Letzter Punkt = jetzt, damit heutige Buchungen und Live-Kurse enthalten sind
+    const now = nowInBerlin();
+    const allKeysWithNow = keys[keys.length - 1] < now ? [...keys, now] : keys;
+    const series = buildValueSeries({ transactions, splits, instruments, prices: merged, fx, keys: [baseline, ...allKeysWithNow], latestPrices, latestFx: fxNow.rates });
     return { range, intraday: true, points: series.map(toChartPoint) };
   }
 
   const start = rangeStart(range, today, firstDate);
   const { prices, fx, symbols } = await loadSeriesInputs(transactions, instruments, start, today);
   const keys = [start, ...businessDays(start, today).filter((day) => day > start)];
-  const quotes = await getQuotes(symbols);
+  // Am Wochenende endet die Reihe trotzdem heute (heutige Buchungen, aktueller Stand)
+  if (keys[keys.length - 1] !== today) keys.push(today);
+  const [quotes, fxNow] = await Promise.all([getQuotes(symbols), getFxRates()]);
   const latestPrices = new Map([...quotes.quotes.entries()].map(([s, q]) => [s, q.price]));
-  const series = buildValueSeries({ transactions, splits, instruments, prices, fx, keys, latestPrices });
+  const series = buildValueSeries({ transactions, splits, instruments, prices, fx, keys, latestPrices, latestFx: fxNow.rates });
   return { range, intraday: false, points: series.map(toChartPoint) };
 }
 
