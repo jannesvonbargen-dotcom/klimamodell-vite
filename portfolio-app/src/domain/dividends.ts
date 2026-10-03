@@ -1,5 +1,5 @@
 import { d, Dec, ONE, roundMoney, ZERO } from "./decimal";
-import { computeLedger, toEUR } from "./ledger";
+import { buildEvents, Ledger, toEUR } from "./ledger";
 import type { Instrument, Split, Transaction } from "./types";
 import { type FxTable, fxRateFor } from "./valuation";
 
@@ -35,7 +35,13 @@ function splitFactorAfter(splits: readonly Split[], instrumentId: number, date: 
 
 export function dividendPayments(transactions: readonly Transaction[], splits: readonly Split[] = []): DividendPayment[] {
   const out: DividendPayment[] = [];
-  for (const tx of transactions) {
+  // Ein Durchlauf durch alle Ereignisse: Bestand zum Zeitpunkt jeder Dividende ohne Stückangabe
+  // (früher je Dividende eine komplette Neuberechnung – quadratischer Aufwand).
+  const ledger = new Ledger();
+  for (const event of buildEvents(transactions, splits)) {
+    ledger.apply(event);
+    if (event.kind !== "tx") continue;
+    const tx = event.tx;
     if (tx.type !== "DIVIDEND" || tx.instrumentId === null || !tx.amount) continue;
     const date = tx.executedAt.slice(0, 10);
     const grossLocal = d(tx.amount).abs();
@@ -44,7 +50,7 @@ export function dividendPayments(transactions: readonly Transaction[], splits: r
     const feeEUR = toEUR(d(tx.fee), tx.fxRate);
     let shares = tx.quantity ? d(tx.quantity).abs() : null;
     if (!shares || shares.isZero()) {
-      const held = computeLedger(transactions, splits, { asOf: date }).positions.get(tx.instrumentId)?.quantity;
+      const held = ledger.positions.get(tx.instrumentId)?.quantity;
       shares = held && held.gt(0) ? held : null;
     }
     const factor = splitFactorAfter(splits, tx.instrumentId, date);

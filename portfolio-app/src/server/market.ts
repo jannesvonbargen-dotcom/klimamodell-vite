@@ -1,5 +1,5 @@
 import { and, asc, between, eq, inArray, ne } from "drizzle-orm";
-import { getDb } from "@/db/client";
+import { getDb, getSqlite } from "@/db/client";
 import { instruments, marketCache, priceSnapshots } from "@/db/schema";
 import { exchangeForInstrument, marketStatus, todayInBerlin } from "@/domain/market-hours";
 import type { Quote } from "@/domain/valuation";
@@ -263,17 +263,28 @@ function sourceFilter() {
   return dataClass() === "demo" ? eq(priceSnapshots.source, "mock") : ne(priceSnapshots.source, "mock");
 }
 
+const upsertStatements = new WeakMap<object, (rows: Array<[string, string, string, string, string]>) => void>();
+
+/**
+ * Speichert Tageskurse. Bewusst mit vorbereitetem SQL statt Query-Builder:
+ * Beim ersten Laden langer Verläufe (Jahre × Werte × Währungen) sind das
+ * zehntausende Zeilen – so dauert es Millisekunden statt Sekunden.
+ */
 function storePoints(symbol: string, currency: string, source: string, points: PricePoint[]): void {
   if (points.length === 0) return;
-  const db = getDb();
-  db.transaction((tx) => {
-    for (const p of points) {
-      tx.insert(priceSnapshots)
-        .values({ symbol, date: p.key, close: p.close, currency, source })
-        .onConflictDoUpdate({ target: [priceSnapshots.symbol, priceSnapshots.date], set: { close: p.close, currency, source } })
-        .run();
-    }
-  });
+  const sqlite = getSqlite();
+  let upsert = upsertStatements.get(sqlite);
+  if (!upsert) {
+    const stmt = sqlite.prepare(
+      "INSERT INTO price_snapshots (symbol, date, close, currency, source) VALUES (?, ?, ?, ?, ?) " +
+        "ON CONFLICT(symbol, date) DO UPDATE SET close = excluded.close, currency = excluded.currency, source = excluded.source",
+    );
+    upsert = sqlite.transaction((rows: Array<[string, string, string, string, string]>) => {
+      for (const r of rows) stmt.run(r);
+    });
+    upsertStatements.set(sqlite, upsert);
+  }
+  upsert(points.map((p) => [symbol, p.key, p.close, currency, source]));
 }
 
 function readPoints(symbol: string, from: string, to: string): PricePoint[] {

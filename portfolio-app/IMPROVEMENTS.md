@@ -50,7 +50,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 ## 5. Performance & Barrierefreiheit
 
 - [x] Transaktionsliste blättert in 100er-Schritten
-- [ ] Wertverlauf „Max“ bei vielen Jahren serverseitig ausdünnen
+- [x] Lastprobe (npm run benchmark, 2.900 Buchungen/10 Jahre): Erträge 8,5 s → 0,2 s (Dividenden-Bestand in einem Durchlauf), Wertverlauf „Max“ 6,9 s → 0,6 s (Kurs-Snapshots per vorbereitetem SQL)
+- [ ] Wertverlauf „Max“ bei sehr vielen Jahren clientseitig ausdünnen (Recharts > 3.000 Punkte)
 - [x] Tabellenansicht für alle Charts („Werte als Tabelle“, ausklappbar)
 - [x] Kontrastprüfung mit dem dataviz-Validator: alle Checks bestanden; drei helle Farben unter 3:1 im Hell-Modus nur im Donut mit Beschriftung
 
