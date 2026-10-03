@@ -2,6 +2,7 @@
   "name": "portfolio-app",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.cjs",
   "scripts": {
     "predev": "tsx scripts/setup.ts",
     "dev": "cross-env NEXT_TELEMETRY_DISABLED=1 next dev -H 127.0.0.1",
@@ -20,7 +21,10 @@
     "db:generate": "drizzle-kit generate",
     "research:refresh": "tsx scripts/research-refresh.ts",
     "research:texts": "tsx scripts/research-texts.ts",
-    "benchmark": "tsx scripts/benchmark.ts"
+    "benchmark": "tsx scripts/benchmark.ts",
+    "app:build": "node scripts/app-build.mjs",
+    "app:install": "node scripts/app-install.mjs",
+    "app:dev": "cross-env DEPOT_URL=http://127.0.0.1:3000 electron ."
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
@@ -55,6 +59,8 @@
     "@types/react-dom": "^19",
     "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.11",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
     "prettier": "^3.9.9",
@@ -67,5 +73,47 @@
   "description": "Lokale Portfolio- und Trading-App (Tracking & Analyse, keine Orders)",
   "engines": {
     "node": ">=22.12"
+  },
+  "build": {
+    "appId": "local.depot.portfolio",
+    "productName": "Depot",
+    "copyright": "Alle Daten bleiben auf diesem Mac – keine Anlageberatung",
+    "directories": {
+      "output": "dist-app",
+      "buildResources": "build"
+    },
+    "files": [
+      ".next/**",
+      "!.next/cache/**",
+      "!.next/dev/**",
+      "!.next/types/**",
+      "!.next/trace*",
+      "public/**",
+      "drizzle/**",
+      "config/**",
+      "content/**",
+      "electron/**",
+      "next.config.ts",
+      ".env.example",
+      "package.json",
+      "!node_modules/better-sqlite3/{deps,src}/**"
+    ],
+    "asar": false,
+    "npmRebuild": false,
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": [
+        {
+          "target": "dir"
+        }
+      ],
+      "icon": "build/icon.png",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "darkModeSupport": true,
+      "files": [
+        "!node_modules/better-sqlite3/prebuilds/{linux,linuxmusl,win32}-*.node"
+      ]
+    }
   }
 }

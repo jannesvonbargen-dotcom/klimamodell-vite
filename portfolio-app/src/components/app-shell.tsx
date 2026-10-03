@@ -41,7 +41,7 @@ export interface ShellProps {
   children: React.ReactNode;
   today: string;
   markets: ShellMarket[];
-  provider: { label: string; isDemo: boolean };
+  provider: { label: string; isDemo: boolean; configFile: string };
   pendingSavings: number;
   alertCount: number;
 }
@@ -164,7 +164,9 @@ function ShellInner({ children, markets, provider, pendingSavings, alertCount }:
     <div className="flex flex-col gap-3">
       <MarketStatusList markets={markets} />
       {provider.isDemo && (
-        <Tooltip content="Kurse sind simuliert (MARKET_DATA_PROVIDER=mock). Für echte Kurse in .env.local auf yahoo umstellen.">
+        <Tooltip
+          content={`Kurse sind simuliert (MARKET_DATA_PROVIDER=mock). Für echte Kurse in ${provider.configFile} auf yahoo umstellen.`}
+        >
           <div className="flex items-center gap-2 rounded-lg bg-warn-soft px-2.5 py-2 text-[12px] font-medium text-warn">
             <span className="size-1.5 rounded-full bg-warn" aria-hidden />
             Demo-Kurse (simuliert)

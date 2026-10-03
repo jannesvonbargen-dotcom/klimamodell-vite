@@ -14,8 +14,11 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     "out/**",
     "build/**",
+    "dist-app/**",
     "next-env.d.ts",
   ]),
+  // Mac-App-Hülle (Electron) ist CommonJS
+  { files: ["electron/**/*.cjs"], rules: { "@typescript-eslint/no-require-imports": "off" } },
 ]);
 
 export default eslintConfig;

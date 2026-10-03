@@ -1,5 +1,6 @@
 /**
- * Laufzeit-Konfiguration aus Umgebungsvariablen (.env.local).
+ * Laufzeit-Konfiguration aus Umgebungsvariablen (.env.local, in der Mac-App
+ * Konfiguration.env im Datenordner).
  * API-Keys werden nur serverseitig gelesen und nie an den Browser gegeben.
  */
 
@@ -31,4 +32,14 @@ export function getConfig(): AppConfig {
     fmpKey: clean(process.env.FMP_API_KEY),
     alphaVantageKey: clean(process.env.ALPHAVANTAGE_API_KEY),
   };
+}
+
+/** Mac-App: Ordner mit Datenbank, Konfiguration und Texten (sonst null). */
+export function desktopDataDir(): string | null {
+  return process.env.DEPOT_DESKTOP === "1" ? (process.env.DEPOT_DATA_DIR ?? null) : null;
+}
+
+/** Datei, in der Kursanbieter und API-Keys eingetragen werden. */
+export function configFileName(): string {
+  return process.env.DEPOT_DESKTOP === "1" ? "Konfiguration.env" : ".env.local";
 }

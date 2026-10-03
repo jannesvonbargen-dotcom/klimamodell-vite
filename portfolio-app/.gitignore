@@ -18,8 +18,8 @@
 /.next-e2e/
 /out/
 
-# production
-/build
+# Mac-App (npm run app:build)
+/dist-app/
 
 # misc
 .DS_Store

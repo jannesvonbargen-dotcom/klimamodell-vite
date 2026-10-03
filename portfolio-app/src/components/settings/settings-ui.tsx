@@ -6,6 +6,7 @@ import {
   DownloadIcon,
   FileJsonIcon,
   FileSpreadsheetIcon,
+  FolderOpenIcon,
   PlugZapIcon,
   RotateCcwIcon,
   Trash2Icon,
@@ -237,6 +238,37 @@ export function ClearCacheButton() {
       }
     >
       <RotateCcwIcon /> Kurs-Cache leeren
+    </Button>
+  );
+}
+
+declare global {
+  interface Window {
+    /** Nur in der Mac-App vorhanden (electron/preload.cjs). */
+    depotDesktop?: { showDataFolder: () => Promise<string> };
+  }
+}
+
+const noSubscription = () => () => {};
+
+/** Mac-App: Datenordner im Finder öffnen. */
+export function ShowDataFolderButton() {
+  const available = React.useSyncExternalStore(
+    noSubscription,
+    () => Boolean(window.depotDesktop),
+    () => false,
+  );
+  if (!available) return null;
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={async () => {
+        const error = await window.depotDesktop?.showDataFolder();
+        if (error) toast.error(`Ordner konnte nicht geöffnet werden: ${error}`);
+      }}
+    >
+      <FolderOpenIcon /> Im Finder zeigen
     </Button>
   );
 }

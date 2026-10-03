@@ -3,7 +3,7 @@ import path from "node:path";
 import { count, eq, isNull } from "drizzle-orm";
 import { databasePath, getDb } from "@/db/client";
 import { instruments, marketCache, priceSnapshots, savingsPlans, transactions, watchlist } from "@/db/schema";
-import { getConfig } from "./config";
+import { configFileName, desktopDataDir, getConfig } from "./config";
 import { providerInfo, type ProviderInfo } from "./market";
 import { getSetting } from "./repo";
 
@@ -23,6 +23,10 @@ export interface SettingsOverview {
   databaseSize: number | null;
   backups: Array<{ name: string; size: number; createdAt: string }>;
   seededAt: string | null;
+  /** Datei für Kursanbieter und API-Keys (.env.local bzw. Konfiguration.env). */
+  configFile: string;
+  /** Nur in der Mac-App: Datenordner. */
+  dataDir: string | null;
 }
 
 function backupsDir(): string | null {
@@ -64,6 +68,8 @@ export function getSettingsOverview(): SettingsOverview {
     databaseSize: file !== ":memory:" && fs.existsSync(file) ? fs.statSync(file).size : null,
     backups,
     seededAt: getSetting<string | null>("seededAt", null),
+    configFile: configFileName(),
+    dataDir: desktopDataDir(),
   };
 }
 

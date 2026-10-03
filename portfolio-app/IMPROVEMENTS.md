@@ -65,3 +65,6 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Kursalarme zusätzlich als Hinweis bzw. Systembenachrichtigung (nur wenn die App offen ist, Opt-in)
 - [ ] Export der Wachstumswerte-Bewertung als PDF/Markdown
 - [x] KI-Entwürfe der Thesen-Texte (npm run research:texts) mit Prüfung auf belegte Zahlen und manueller Freigabe
+- [x] Mac-App ohne Browser (Electron): eigenes Fenster und Dock-Symbol, deutsche Menüleiste mit ⌘1–⌘7, Startbildschirm, Daten in ~/Library/Application Support/Depot, Konfiguration.env statt .env.local, Datenordner-Knopf in den Einstellungen; Paket ohne Entwicklerwerkzeuge und echtes Electron-Fenster getestet (Start, Neustart mit erhaltenen Daten, Beenden samt Server, Doppelstart, Menü, externe Links)
+- [ ] Mac-App verkleinern (~0,8 GB): Next.js-„standalone“-Ausgabe statt vollständiger node_modules, sobald sie die SQLite-Bindung zuverlässig mitnimmt
+- [x] Mac-App: Fenstergröße und -position beim nächsten Start wiederherstellen (fällt auf Standard zurück, wenn der Bildschirm fehlt)

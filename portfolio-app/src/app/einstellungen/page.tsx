@@ -9,6 +9,7 @@ import {
   DemoDataButton,
   ExportButtons,
   RestoreBackup,
+  ShowDataFolderButton,
   ThemeSetting,
   WipeDataButton,
 } from "@/components/settings/settings-ui";
@@ -45,8 +46,8 @@ export default function SettingsPage() {
           label="Kursanbieter"
           description={
             <>
-              Festgelegt in <Code>.env.local</Code> über <Code>MARKET_DATA_PROVIDER</Code> (yahoo, finnhub, fmp, alphavantage oder mock).
-              Nach einer Änderung die App neu starten.
+              Festgelegt in <Code>{s.configFile}</Code> über <Code>MARKET_DATA_PROVIDER</Code> (yahoo, finnhub, fmp, alphavantage oder
+              mock). Nach einer Änderung die App neu starten.
             </>
           }
         >
@@ -69,7 +70,9 @@ export default function SettingsPage() {
         </Row>
         <Row
           label="API-Keys"
-          description={<>Nur in .env.local, nie im Browser. Für die Kursdaten optional, für npm run research:refresh wird FMP benötigt.</>}
+          description={
+            <>Nur in {s.configFile}, nie im Browser. Für die Kursdaten optional, für npm run research:refresh wird FMP benötigt.</>
+          }
         >
           <div className="flex flex-col items-start gap-1 text-[13px] sm:items-end">
             <KeyStatus label="Finnhub" ok={s.keys.finnhub} />
@@ -107,7 +110,9 @@ export default function SettingsPage() {
           label="Automatische Sicherungen"
           description={
             <>
-              Vor dem Zurücksetzen, Wiederherstellen und Löschen legt die App eine Kopie der Datenbank unter <Code>data/backups/</Code> an.
+              Vor dem Zurücksetzen, Wiederherstellen und Löschen legt die App eine Kopie der Datenbank unter{" "}
+              <Code>{s.dataDir ? "backups/" : "data/backups/"}</Code>
+              {s.dataDir ? " im Datenordner" : ""} an.
             </>
           }
         >
@@ -146,6 +151,19 @@ export default function SettingsPage() {
             keine externen Schriften. Nach außen gehen nur Kursabfragen an den gewählten Anbieter (Symbole, keine Depotdaten).
           </p>
         </div>
+        {s.dataDir && (
+          <Row
+            label="Datenordner"
+            description={
+              <>
+                {s.dataDir} – enthält Datenbank, Sicherungen, <Code>Konfiguration.env</Code> (Kursanbieter und API-Keys) sowie die Texte der
+                Wachstumswerte.
+              </>
+            }
+          >
+            <ShowDataFolderButton />
+          </Row>
+        )}
         <Row label="Datenbank" description={s.databasePath}>
           <span className="tnum text-[13px] text-muted">{fileSize(s.databaseSize)}</span>
         </Row>

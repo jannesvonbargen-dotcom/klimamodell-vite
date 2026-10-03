@@ -6,3 +6,4 @@ data
 package-lock.json
 playwright-report
 test-results
+dist-app

@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { todayInBerlin } from "@/domain/market-hours";
 import { providerInfo } from "@/server/market";
 import { marketInfos, pendingSavingsSuggestions } from "@/server/portfolio";
+import { configFileName } from "@/server/config";
+import { ensureInitialized } from "@/server/init";
 import { triggeredAlertCount } from "@/server/watchlist";
 import "./globals.css";
 
@@ -26,6 +28,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
+  await ensureInitialized();
   const provider = providerInfo();
   const alertCount = await triggeredAlertCount().catch(() => 0);
   return (
@@ -41,7 +44,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <AppShell
             today={todayInBerlin()}
             markets={marketInfos()}
-            provider={{ label: provider.label, isDemo: provider.isDemo }}
+            provider={{ label: provider.label, isDemo: provider.isDemo, configFile: configFileName() }}
             pendingSavings={pendingSavingsSuggestions().length}
             alertCount={alertCount}
           >

@@ -1,7 +1,7 @@
 # Depot – lokale Portfolio- & Trading-App
 
-Eine lokale Web-App, mit der du dein Wertpapierdepot (z. B. bei Trade Republic) verfolgen und analysieren kannst. Die App gibt **keine
-Orders** auf. Alle Daten liegen in einer SQLite-Datei auf deinem Rechner.
+Eine lokale App – im Browser oder als eigenständige Mac-App –, mit der du dein Wertpapierdepot (z. B. bei Trade Republic) verfolgen
+und analysieren kannst. Die App gibt **keine Orders** auf. Alle Daten liegen in einer SQLite-Datei auf deinem Rechner.
 
 > **Keine Anlageberatung.** Informationen ohne Gewähr. Auch als solide geltende Aktien können stark fallen.
 
@@ -58,6 +58,40 @@ Produktiv starten (schneller):
 ```bash
 npm run build && npm start
 ```
+
+## Als Mac-App (ohne Browser)
+
+Depot lässt sich als eigenständige Mac-App bauen: eigenes Fenster und Dock-Symbol, deutsche Menüleiste, kein Browser und kein Terminal
+im Alltag. Gebaut wird einmalig auf deinem Mac (Xcode ist nicht nötig, die SQLite-Bindung liegt fertig bei):
+
+```bash
+cd portfolio-app
+npm install
+npm run app:build     # einige Minuten; erzeugt dist-app/mac-arm64/Depot.app (Intel-Mac: dist-app/mac/)
+npm run app:install   # kopiert Depot.app nach /Programme (ohne Admin-Rechte nach ~/Programme)
+```
+
+Danach startest du **Depot** wie jede andere App über Programme, Launchpad oder Spotlight. Im Dock behalten: Rechtsklick auf das
+Symbol → Optionen → Im Dock behalten.
+
+- **Daten:** `~/Library/Application Support/Depot`, getrennt von der App. Sie bleiben bei Updates erhalten. Dort liegen
+  `portfolio.db`, `backups/`, `Konfiguration.env`, `config/` und `content/`. Den Ordner öffnest du über das Menü **Depot →
+  Datenordner im Finder zeigen** oder unter **Einstellungen → Daten & Datenschutz**.
+- **Konfiguration:** `Konfiguration.env` im Datenordner übernimmt die Rolle von `.env.local`, mit denselben Einträgen
+  (`MARKET_DATA_PROVIDER`, API-Keys …). Die App legt die Datei beim ersten Start aus der Vorlage an. Nach Änderungen Depot mit ⌘Q
+  beenden und neu öffnen.
+- **Daten aus der Browser-Version übernehmen:** Dort unter Einstellungen → Exportieren die JSON-Sicherung herunterladen und in der
+  App unter Einstellungen → Wiederherstellen einlesen.
+- **Aktualisieren:** Depot beenden, `git pull`, dann erneut `npm run app:build && npm run app:install`.
+- **Tastatur:** ⌘1 bis ⌘7 wechseln die Seiten, ⌘, öffnet die Einstellungen, ⌘[ und ⌘] blättern zurück und vor, ⌘R lädt neu, ⌘+ und
+  ⌘− zoomen. `N` und ⌘K funktionieren wie im Browser.
+- **Technik:** Das Fenster ist Electron. Im Hintergrund läuft derselbe Next.js-Server wie bei `npm start`, nur auf 127.0.0.1 und
+  Port 47321 (ist er belegt, ein freier). Er wird mit der App beendet. Quellen-Links öffnen im Standardbrowser. Die App braucht etwa
+  0,8 GB Speicherplatz.
+- **Signatur:** Die App ist nur lokal (ad hoc) signiert und nicht von Apple notarisiert. Weil du sie selbst baust, startet sie ohne
+  Warnung. Für die Weitergabe an andere Macs ist sie nicht gedacht, dort würde Gatekeeper sie blockieren.
+- **Entwicklung:** `npm run dev` starten und parallel `npm run app:dev`. Das App-Fenster zeigt dann den Dev-Server mit den Daten aus
+  `data/`.
 
 ## Kursdaten und API-Keys
 
@@ -176,8 +210,12 @@ npm run db:reset -- --empty   # Sicherung, dann leere Datenbank
 | `npm run db:reset`         | Datenbank zurücksetzen (siehe oben)                        |
 | `npm run db:generate`      | Neue Migration aus `src/db/schema.ts` erzeugen (Drizzle)   |
 | `npm run research:refresh` | Daten der Wachstumswerte über FMP aktualisieren            |
+| `npm run app:build`        | Mac-App bauen (`dist-app/`, siehe „Als Mac-App“)           |
+| `npm run app:install`      | Gebaute Mac-App nach /Programme kopieren                   |
+| `npm run app:dev`          | App-Fenster mit laufendem Dev-Server öffnen                |
 
-Für die Browser-Tests einmalig `npx playwright install chromium` ausführen. Die Tests starten einen eigenen Server auf Port 3100 mit
+Für die Browser-Tests einmalig `npx playwright install chromium` ausführen (oder mit `PLAYWRIGHT_CHROMIUM_EXECUTABLE` ein
+vorhandenes Chromium angeben). Die Tests starten einen eigenen Server auf Port 3100 mit
 der Datenbank `data/e2e.db` und Demo-Kursen; deine Daten bleiben unberührt.
 
 ## Rechenregeln
@@ -200,18 +238,22 @@ der Datenbank `data/e2e.db` und Demo-Kursen; deine Daten bleiben unberührt.
   Schrift Geist wird mitgeliefert), keine Logos von Drittservern.
 - Nach außen gehen nur Kursabfragen an den gewählten Anbieter (Symbole und Zeiträume, keine Depotdaten) sowie EZB-Wechselkurse.
 - Der Server lauscht nur auf 127.0.0.1. Anfragen mit fremdem Host-Header und schreibende Anfragen von fremden Seiten werden abgewiesen.
-- API-Keys stehen nur in `.env.local`.
+- API-Keys stehen nur in `.env.local` (Mac-App: `Konfiguration.env` im Datenordner) und werden nie an die Oberfläche gegeben.
+- Mac-App: Die Oberfläche läuft abgeschottet (kein Node-Zugriff, Sandbox) und kann nur Seiten von 127.0.0.1 anzeigen; alles andere
+  öffnet im Standardbrowser.
 
 ## Projektstruktur
 
 ```
 portfolio-app/
+├── build/             App-Icon der Mac-App
 ├── config/            Kriterien „Solide Wachstumswerte“ (+ README)
 ├── content/           Anbieterdaten (research/) und Texte (theses/)
 ├── data/              SQLite-Datenbank und Sicherungen (nicht eingecheckt)
 ├── drizzle/           SQL-Migrationen
 ├── e2e/               Playwright-Smoke-Tests
-├── scripts/           Setup, Reset, Research-Aktualisierung
+├── electron/          Mac-App: Fenster, Menü, Hintergrundserver
+├── scripts/           Setup, Reset, Research, Mac-App bauen/installieren
 └── src/
     ├── app/           Seiten, Server Actions, API-Routen (Next.js App Router)
     ├── components/    UI-Komponenten
