@@ -53,6 +53,8 @@ export const transactions = sqliteTable(
       .default("manual"),
     /** Schlüssel zur Duplikat-Erkennung: Datum|ISIN|Stück|Betrag */
     dedupeKey: text("dedupe_key"),
+    /** ID der Transaktion beim Broker (z. B. transaction_id im TR-Export). */
+    externalId: text("external_id"),
     importBatchId: integer("import_batch_id"),
     savingsPlanId: integer("savings_plan_id"),
     /** Soft-Delete für „Rückgängig“; endgültig gelöscht wird beim nächsten Start. */
@@ -63,6 +65,7 @@ export const transactions = sqliteTable(
     index("transactions_executed_at_idx").on(t.executedAt),
     index("transactions_instrument_idx").on(t.instrumentId),
     index("transactions_dedupe_idx").on(t.dedupeKey),
+    index("transactions_external_idx").on(t.externalId),
   ],
 );
 

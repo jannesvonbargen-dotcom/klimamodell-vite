@@ -96,7 +96,7 @@ function ShellInner({ children, markets, provider, pendingSavings }: ShellProps)
         return;
       }
       if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (document.querySelector("[role=dialog]")) return;
+      if (document.querySelector("[role=dialog][data-state=open]")) return;
       if (e.key === "n" || e.key === "N") {
         e.preventDefault();
         openCreate();
