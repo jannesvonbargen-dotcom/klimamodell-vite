@@ -60,4 +60,4 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 
 - [ ] Kursalarme zusätzlich als Systembenachrichtigung (nur wenn die App offen ist, Opt-in)
 - [ ] Export der Wachstumswerte-Bewertung als PDF/Markdown
-- [ ] KI-gestützte Aktualisierung der Thesen-Texte (mit Quellenpflicht und manueller Freigabe)
+- [x] KI-Entwürfe der Thesen-Texte (npm run research:texts) mit Prüfung auf belegte Zahlen und manueller Freigabe

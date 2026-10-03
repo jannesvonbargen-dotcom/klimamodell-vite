@@ -132,7 +132,19 @@ npm run research:refresh -- MSFT V  # nur bestimmte Symbole
 npm run research:refresh -- --dry-run
 ```
 
-Die Texte in `content/theses/` werden dabei nicht verändert. Lies sie gegen, wenn sich Zahlen deutlich geändert haben. Mit echtem
+Für neue Kandidaten kann die Claude-API einen **Textentwurf** schreiben (`ANTHROPIC_API_KEY` in `.env.local`, optional
+`ANTHROPIC_MODEL`):
+
+```bash
+npm run research:texts            # Kandidaten ohne Text
+npm run research:texts -- MSFT    # Neufassung für bestimmte Symbole
+```
+
+Entwürfe landen als `content/theses/<SYM>.draft.md` und erscheinen erst in der App, wenn du sie geprüft und in `<SYM>.md` umbenannt
+hast. Das Skript meldet fehlende Abschnitte und jede Zahl, die sich nicht aus den Anbieterdaten ableiten lässt; ein Test stellt sicher,
+dass auch die mitgelieferten Texte nur belegte Zahlen enthalten.
+
+Die Texte in `content/theses/` werden beim Aktualisieren der Daten nicht verändert. Lies sie gegen, wenn sich Zahlen deutlich geändert haben. Mit echtem
 Kursanbieter rechnet die Seite mit Live-Kursen und berechnet Volatilität und maximalen Rückgang aus den Tageskursen. Im Demo-Modus
 nutzt sie die datierte Momentaufnahme und zeigt keine simulierten Kurse.
 

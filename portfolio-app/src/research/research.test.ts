@@ -148,3 +148,35 @@ describe("FMP-Umwandlung", () => {
     expect(evaluateCriteria(c, m, config).length).toBeGreaterThan(5);
   });
 });
+
+describe("KI-Entwürfe der Texte", () => {
+  it("baut den Prompt mit Regeln und Daten", async () => {
+    const { buildThesisPrompt } = await import("./thesis-draft");
+    const { system, user } = buildThesisPrompt(load("MSFT"));
+    expect(system).toMatch(/Erfinde keine Zahlen/);
+    expect(system).toMatch(/## Was müsste passieren, damit die These falsch ist\?/);
+    expect(user).toContain("Microsoft Corporation");
+    expect(user).toContain("331839000000");
+  });
+
+  it("erkennt fehlende Abschnitte und erfundene Zahlen", async () => {
+    const { validateThesisDraft } = await import("./thesis-draft");
+    const msft = load("MSFT");
+    const ok = validateThesisDraft(
+      "## Kurzprofil\nUmsatz zuletzt 331,8 Mrd. $, Marge 46,8 %.\n## Investment-These\nText\n## Risiken\n- **A:** b\n## Was müsste passieren, damit die These falsch ist?\nText",
+      msft,
+    );
+    expect(ok).toEqual({ missingSections: [], unknownNumbers: [] });
+    const bad = validateThesisDraft("## Kurzprofil\nMarktanteil von 73,4 % und 412 Mrd. $ Umsatz im Jahr 2026.", msft);
+    expect(bad.missingSections).toHaveLength(3);
+    expect(bad.unknownNumbers).toEqual(["73,4", "412"]);
+  });
+
+  it("alle mitgelieferten Texte enthalten nur belegte Zahlen", async () => {
+    const { validateThesisDraft } = await import("./thesis-draft");
+    for (const symbol of config.candidates) {
+      const md = fs.readFileSync(path.join(root, "content/theses", `${symbol}.md`), "utf8");
+      expect(validateThesisDraft(md, load(symbol)), symbol).toEqual({ missingSections: [], unknownNumbers: [] });
+    }
+  });
+});
