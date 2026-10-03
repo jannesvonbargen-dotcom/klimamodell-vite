@@ -27,8 +27,17 @@ interface Providers {
 }
 
 let providersCache: { key: string; value: Providers } | null = null;
+let providersOverride: Providers | null = null;
+
+/** Nur für Tests: Anbieter ersetzen (null = wieder aus der Konfiguration). */
+export function overrideProvidersForTest(value: Partial<Providers> | null): void {
+  providersOverride = value
+    ? { primary: value.primary ?? new MockProvider(), fallback: value.fallback ?? null, fx: value.fx ?? new MockFxProvider(), warnings: value.warnings ?? [] }
+    : null;
+}
 
 export function getProviders(): Providers {
+  if (providersOverride) return providersOverride;
   const config = getConfig();
   const key = JSON.stringify(config);
   if (providersCache?.key === key) return providersCache.value;

@@ -239,3 +239,17 @@ export function setSetting(key: string, value: unknown): void {
   const json = JSON.stringify(value);
   getDb().insert(settings).values({ key, value: json }).onConflictDoUpdate({ target: settings.key, set: { value: json } }).run();
 }
+
+// Splits ---------------------------------------------------------------------
+
+export function addSplit(instrumentId: number, effectiveDate: string, ratioFrom: string, ratioTo: string, note: string | null = null): void {
+  getDb()
+    .insert(splits)
+    .values({ instrumentId, effectiveDate, ratioFrom, ratioTo, note })
+    .onConflictDoUpdate({ target: [splits.instrumentId, splits.effectiveDate], set: { ratioFrom, ratioTo, note } })
+    .run();
+}
+
+export function deleteSplit(id: number): void {
+  getDb().delete(splits).where(eq(splits.id, id)).run();
+}

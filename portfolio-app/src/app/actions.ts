@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { ImportCandidate } from "@/import/types";
 import { confirmExecution, deleteSavingsPlan, saveSavingsPlan, type SavingsPlanInput, setSavingsPlanActive, skipExecution } from "@/server/savings";
+import { addSplit, deleteSplit, updateInstrument } from "@/server/repo";
 import { commitImport, type CommitResult, type ImportPreview, previewImport, restoreImportBatch, undoImportBatch } from "@/server/import";
 import {
   type ActionResult,
@@ -96,5 +97,41 @@ export async function confirmExecutionAction(planId: number, dueDate: string, pr
 
 export async function skipExecutionAction(planId: number, dueDate: string): Promise<void> {
   skipExecution(planId, dueDate);
+  refresh();
+}
+
+// Instrumente & Splits -------------------------------------------------------
+
+export async function updateInstrumentAction(
+  id: number,
+  patch: { symbol?: string; name?: string; currency?: string; sector?: string | null; country?: string | null; kind?: "STOCK" | "ETF" },
+): Promise<ActionResult> {
+  const errors: Record<string, string> = {};
+  if (patch.symbol !== undefined && !/^[A-Za-z0-9.\-=^]{1,20}$/.test(patch.symbol.trim())) errors.symbol = "Ungültiges Symbol.";
+  if (patch.name !== undefined && patch.name.trim().length < 1) errors.name = "Name fehlt.";
+  if (patch.currency !== undefined && !/^[A-Z]{3}$|^GBp$/.test(patch.currency.trim())) errors.currency = "Währung als Code, z. B. EUR.";
+  if (Object.keys(errors).length) return { ok: false, errors };
+  updateInstrument(id, {
+    ...patch,
+    symbol: patch.symbol?.trim(),
+    name: patch.name?.trim(),
+    currency: patch.currency?.trim(),
+  });
+  refresh();
+  return { ok: true };
+}
+
+export async function addSplitAction(instrumentId: number, effectiveDate: string, ratioFrom: string, ratioTo: string): Promise<ActionResult> {
+  const from = Number(ratioFrom.replace(",", "."));
+  const to = Number(ratioTo.replace(",", "."));
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(effectiveDate)) return { ok: false, errors: { effectiveDate: "Datum fehlt." } };
+  if (!(from > 0) || !(to > 0) || from === to) return { ok: false, errors: { ratio: "Verhältnis z. B. 1 : 4 angeben." } };
+  addSplit(instrumentId, effectiveDate, String(from), String(to), `Aktiensplit ${from}:${to}`);
+  refresh();
+  return { ok: true };
+}
+
+export async function deleteSplitAction(id: number): Promise<void> {
+  deleteSplit(id);
   refresh();
 }
