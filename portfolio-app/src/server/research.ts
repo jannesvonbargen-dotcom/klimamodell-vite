@@ -20,7 +20,7 @@ import { instrumentMap, listSplits, listTransactions, listWatchlist } from "./re
  */
 
 function contentRoot(): string {
-  return process.env.RESEARCH_ROOT ? path.resolve(process.env.RESEARCH_ROOT) : process.cwd();
+  return process.env.RESEARCH_ROOT ? path.resolve(/*turbopackIgnore: true*/ process.env.RESEARCH_ROOT) : process.cwd();
 }
 
 const SYMBOL_RE = /^[A-Z0-9][A-Z0-9.-]{0,14}$/;

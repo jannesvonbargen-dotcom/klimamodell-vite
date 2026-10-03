@@ -1,0 +1,5 @@
+"datetime","date","account_type","category","type","asset_class","name","symbol","shares","price","amount","fee","tax","currency","original_amount","original_currency","fx_rate","description","transaction_id","counterparty_name","counterparty_iban","payment_reference","mcc_code"
+"2026-09-01T08:00:00.000Z","2026-09-01","DEFAULT","CASH","CUSTOMER_INBOUND","","","","","","2000.00","","","EUR","","","","Einzahlung","imp-1","","","",""
+"2026-09-02T07:31:12.120Z","2026-09-02","DEFAULT","TRADING","BUY","STOCK","Coca-Cola Co.","US1912161007","10","60.10","-601.00","-1.00","","EUR","","","","Kauf","imp-2","","","",""
+"2026-09-03T07:31:12.120Z","2026-09-03","DEFAULT","TRADING","BUY","STOCK","Beispiel AG","DE000A0D9PT0","5","20.00","-100.00","-1.00","","EUR","","","","Kauf","imp-3","","","",""
+"2026-09-20T12:00:00.000Z","2026-09-20","DEFAULT","CASH","CARD_TRANSACTION","","","","","","-23.90","","","EUR","","","","Supermarkt","imp-4","","","","5411"

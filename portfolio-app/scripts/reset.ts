@@ -4,6 +4,7 @@
  *
  *   npm run db:reset            → leere Datenbank + Beispieldaten
  *   npm run db:reset -- --empty → leere Datenbank ohne Beispieldaten
+ *   --no-backup                 → ohne Sicherung (für Tests)
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -13,9 +14,12 @@ loadEnv();
 
 async function main() {
   const empty = process.argv.includes("--empty");
+  const noBackup = process.argv.includes("--no-backup");
   const { closeDb, databasePath, getDb } = await import("../src/db/client");
   const file = databasePath();
-  if (file !== ":memory:" && fs.existsSync(file)) {
+  if (file !== ":memory:" && fs.existsSync(file) && noBackup) {
+    for (const suffix of ["", "-wal", "-shm"]) if (fs.existsSync(file + suffix)) fs.rmSync(file + suffix);
+  } else if (file !== ":memory:" && fs.existsSync(file)) {
     const backupDir = path.join(path.dirname(file), "backups");
     fs.mkdirSync(backupDir, { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");

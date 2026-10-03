@@ -18,11 +18,12 @@ const globalForDb = globalThis as unknown as { __portfolioDb?: DbState };
 export function databasePath(): string {
   const configured = process.env.DATABASE_PATH;
   if (configured === ":memory:") return configured;
-  return path.resolve(process.cwd(), configured ?? "data/portfolio.db");
+  // Laufzeitpfad (lokale Datei) – nicht in den Build einbeziehen
+  return path.resolve(/*turbopackIgnore: true*/ process.cwd(), configured ?? "data/portfolio.db");
 }
 
 export function migrationsFolder(): string {
-  return path.resolve(process.cwd(), "drizzle");
+  return path.resolve(/*turbopackIgnore: true*/ process.cwd(), "drizzle");
 }
 
 /** Öffnet (und migriert) die lokale SQLite-Datenbank – einmal pro Prozess. */

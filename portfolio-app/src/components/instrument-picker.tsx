@@ -48,6 +48,7 @@ export function InstrumentPicker({
   autoFocus,
   invalid,
   placeholder = "Name, Ticker, ISIN oder WKN",
+  label = "Wertpapier",
 }: {
   value: PickedInstrument | null;
   onChange: (value: PickedInstrument | null) => void;
@@ -55,6 +56,8 @@ export function InstrumentPicker({
   autoFocus?: boolean;
   invalid?: boolean;
   placeholder?: string;
+  /** Zugänglicher Name des Suchfelds (cmdk vergibt die Input-ID selbst). */
+  label?: string;
 }) {
   const [query, setQuery] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -116,14 +119,13 @@ export function InstrumentPicker({
   }
 
   return (
-    <Command shouldFilter={false} loop className="relative">
+    <Command shouldFilter={false} loop className="relative" label={label} id={id}>
       <Popover open={open && query.trim().length > 0} onOpenChange={setOpen}>
         <PopoverAnchor asChild>
           <div className="relative">
             <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-subtle" />
             <Command.Input
               ref={inputRef}
-              id={id}
               value={query}
               onValueChange={(v) => {
                 setQuery(v);

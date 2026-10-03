@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // Native SQLite-Bindung nicht bündeln
   serverExternalPackages: ["better-sqlite3"],
   poweredByHeader: false,
+  // Eigener Build-Ordner für die E2E-Tests (läuft parallel zum Dev-Server)
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   images: { unoptimized: true },
   devIndicators: false,
   turbopack: { root: path.resolve(__dirname) },
