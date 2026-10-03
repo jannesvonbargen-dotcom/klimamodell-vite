@@ -1,5 +1,6 @@
 import { d, Dec, roundMoney, sum, ZERO } from "@/domain/decimal";
 import { dividendPayments, forecastDividends, monthlyBuckets } from "@/domain/dividends";
+import { fifoRealized } from "@/domain/fifo";
 import { computeLedger } from "@/domain/ledger";
 import { todayInBerlin } from "@/domain/market-hours";
 import type { Instrument } from "@/domain/types";
@@ -45,6 +46,8 @@ export interface IncomeOverview {
     dividendsNetEUR: string;
     interestEUR: string;
     realizedEUR: string;
+    /** Realisierte Gewinne nach FIFO (steuerliche Reihenfolge). */
+    realizedFifoEUR: string;
     feesEUR: string;
     taxesEUR: string;
     totalEUR: string;
@@ -61,6 +64,7 @@ export async function getIncomeOverview(): Promise<IncomeOverview> {
   const splits = listSplits();
   const instruments = instrumentMap();
   const ledger = computeLedger(transactions, splits);
+  const fifo = fifoRealized(transactions, splits);
   const fx = await getFxRates();
   const holdings = new Map(ledger.openPositions().map((p) => [p.instrumentId, p.quantity]));
   const payments = dividendPayments(transactions, splits);
@@ -142,9 +146,10 @@ export async function getIncomeOverview(): Promise<IncomeOverview> {
         dividendsNetEUR: roundMoney(s.dividendsNetEUR).toString(),
         interestEUR: roundMoney(s.interestEUR).toString(),
         realizedEUR: roundMoney(s.realizedEUR).toString(),
+        realizedFifoEUR: roundMoney(fifo.byYear.get(year) ?? ZERO).toString(),
         feesEUR: roundMoney(s.feesEUR).toString(),
         taxesEUR: roundMoney(s.taxesEUR).toString(),
-        totalEUR: roundMoney(s.dividendsNetEUR.plus(s.interestEUR).plus(s.realizedEUR)).toString(),
+        totalEUR: roundMoney(s.dividendsNetEUR.plus(s.interestEUR).plus(fifo.byYear.get(year) ?? ZERO)).toString(),
       })),
   };
 }

@@ -138,8 +138,9 @@ export default async function IncomePage() {
             Jahresübersicht
           </h2>
           <p className="text-[13px] text-muted">
-            Steuern so, wie sie gebucht wurden (Abrechnungen, Import, manuelle Eingabe). Realisierte Gewinne nach Durchschnittskosten
-            inklusive Gebühren – die Steuerbescheinigung rechnet nach FIFO und kann abweichen.
+            Steuern so, wie sie gebucht wurden (Abrechnungen, Import, manuelle Eingabe). Realisierte Gewinne zweimal: nach FIFO (älteste
+            Stücke zuerst – so rechnet die Steuer) und nach Durchschnittskosten wie im Rest der App. Beide inklusive Gebühren; über die
+            Jahre summiert sind sie gleich, sobald eine Position vollständig verkauft ist.
           </p>
         </div>
         <Card className="overflow-hidden">
@@ -151,7 +152,8 @@ export default async function IncomePage() {
                   <th className="px-5 py-2.5 text-left font-medium">Jahr</th>
                   <th className="px-4 py-2.5 font-medium">Dividenden brutto</th>
                   <th className="px-4 py-2.5 font-medium">Zinsen netto</th>
-                  <th className="px-4 py-2.5 font-medium">Realisiert</th>
+                  <th className="px-4 py-2.5 font-medium">Realisiert FIFO</th>
+                  <th className="px-4 py-2.5 font-medium">Realisiert Ø</th>
                   <th className="px-4 py-2.5 font-medium">Gebühren</th>
                   <th className="px-4 py-2.5 font-medium">Steuern</th>
                   <th className="px-5 py-2.5 font-medium">Ertrag netto</th>
@@ -166,7 +168,10 @@ export default async function IncomePage() {
                     <td className="tnum px-4 py-3">{formatMoney(y.dividendsGrossEUR)}</td>
                     <td className="tnum px-4 py-3">{formatMoney(y.interestEUR)}</td>
                     <td className="px-4 py-3">
-                      <Delta value={y.realizedEUR} size="sm" showArrow={false} className="justify-end" />
+                      <Delta value={y.realizedFifoEUR} size="sm" showArrow={false} className="justify-end" />
+                    </td>
+                    <td className="px-4 py-3">
+                      <Delta value={y.realizedEUR} size="sm" showArrow={false} muted className="justify-end" />
                     </td>
                     <td className="tnum px-4 py-3 text-muted">{formatMoney(y.feesEUR)}</td>
                     <td className="tnum px-4 py-3 text-muted">{formatMoney(y.taxesEUR)}</td>
@@ -177,7 +182,7 @@ export default async function IncomePage() {
                 ))}
                 {data.years.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-5 py-8 text-center text-[13px] text-subtle">
+                    <td colSpan={8} className="px-5 py-8 text-center text-[13px] text-subtle">
                       Noch keine Buchungen.
                     </td>
                   </tr>
@@ -186,7 +191,7 @@ export default async function IncomePage() {
             </table>
           </div>
           <p className="border-t border-border bg-surface-2/50 px-5 py-2.5 text-[12px] text-subtle">
-            Ertrag netto = Dividenden netto + Zinsen netto + realisierte Gewinne/Verluste.
+            Ertrag netto = Dividenden netto + Zinsen netto + realisierte Gewinne/Verluste nach FIFO.
           </p>
         </Card>
       </section>

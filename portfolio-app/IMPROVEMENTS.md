@@ -19,7 +19,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Einstellungen: Sicherung/Wiederherstellung (JSON), CSV-Export, Beispieldaten, Daten löschen
 - [x] Watchlist mit Kursalarmen
 - [x] Dividendenkalender: erwartete Ausschüttungen der nächsten 12 Monate (aus bisherigen Zahlungen hochgerechnet, klar als Schätzung)
-- [x] Steuerübersicht je Jahr: Erträge, Gebühren, gezahlte Steuern; Hinweis auf FIFO-Abweichung
+- [x] Steuerübersicht je Jahr: Erträge, Gebühren, gezahlte Steuern
+- [x] Realisierte Gewinne zusätzlich nach FIFO (steuerliche Reihenfolge) in der Jahresübersicht
 - [ ] Steuerübersicht: Kapitalertragsteuer, Soli und Kirchensteuer getrennt (braucht getrennte Erfassung)
 - [x] Benchmark-Vergleich (MSCI World über EUNL.DE) im Wertverlauf ab 1M, zeitgewichtet seit Beginn des Zeitraums
 - [ ] Benchmark auch für 1T/1W (Intraday-Kurse des Index)

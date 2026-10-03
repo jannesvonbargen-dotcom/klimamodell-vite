@@ -172,6 +172,8 @@ der Datenbank `data/e2e.db` und Demo-Kursen; deine Daten bleiben unberührt.
 - **Positionen und Cash** werden ausschließlich aus den Transaktionen berechnet, nie gespeichert. Geld ist nie ein Float: Beträge sind
   Dezimal-Strings und werden mit `decimal.js` gerechnet.
 - **Einstand:** Durchschnittskostenmethode. Gebühren und Steuern beim Kauf erhöhen den Einstand. Ein Teilverkauf realisiert anteilig.
+  Unter **Erträge & Steuern** stehen die realisierten Gewinne zusätzlich nach **FIFO** (älteste Stücke zuerst), so wie die Steuer
+  rechnet.
 - **Fremdwährung:** Jede Buchung wird mit ihrem Wechselkurs in Euro umgerechnet und auf Cent gerundet. Aktuelle Werte werden mit dem
   aktuellen Kurs umgerechnet.
 - **Splits** gelten ab Beginn des Stichtags. Historische Kurse sind split-bereinigt.
@@ -211,8 +213,8 @@ portfolio-app/
 ## Bekannte Einschränkungen
 
 - **Steuern:** Die App übernimmt Steuern aus Importen oder Eingaben, berechnet aber keine (keine Vorabpauschale, kein
-  Verlustverrechnungstopf). Realisierte Gewinne folgen der Durchschnittskostenmethode; das deutsche Steuerrecht rechnet nach FIFO,
-  die Werte können daher von der Steuerbescheinigung abweichen.
+  Verlustverrechnungstopf, keine Trennung von Aktien- und sonstigen Verlusten). Die Jahresübersicht zeigt realisierte Gewinne nach FIFO
+  als Orientierung; maßgeblich bleibt die Steuerbescheinigung des Brokers.
 - **Trade Republic:** nur CSV-Export und manuelle Eingabe. Ändert Trade Republic das Exportformat, kann die Spaltenzuordnung nötig
   werden.
 - **Kapitalmaßnahmen:** Nur Aktiensplits werden abgebildet (manuell auf der Positionsseite über das Menü „…“). Spin-offs, Fusionen und Bezugsrechte
