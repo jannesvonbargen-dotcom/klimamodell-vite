@@ -90,6 +90,7 @@ export function detectPreset(headers: string[]): PresetId {
   const h = headers.map((x) => x.toLowerCase());
   const has = (...names: string[]) => names.every((n) => h.includes(n));
   if (has("datetime", "category", "type", "amount", "currency")) return "trade_republic";
+  if (has("datum", "uhrzeit", "typ", "betrag", "wechselkurs", "transaktions-id", "quelle")) return "app_backup";
   if (has("buchungswährung") || has("wertpapiername") || has("ticker-symbol")) return "portfolio_performance";
   if ((has("datum", "typ", "wert") || has("date", "type", "value")) && (h.includes("isin") || h.includes("notiz") || h.includes("note")))
     return "pytr";
@@ -117,8 +118,8 @@ export function suggestMapping(table: CsvTable, preset: PresetId): ColumnMapping
   return {
     columns,
     // PP und pytr: „Wert“ ist die Kassenwirkung inklusive Gebühren und Steuern
-    amountMode: preset === "custom" ? "gross" : "net",
-    numberFormat: detectNumberFormat(table, columns),
+    amountMode: preset === "custom" || preset === "app_backup" ? "gross" : "net",
+    numberFormat: preset === "app_backup" ? "de" : detectNumberFormat(table, columns),
     typeMap,
     dateFormat: "auto",
     defaultCurrency: "EUR",

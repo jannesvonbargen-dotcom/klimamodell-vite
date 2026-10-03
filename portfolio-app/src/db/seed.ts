@@ -7,7 +7,7 @@ import { catalogBySymbol } from "@/market/catalog";
 import { MockFxProvider, MockProvider } from "@/market/providers/mock";
 import type { PricePoint } from "@/market/types";
 import { getFxHistory, getDailyHistory } from "@/server/market";
-import { setSetting, upsertInstrument } from "@/server/repo";
+import { recomputeDedupeKeys, setSetting, upsertInstrument } from "@/server/repo";
 import { getDb } from "./client";
 import { instruments, savingsPlanExecutions, savingsPlans, settings, splits, transactions, watchlist } from "./schema";
 
@@ -303,6 +303,7 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
     if (row) watchIds.push(row.id);
   }
 
+  recomputeDedupeKeys();
   setSetting("seedPlanIds", planIds);
   setSetting("seedWatchlistIds", watchIds);
   setSetting("seededAt", new Date().toISOString());

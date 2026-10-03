@@ -8,8 +8,9 @@ loadEnv();
 
 async function main() {
   const { closeDb, databasePath, getDb } = await import("../src/db/client");
-  const { getSetting, setSetting } = await import("../src/server/repo");
+  const { getSetting, recomputeDedupeKeys, setSetting } = await import("../src/server/repo");
   getDb();
+  recomputeDedupeKeys();
   const initialized = getSetting<boolean>("initialized", false);
   if (!initialized) {
     const skipSeed = process.env.SEED_ON_FIRST_RUN === "false";

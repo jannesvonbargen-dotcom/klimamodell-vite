@@ -3,7 +3,7 @@ import { TRADE_TYPES, TRANSACTION_TYPES, type TransactionType } from "@/domain/t
 import { type FieldErrors, type TransactionDraft, validateDeletion, validateFields, validateTimeline } from "@/domain/validation";
 import { catalogByIsin } from "@/market/catalog";
 import {
-  dedupeKey,
+  transactionDedupeKey,
   getInstrument,
   getTransaction,
   insertTransaction,
@@ -133,7 +133,7 @@ export function createTransaction(
     ...draft,
     source,
     savingsPlanId: extra.savingsPlanId ?? null,
-    dedupeKey: dedupeKey(draft.executedAt, instrument?.isin ?? null, draft.quantity, draft.amount ?? draft.price),
+    dedupeKey: transactionDedupeKey(draft, instrument?.isin ?? null),
   });
   return { ok: true, id: row.id };
 }
@@ -150,7 +150,7 @@ export function updateTransaction(id: number, input: TransactionInput): ActionRe
   const instrument = instrumentId ? getInstrument(instrumentId) : null;
   updateTransactionRow(id, {
     ...draft,
-    dedupeKey: dedupeKey(draft.executedAt, instrument?.isin ?? null, draft.quantity, draft.amount ?? draft.price),
+    dedupeKey: transactionDedupeKey(draft, instrument?.isin ?? null),
   });
   return { ok: true, id };
 }

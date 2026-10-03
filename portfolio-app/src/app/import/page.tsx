@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ImportHistory } from "@/components/import/import-history";
 import { ImportWizard } from "@/components/import/import-wizard";
 import { PageHeader } from "@/components/page-header";
@@ -27,7 +28,11 @@ export default function ImportPage() {
         </HelpCard>
         <HelpCard title="Andere Broker">
           Jede CSV mit Kopfzeile funktioniert: Spalten zuordnen, Typen zuordnen, Vorschau prüfen. Duplikate werden über Datum, ISIN,
-          Stückzahl und Betrag erkannt.
+          Stückzahl und Betrag erkannt. Die CSV-Sicherung aus den{" "}
+          <Link href="/einstellungen" className="text-accent underline-offset-4 hover:underline">
+            Einstellungen
+          </Link>{" "}
+          wird automatisch erkannt.
         </HelpCard>
       </div>
       {batches.length > 0 && <ImportHistory batches={batches} />}

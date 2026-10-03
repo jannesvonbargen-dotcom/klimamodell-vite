@@ -146,7 +146,9 @@ export function ImportWizard() {
           <UploadCloudIcon className="size-9 text-subtle" strokeWidth={1.5} />
           <div className="flex flex-col gap-1">
             <p className="text-[16px] font-semibold">CSV-Datei hierher ziehen</p>
-            <p className="text-[13px] text-muted">Trade-Republic-Transaktionsexport, pytr, Portfolio Performance oder eigenes Format</p>
+            <p className="text-[13px] text-muted">
+              Trade-Republic-Transaktionsexport, pytr, Portfolio Performance, CSV-Sicherung dieser App oder eigenes Format
+            </p>
           </div>
           <input
             ref={inputRef}

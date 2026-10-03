@@ -1,7 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { removeDemoData, seedDemoData } from "@/db/seed";
 import type { ImportCandidate } from "@/import/types";
+import { backupDatabaseFile, restoreBackup, type RestoreResult, wipeAllData } from "@/server/backup";
+import { clearMarketCache } from "@/server/settings";
 import {
   confirmExecution,
   deleteSavingsPlan,
@@ -179,4 +182,35 @@ export async function updateWatchlistItemAction(
   const result = updateWatchlistItem(id, patch);
   if (result.ok) refresh();
   return result;
+}
+
+// Einstellungen & Sicherung -------------------------------------------------------
+
+export async function restoreBackupAction(json: string): Promise<RestoreResult> {
+  const result = await restoreBackup(json);
+  if (result.ok) refresh();
+  return result;
+}
+
+export async function wipeAllDataAction(): Promise<{ backupFile: string | null }> {
+  const result = await wipeAllData();
+  refresh();
+  return result;
+}
+
+export async function loadDemoDataAction(): Promise<{ transactions: number }> {
+  const result = await seedDemoData();
+  refresh();
+  return result;
+}
+
+export async function removeDemoDataAction(): Promise<void> {
+  await backupDatabaseFile("vor-demo-entfernen");
+  removeDemoData();
+  refresh();
+}
+
+export async function clearMarketCacheAction(): Promise<void> {
+  clearMarketCache();
+  refresh();
 }

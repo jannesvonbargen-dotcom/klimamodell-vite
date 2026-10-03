@@ -91,11 +91,12 @@ export interface ColumnMapping {
   defaultCurrency: string;
 }
 
-export type PresetId = "trade_republic" | "pytr" | "portfolio_performance" | "custom";
+export type PresetId = "trade_republic" | "pytr" | "portfolio_performance" | "app_backup" | "custom";
 
 export const PRESET_LABELS: Record<PresetId, string> = {
   trade_republic: "Trade Republic – Transaktionsexport",
   pytr: "pytr – export_transactions",
   portfolio_performance: "Portfolio Performance – CSV-Export",
+  app_backup: "CSV-Sicherung dieser App",
   custom: "Eigenes Format",
 };

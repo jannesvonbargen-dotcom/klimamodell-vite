@@ -13,6 +13,7 @@ import {
   watchlist,
 } from "@/db/schema";
 import { d, roundMoney } from "@/domain/decimal";
+import { grossAmount } from "@/domain/ledger";
 import type { Instrument, SavingsPlan, Split, Transaction } from "@/domain/types";
 
 /** Datenzugriff – übersetzt zwischen DB-Zeilen und Domain-Typen. */
@@ -178,6 +179,38 @@ export function dedupeKey(date: string, isin: string | null, quantity: string | 
   const qty = quantity ? d(quantity).abs().toFixed(6) : "";
   const amt = amount ? roundMoney(d(amount).abs()).toFixed(2) : "";
   return [date.slice(0, 10), (isin ?? "").toUpperCase(), qty, amt].join("|");
+}
+
+/** Duplikat-Schlüssel einer Buchung – Betrag = Bruttobetrag bzw. Stück × Kurs (wie beim Import). */
+export function transactionDedupeKey(
+  t: { executedAt: string; quantity: string | null; price: string | null; amount: string | null },
+  isin: string | null,
+): string {
+  const gross = t.amount ?? (t.quantity && t.price ? grossAmount(t).toString() : null);
+  return dedupeKey(t.executedAt, isin, t.quantity, gross);
+}
+
+/** Berechnet alle Duplikat-Schlüssel neu (beim Start; repariert ältere Datenbestände). */
+export function recomputeDedupeKeys(): number {
+  const db = getDb();
+  const isins = new Map(
+    db
+      .select({ id: instruments.id, isin: instruments.isin })
+      .from(instruments)
+      .all()
+      .map((r) => [r.id, r.isin]),
+  );
+  let changed = 0;
+  db.transaction((tx) => {
+    for (const row of tx.select().from(transactions).all()) {
+      const key = transactionDedupeKey(row, row.instrumentId ? (isins.get(row.instrumentId) ?? null) : null);
+      if (key !== row.dedupeKey) {
+        tx.update(transactions).set({ dedupeKey: key }).where(eq(transactions.id, row.id)).run();
+        changed++;
+      }
+    }
+  });
+  return changed;
 }
 
 export function existingDedupeKeys(): Set<string> {
