@@ -6,6 +6,7 @@ import { d } from "@/domain/decimal";
 import { formatDateLong, formatNumber, formatPercent, formatPrice, formatQuantity } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { InstrumentChart, InstrumentRange } from "@/server/position";
+import { ChartTable, sampleRows } from "../chart-table";
 import { Delta } from "../numbers";
 import { Segmented } from "../transaction-dialog";
 
@@ -197,6 +198,13 @@ export function InstrumentChartView({ isin, initial }: { isin: string; initial: 
       </div>
       {shown && changePct !== null && active === null && range !== "1D" && (
         <p className="sr-only">Veränderung im Zeitraum: {formatPercent(changePct.toDecimalPlaces(6).toString())}</p>
+      )}
+      {shown && (
+        <ChartTable
+          caption={`Kursverlauf ${rangeInfo.long}`}
+          columns={[{ label: "Zeitpunkt" }, { label: `Kurs (${data.currency})`, align: "right" }]}
+          rows={sampleRows(points).map((p) => [label(p.key, data.intraday), formatPrice(String(p.price), data.currency)])}
+        />
       )}
     </div>
   );

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Bar, BarChart, CartesianGrid, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { formatMoney } from "@/lib/format";
+import { ChartTable } from "../chart-table";
 
 /**
  * Dividenden je Monat: 12 Monate erhalten (gefüllt) und 12 Monate erwartet
@@ -119,6 +120,21 @@ export function DividendChart({ months, currentMonth }: { months: MonthDatum[]; 
           </span>
         )}
       </p>
+      <ChartTable
+        caption="Dividenden je Monat"
+        columns={[
+          { label: "Monat" },
+          { label: "Erhalten brutto", align: "right" },
+          { label: "Erhalten netto", align: "right" },
+          { label: "Erwartet brutto", align: "right" },
+        ]}
+        rows={months.map((m) => [
+          longMonth(m.month),
+          m.received ? formatMoney(String(m.received)) : "—",
+          m.receivedNet ? formatMoney(String(m.receivedNet)) : "—",
+          m.expected ? formatMoney(String(m.expected)) : "—",
+        ])}
+      />
     </div>
   );
 }

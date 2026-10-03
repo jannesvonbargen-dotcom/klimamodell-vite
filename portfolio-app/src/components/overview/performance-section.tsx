@@ -6,6 +6,7 @@ import type { RangeKey } from "@/domain/performance";
 import { formatDateLong, formatMoney, formatPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { ChartPoint, PerformanceData } from "@/server/portfolio";
+import { ChartTable, sampleRows } from "../chart-table";
 import { AnimatedText, Delta } from "../numbers";
 import { Segmented } from "../transaction-dialog";
 
@@ -38,6 +39,8 @@ function rangeCaption(data: PerformanceData, first: ChartPoint, last: ChartPoint
 }
 
 function pointLabel(key: string, intraday: boolean): string {
+  // In Intraday-Reihen ist ein reiner Datumspunkt der Vortagesschluss
+  if (intraday && key.length === 10) return `Schluss ${formatDateLong(key)}`;
   if (key.length > 10) {
     const time = key.slice(11, 16);
     return intraday ? `${formatDateLong(key)}, ${time} Uhr` : formatDateLong(key);
@@ -349,6 +352,25 @@ export function PerformanceSection({
             </button>
           </div>
         </div>
+        {shown && (
+          <ChartTable
+            caption={`Wertverlauf ${longLabel}`}
+            columns={[
+              { label: "Zeitpunkt" },
+              { label: "Gesamtvermögen", align: "right" },
+              { label: "Gewinn/Verlust", align: "right" },
+              { label: "Rendite (zeitgew.)", align: "right" },
+              ...(comparing ? [{ label: bench!.label, align: "right" as const }] : []),
+            ]}
+            rows={sampleRows(points.map((p, i) => ({ p, i }))).map(({ p, i }) => [
+              pointLabel(p.key, data.intraday),
+              formatMoney(String(p.value)),
+              formatMoney(String(p.gain), "EUR", { signed: true }),
+              formatPercent(String(p.twr), { digits: 2 }),
+              ...(comparing ? [bench!.values[i] === null ? "—" : formatPercent(String(bench!.values[i]), { digits: 2 })] : []),
+            ])}
+          />
+        )}
       </div>
     </section>
   );

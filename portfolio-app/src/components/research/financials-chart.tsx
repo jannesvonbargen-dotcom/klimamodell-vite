@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { formatCompact, formatDate, formatPrice } from "@/lib/format";
+import { ChartTable } from "../chart-table";
 
 /**
  * Umsatz und Jahresüberschuss je Geschäftsjahr (Anbieterdaten) plus die
@@ -96,6 +97,15 @@ export function FinancialsChart({ years, currency }: { years: FinancialYear[]; c
           <span className="text-subtle">Balken antippen oder überfahren für Details.</span>
         )}
       </p>
+      <ChartTable
+        caption="Umsatz und Jahresüberschuss je Geschäftsjahr"
+        columns={[{ label: "Geschäftsjahr" }, { label: "Umsatz", align: "right" }, { label: "Jahresüberschuss", align: "right" }]}
+        rows={years.map((y) => [
+          `${y.estimate ? "Schätzung " : ""}bis ${formatDate(y.fiscalYearEnd)}`,
+          formatCompact(y.revenue, currency),
+          y.netIncome === null ? "—" : formatCompact(y.netIncome, currency),
+        ])}
+      />
     </div>
   );
 }

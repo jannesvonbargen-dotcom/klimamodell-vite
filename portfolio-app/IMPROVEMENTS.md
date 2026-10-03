@@ -38,14 +38,14 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 
 - [ ] Buchungen in GBp/GBX (London) im Formular explizit unterstützen
 - [x] Kauf/Verkauf am Tag eines Splits: Split wirkt zu Tagesbeginn (per Test abgesichert)
-- [ ] Import: Trade-Republic-Sammelzeilen (Teilausführungen) zusammenführen
+- [x] Import: Teilausführungen mit gleicher Transaktions-ID werden einzeln gebucht und beim erneuten Import als Duplikat erkannt (geprüft)
 - [x] Zeitzonen: Trade-Republic-Buchungen kurz vor Mitternacht UTC behalten ihr Buchungsdatum (sonst z. B. Zinsen vom 31.12. im falschen Steuerjahr)
 
 ## 5. Performance & Barrierefreiheit
 
 - [x] Transaktionsliste blättert in 100er-Schritten
 - [ ] Wertverlauf „Max“ bei vielen Jahren serverseitig ausdünnen
-- [ ] Screenreader-Tabellenansicht für Charts (Werte als Tabelle)
+- [x] Tabellenansicht für alle Charts („Werte als Tabelle“, ausklappbar)
 - [ ] Kontrastprüfung der Hell-Variante mit dem dataviz-Validator für alle Chartfarben
 
 ## 6. Extras
