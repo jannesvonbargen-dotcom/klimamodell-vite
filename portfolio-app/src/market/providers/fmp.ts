@@ -71,11 +71,20 @@ export class FmpProvider implements MarketDataProvider {
 
   async fundamentals(symbol: string): Promise<Fundamentals | null> {
     const [profiles, ratios] = await Promise.all([
-      fetchJson<Array<{ companyName?: string; currency?: string; sector?: string; industry?: string; country?: string; marketCap?: number; range?: string }>>(
-        this.url("profile", { symbol }),
-        "FMP",
+      fetchJson<
+        Array<{
+          companyName?: string;
+          currency?: string;
+          sector?: string;
+          industry?: string;
+          country?: string;
+          marketCap?: number;
+          range?: string;
+        }>
+      >(this.url("profile", { symbol }), "FMP"),
+      fetchJson<Array<{ priceToEarningsRatioTTM?: number; dividendYieldTTM?: number }>>(this.url("ratios-ttm", { symbol }), "FMP").catch(
+        () => [],
       ),
-      fetchJson<Array<{ priceToEarningsRatioTTM?: number; dividendYieldTTM?: number }>>(this.url("ratios-ttm", { symbol }), "FMP").catch(() => []),
     ]);
     const p = profiles[0];
     if (!p) return null;

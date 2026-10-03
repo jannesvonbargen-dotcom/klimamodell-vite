@@ -166,7 +166,11 @@ export function softDeleteTransaction(id: number): void {
 }
 
 export function restoreTransaction(id: number): void {
-  getDb().update(transactions).set({ deletedAt: null }).where(and(eq(transactions.id, id), isNotNull(transactions.deletedAt))).run();
+  getDb()
+    .update(transactions)
+    .set({ deletedAt: null })
+    .where(and(eq(transactions.id, id), isNotNull(transactions.deletedAt)))
+    .run();
 }
 
 /** Duplikat-Schlüssel: Datum | ISIN | Stück (6 NK) | Betrag (2 NK). */
@@ -205,7 +209,12 @@ export function listSavingsPlans(): SavingsPlan[] {
     }));
 }
 
-export function listExecutions(): Array<{ planId: number; dueDate: string; status: "CONFIRMED" | "SKIPPED"; transactionId: number | null }> {
+export function listExecutions(): Array<{
+  planId: number;
+  dueDate: string;
+  status: "CONFIRMED" | "SKIPPED";
+  transactionId: number | null;
+}> {
   return getDb()
     .select({
       planId: savingsPlanExecutions.planId,
@@ -237,12 +246,22 @@ export function getSetting<T>(key: string, fallback: T): T {
 
 export function setSetting(key: string, value: unknown): void {
   const json = JSON.stringify(value);
-  getDb().insert(settings).values({ key, value: json }).onConflictDoUpdate({ target: settings.key, set: { value: json } }).run();
+  getDb()
+    .insert(settings)
+    .values({ key, value: json })
+    .onConflictDoUpdate({ target: settings.key, set: { value: json } })
+    .run();
 }
 
 // Splits ---------------------------------------------------------------------
 
-export function addSplit(instrumentId: number, effectiveDate: string, ratioFrom: string, ratioTo: string, note: string | null = null): void {
+export function addSplit(
+  instrumentId: number,
+  effectiveDate: string,
+  ratioFrom: string,
+  ratioTo: string,
+  note: string | null = null,
+): void {
   getDb()
     .insert(splits)
     .values({ instrumentId, effectiveDate, ratioFrom, ratioTo, note })

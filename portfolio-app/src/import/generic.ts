@@ -91,7 +91,8 @@ export function detectPreset(headers: string[]): PresetId {
   const has = (...names: string[]) => names.every((n) => h.includes(n));
   if (has("datetime", "category", "type", "amount", "currency")) return "trade_republic";
   if (has("buchungswährung") || has("wertpapiername") || has("ticker-symbol")) return "portfolio_performance";
-  if ((has("datum", "typ", "wert") || has("date", "type", "value")) && (h.includes("isin") || h.includes("notiz") || h.includes("note"))) return "pytr";
+  if ((has("datum", "typ", "wert") || has("date", "type", "value")) && (h.includes("isin") || h.includes("notiz") || h.includes("note")))
+    return "pytr";
   return "custom";
 }
 
@@ -236,7 +237,8 @@ export function normalizeGeneric(table: CsvTable, mapping: ColumnMapping): Parse
       }
       // Bruttokurswert aus dem Betrag herausrechnen, falls er die Kassenwirkung ist
       let gross: ReturnType<typeof d>;
-      if (amountRaw && mapping.amountMode === "net") gross = mapped === "SELL" ? absAmount.plus(fee).plus(tax) : absAmount.minus(fee).minus(tax);
+      if (amountRaw && mapping.amountMode === "net")
+        gross = mapped === "SELL" ? absAmount.plus(fee).plus(tax) : absAmount.minus(fee).minus(tax);
       else if (amountRaw) gross = absAmount;
       else gross = shares.times(priceRaw!).toDecimalPlaces(2);
       if (gross.lte(0)) {
@@ -244,7 +246,15 @@ export function normalizeGeneric(table: CsvTable, mapping: ColumnMapping): Parse
         return;
       }
       const price = priceRaw && priceRaw.gt(0) ? priceRaw : gross.div(shares).toDecimalPlaces(6);
-      candidates.push({ ...base, type: mapped, quantity: shares.toString(), price: price.toString(), amount: gross.toString(), fee: fee.toString(), tax: tax.toString() });
+      candidates.push({
+        ...base,
+        type: mapped,
+        quantity: shares.toString(),
+        price: price.toString(),
+        amount: gross.toString(),
+        fee: fee.toString(),
+        tax: tax.toString(),
+      });
       return;
     }
 
@@ -269,7 +279,16 @@ export function normalizeGeneric(table: CsvTable, mapping: ColumnMapping): Parse
     }
 
     if (mapped === "FEE" && isRefund) {
-      candidates.push({ ...base, type: "DEPOSIT", quantity: null, price: null, amount: absAmount.toString(), fee: "0", tax: "0", note: base.note ?? "Gebührenerstattung" });
+      candidates.push({
+        ...base,
+        type: "DEPOSIT",
+        quantity: null,
+        price: null,
+        amount: absAmount.toString(),
+        fee: "0",
+        tax: "0",
+        note: base.note ?? "Gebührenerstattung",
+      });
       return;
     }
 

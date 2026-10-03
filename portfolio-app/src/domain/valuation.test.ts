@@ -11,11 +11,7 @@ describe("valuePortfolio", () => {
 
   it("bewertet Positionen und berechnet die Tagesveränderung trotz Käufen am selben Tag", () => {
     const result = valuePortfolio({
-      transactions: [
-        deposit("2026-10-01", "2000"),
-        buy("2026-10-02", 1, "10", "100"),
-        buy("2026-10-05T10:15", 1, "5", "108"),
-      ],
+      transactions: [deposit("2026-10-01", "2000"), buy("2026-10-02", 1, "10", "100"), buy("2026-10-05T10:15", 1, "5", "108")],
       instruments: new Map([[1, instrument(1, "SAP.DE")]]),
       quotes: new Map([["SAP.DE", quote("SAP.DE", "110", "105")]]),
       fx: new Map(),

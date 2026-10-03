@@ -116,9 +116,7 @@ export function grossAmount(tx: Pick<Transaction, "amount" | "quantity" | "price
   return ZERO;
 }
 
-export type LedgerEvent =
-  | { kind: "tx"; key: string; tx: Transaction }
-  | { kind: "split"; key: string; split: Split };
+export type LedgerEvent = { kind: "tx"; key: string; tx: Transaction } | { kind: "split"; key: string; split: Split };
 
 const TYPE_ORDER: Record<string, number> = {
   DEPOSIT: 0,

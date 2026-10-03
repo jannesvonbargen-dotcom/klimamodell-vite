@@ -1,0 +1,176 @@
+{
+  "symbol": "WMT",
+  "isin": "US9311421039",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Walmart Inc.",
+    "isin": "US9311421039",
+    "sector": "Consumer Defensive",
+    "industry": "Discount Stores",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 829709420800,
+    "beta": 0.595,
+    "price": 104.26,
+    "currency": "USD",
+    "range": [98.88, 135.16],
+    "website": "https://corporate.walmart.com",
+    "lastDividend": 0.9775,
+    "employees": 2100000,
+    "ceo": "John Furner"
+  },
+  "income": {
+    "fiscalYearEnds": ["2022-01-31", "2023-01-31", "2024-01-31", "2025-01-31", "2026-01-31"],
+    "revenue": [572754000000, 611289000000, 648125000000, 680985000000, 713163000000],
+    "netIncome": [13673000000, 11680000000, 15511000000, 19436000000, 21893000000],
+    "epsDiluted": [1.62, 1.42, 1.91, 2.41, 2.73],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2025-01-31", "2026-01-31"],
+    "freeCashFlow": [12660000000, 14923000000],
+    "operatingCashFlow": [36443000000, 41565000000]
+  },
+  "ratios": {
+    "grossMargin": 0.2523,
+    "operatingMargin": 0.0439,
+    "netMargin": 0.03,
+    "debtToEquity": 0.7508,
+    "dividendYield": 0.009376,
+    "payoutRatio": 0.3487,
+    "epsTTM": 2.7755
+  },
+  "metrics": {
+    "roe": 0.2274,
+    "netDebtToEbitda": 1.4526,
+    "fcfYield": 0.0163
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2026-01-31",
+    "revenueAvg": 712771477083,
+    "epsAvg": 2.63782
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2027-01-31",
+      "revenueAvg": 752600825809,
+      "epsAvg": 2.88878,
+      "analystsRevenue": 27,
+      "analystsEps": 25
+    },
+    {
+      "fiscalYearEnd": "2028-01-31",
+      "revenueAvg": 785821578174,
+      "epsAvg": 3.22224,
+      "analystsRevenue": 27,
+      "analystsEps": 26
+    }
+  ],
+  "analysts": {
+    "strongBuy": 0,
+    "buy": 47,
+    "hold": 16,
+    "sell": 3,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 155,
+    "targetLow": 110,
+    "targetConsensus": 128.84,
+    "targetMedian": 130
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-08-04",
+      "firm": "Oppenheimer",
+      "action": "downgrade",
+      "previous": "Outperform",
+      "new": "Perform"
+    },
+    {
+      "date": "2026-05-21",
+      "firm": "Freedom Broker",
+      "action": "upgrade",
+      "previous": "Sell",
+      "new": "Hold"
+    },
+    {
+      "date": "2026-02-20",
+      "firm": "HSBC",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Hold"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-09-29",
+      "firm": "Mizuho",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-09-10",
+      "firm": "DA Davidson",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-10",
+      "firm": "BTIG",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-31",
+      "firm": "Tigress Financial",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-21",
+      "firm": "UBS",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-21",
+      "firm": "BTIG",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 1,
+    "downgrades": 2,
+    "total": 94
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Walmart Inc.",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=104169",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/WMT/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://corporate.walmart.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

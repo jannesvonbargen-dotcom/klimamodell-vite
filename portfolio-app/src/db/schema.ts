@@ -21,7 +21,9 @@ export const instruments = sqliteTable(
     wkn: text("wkn"),
     symbol: text("symbol").notNull(),
     name: text("name").notNull(),
-    kind: text("kind", { enum: ["STOCK", "ETF"] }).notNull().default("STOCK"),
+    kind: text("kind", { enum: ["STOCK", "ETF"] })
+      .notNull()
+      .default("STOCK"),
     currency: text("currency").notNull().default("EUR"),
     sector: text("sector"),
     country: text("country"),

@@ -15,7 +15,15 @@ import { Field, Input } from "../ui/input";
 import { Menu, MenuContent, MenuItem, MenuTrigger } from "../ui/misc";
 import { Select } from "../ui/select";
 
-export function PositionActions({ instrument, holds, splits }: { instrument: Instrument; holds: boolean; splits: Array<{ id: number; effectiveDate: string; ratioFrom: string; ratioTo: string }> }) {
+export function PositionActions({
+  instrument,
+  holds,
+  splits,
+}: {
+  instrument: Instrument;
+  holds: boolean;
+  splits: Array<{ id: number; effectiveDate: string; ratioFrom: string; ratioTo: string }>;
+}) {
   const { openCreate } = useTransactionDialog();
   const [editOpen, setEditOpen] = React.useState(false);
   const [splitOpen, setSplitOpen] = React.useState(false);
@@ -64,7 +72,15 @@ export function PositionActions({ instrument, holds, splits }: { instrument: Ins
   );
 }
 
-function EditInstrumentDialog({ open, onOpenChange, instrument }: { open: boolean; onOpenChange: (o: boolean) => void; instrument: Instrument }) {
+function EditInstrumentDialog({
+  open,
+  onOpenChange,
+  instrument,
+}: {
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+  instrument: Instrument;
+}) {
   const router = useRouter();
   const [symbol, setSymbol] = React.useState(instrument.symbol);
   const [name, setName] = React.useState(instrument.name);
@@ -78,7 +94,14 @@ function EditInstrumentDialog({ open, onOpenChange, instrument }: { open: boolea
   function submit(e: React.FormEvent) {
     e.preventDefault();
     startTransition(async () => {
-      const result = await updateInstrumentAction(instrument.id, { symbol, name, currency, sector: sector || null, country: country || null, kind });
+      const result = await updateInstrumentAction(instrument.id, {
+        symbol,
+        name,
+        currency,
+        sector: sector || null,
+        country: country || null,
+        kind,
+      });
       if (!result.ok) {
         setErrors(result.errors);
         return;
@@ -95,7 +118,9 @@ function EditInstrumentDialog({ open, onOpenChange, instrument }: { open: boolea
         <form onSubmit={submit} noValidate className="flex min-h-0 flex-col">
           <DialogHeader>
             <DialogTitle>Stammdaten</DialogTitle>
-            <DialogDescription>Das Kurssymbol bestimmt, welche Kurse geladen werden (z. B. „SAP.DE“ für Xetra, „AAPL“ für Nasdaq).</DialogDescription>
+            <DialogDescription>
+              Das Kurssymbol bestimmt, welche Kurse geladen werden (z. B. „SAP.DE“ für Xetra, „AAPL“ für Nasdaq).
+            </DialogDescription>
           </DialogHeader>
           <DialogBody className="flex flex-col gap-4 pb-4">
             <Field label="Name" htmlFor="inst-name" error={errors.name}>
@@ -188,9 +213,21 @@ function SplitDialog({
             <Field label="Stichtag (erster Handelstag nach dem Split)" htmlFor="split-date" error={errors.effectiveDate}>
               <Input id="split-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </Field>
-            <Field label="Verhältnis alt : neu" htmlFor="split-from" error={errors.ratio} hint="Beispiel: 1 : 10 – aus einer Aktie werden zehn.">
+            <Field
+              label="Verhältnis alt : neu"
+              htmlFor="split-from"
+              error={errors.ratio}
+              hint="Beispiel: 1 : 10 – aus einer Aktie werden zehn."
+            >
               <div className="flex items-center gap-2">
-                <Input id="split-from" inputMode="decimal" value={from} onChange={(e) => setFrom(e.target.value)} className="w-24" aria-label="Alt" />
+                <Input
+                  id="split-from"
+                  inputMode="decimal"
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                  className="w-24"
+                  aria-label="Alt"
+                />
                 <span className="text-muted">:</span>
                 <Input inputMode="decimal" value={to} onChange={(e) => setTo(e.target.value)} className="w-24" aria-label="Neu" />
               </div>

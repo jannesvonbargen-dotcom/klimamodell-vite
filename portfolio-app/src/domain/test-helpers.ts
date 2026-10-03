@@ -24,11 +24,25 @@ export function tx(type: TransactionType, executedAt: string, fields: Partial<Tr
   };
 }
 
-export function buy(executedAt: string, instrumentId: number, quantity: string, price: string, fee = "1", extra: Partial<Transaction> = {}): Transaction {
+export function buy(
+  executedAt: string,
+  instrumentId: number,
+  quantity: string,
+  price: string,
+  fee = "1",
+  extra: Partial<Transaction> = {},
+): Transaction {
   return tx("BUY", executedAt, { instrumentId, quantity, price, fee, ...extra });
 }
 
-export function sell(executedAt: string, instrumentId: number, quantity: string, price: string, fee = "1", extra: Partial<Transaction> = {}): Transaction {
+export function sell(
+  executedAt: string,
+  instrumentId: number,
+  quantity: string,
+  price: string,
+  fee = "1",
+  extra: Partial<Transaction> = {},
+): Transaction {
   return tx("SELL", executedAt, { instrumentId, quantity, price, fee, ...extra });
 }
 

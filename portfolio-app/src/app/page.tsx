@@ -38,7 +38,12 @@ export default async function OverviewPage() {
           staleQuotes={overview.staleQuotes}
           missingQuotes={overview.missingQuotes}
         />
-        <PerformanceSection initial={performance} totalEUR={totals.totalEUR} dayChangeEUR={totals.dayChangeEUR} dayChangePct={totals.dayChangePct} />
+        <PerformanceSection
+          initial={performance}
+          totalEUR={totals.totalEUR}
+          dayChangeEUR={totals.dayChangeEUR}
+          dayChangePct={totals.dayChangePct}
+        />
       </div>
 
       {(overview.pendingSavings > 0 || negativeCash || oversell) && (
@@ -52,7 +57,8 @@ export default async function OverviewPage() {
                 </Button>
               }
             >
-              {overview.pendingSavings === 1 ? "1 Sparplan-Ausführung wartet" : `${overview.pendingSavings} Sparplan-Ausführungen warten`} auf deine Bestätigung.
+              {overview.pendingSavings === 1 ? "1 Sparplan-Ausführung wartet" : `${overview.pendingSavings} Sparplan-Ausführungen warten`}{" "}
+              auf deine Bestätigung.
             </Notice>
           )}
           {oversell && oversell.kind === "OVERSELL" && (
@@ -81,15 +87,38 @@ export default async function OverviewPage() {
       )}
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <StatTile label="Investiert" value={totals.marketValueEUR} share={totals.investedShare} sub={<>Einstand {formatMoney(totals.costEUR)}</>} />
-        <StatTile label="Cash (uninvestiert)" value={totals.cashEUR} share={totals.cashShare} sub={<>Einzahlungen gesamt {formatMoney(totals.depositsEUR)}</>} />
+        <StatTile
+          label="Investiert"
+          value={totals.marketValueEUR}
+          share={totals.investedShare}
+          sub={<>Einstand {formatMoney(totals.costEUR)}</>}
+        />
+        <StatTile
+          label="Cash (uninvestiert)"
+          value={totals.cashEUR}
+          share={totals.cashShare}
+          sub={<>Einzahlungen gesamt {formatMoney(totals.depositsEUR)}</>}
+        />
       </div>
 
       <Card className="grid grid-cols-2 divide-border md:grid-cols-4 md:divide-x [&>*:nth-child(-n+2)]:border-b [&>*:nth-child(-n+2)]:border-border md:[&>*:nth-child(-n+2)]:border-b-0">
         <Kpi label="Unrealisiert" value={totals.unrealizedEUR} percent={totals.unrealizedPct} />
-        <Kpi label="Realisiert (gesamt)" value={totals.realizedEUR} hint={thisYear ? `${year}: ${formatMoney(thisYear.realizedEUR, "EUR", { signed: true })}` : undefined} />
-        <Kpi label={`Dividenden ${year} (netto)`} value={thisYear?.dividendsNetEUR ?? "0"} hint={`Gesamt ${formatMoney(totals.dividendsNetEUR)}`} />
-        <Kpi label="Gebühren gesamt" value={totals.feesEUR} neutral hint={`Steuern ${formatMoney(totals.taxesEUR)} · Zinsen ${formatMoney(totals.interestEUR)}`} />
+        <Kpi
+          label="Realisiert (gesamt)"
+          value={totals.realizedEUR}
+          hint={thisYear ? `${year}: ${formatMoney(thisYear.realizedEUR, "EUR", { signed: true })}` : undefined}
+        />
+        <Kpi
+          label={`Dividenden ${year} (netto)`}
+          value={thisYear?.dividendsNetEUR ?? "0"}
+          hint={`Gesamt ${formatMoney(totals.dividendsNetEUR)}`}
+        />
+        <Kpi
+          label="Gebühren gesamt"
+          value={totals.feesEUR}
+          neutral
+          hint={`Steuern ${formatMoney(totals.taxesEUR)} · Zinsen ${formatMoney(totals.interestEUR)}`}
+        />
       </Card>
 
       <PositionsTable positions={overview.positions} />

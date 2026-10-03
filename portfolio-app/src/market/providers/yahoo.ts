@@ -1,7 +1,14 @@
 import YahooFinance from "yahoo-finance2";
 import { Dec } from "@/domain/decimal";
 import { wallTime } from "@/domain/market-hours";
-import { type Fundamentals, type MarketDataProvider, type PricePoint, ProviderError, type ProviderQuote, type SearchResult } from "../types";
+import {
+  type Fundamentals,
+  type MarketDataProvider,
+  type PricePoint,
+  ProviderError,
+  type ProviderQuote,
+  type SearchResult,
+} from "../types";
 
 /**
  * Yahoo Finance über yahoo-finance2 (inoffiziell, ohne API-Key).
@@ -95,9 +102,7 @@ export class YahooProvider implements MarketDataProvider {
       // Nur die letzten `days` Handelstage
       const tz = typeof result.meta.exchangeTimezoneName === "string" ? result.meta.exchangeTimezoneName : "Europe/Berlin";
       const sessionDays = [...new Set(points.map((p) => wallTime(p.at, tz).date))].slice(-days);
-      return points
-        .filter((p) => sessionDays.includes(wallTime(p.at, tz).date))
-        .map((p) => ({ key: berlinKey(p.at), close: p.close }));
+      return points.filter((p) => sessionDays.includes(wallTime(p.at, tz).date)).map((p) => ({ key: berlinKey(p.at), close: p.close }));
     } catch (error) {
       throw wrap(error);
     }

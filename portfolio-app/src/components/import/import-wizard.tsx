@@ -10,7 +10,17 @@ import { TRANSACTION_TYPE_LABELS, TRANSACTION_TYPES, type TransactionType } from
 import { type CsvTable, decodeBytes, parseCsv } from "@/import/csv";
 import { detectPreset, distinctValues, normalizeGeneric, suggestMapping } from "@/import/generic";
 import { parseTradeRepublic } from "@/import/trade-republic";
-import { type ColumnMapping, IMPORT_FIELD_LABELS, IMPORT_FIELDS, type ImportCandidate, type ImportField, PRESET_LABELS, type PresetId, REQUIRED_FIELDS, type SkippedRow } from "@/import/types";
+import {
+  type ColumnMapping,
+  IMPORT_FIELD_LABELS,
+  IMPORT_FIELDS,
+  type ImportCandidate,
+  type ImportField,
+  PRESET_LABELS,
+  type PresetId,
+  REQUIRED_FIELDS,
+  type SkippedRow,
+} from "@/import/types";
 import { formatDate, formatMoney, formatQuantity } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { CommitResult, ImportPreview, PreviewRow } from "@/server/import";
@@ -20,7 +30,11 @@ import { Label } from "../ui/input";
 import { Badge, Card } from "../ui/misc";
 import { Select } from "../ui/select";
 
-type Step = { name: "upload" } | { name: "mapping" } | { name: "preview"; preview: ImportPreview; skipped: SkippedRow[] } | { name: "done"; result: CommitResult };
+type Step =
+  | { name: "upload" }
+  | { name: "mapping" }
+  | { name: "preview"; preview: ImportPreview; skipped: SkippedRow[] }
+  | { name: "done"; result: CommitResult };
 
 const NONE = "__none__";
 
@@ -113,7 +127,10 @@ export function ImportWizard() {
 
       {step.name === "upload" && (
         <Card
-          className={cn("relative flex flex-col items-center gap-4 border-dashed border-border-strong px-6 py-14 text-center transition-colors duration-150", dragging && "border-accent bg-surface-2")}
+          className={cn(
+            "relative flex flex-col items-center gap-4 border-dashed border-border-strong px-6 py-14 text-center transition-colors duration-150",
+            dragging && "border-accent bg-surface-2",
+          )}
           onDragOver={(e) => {
             e.preventDefault();
             setDragging(true);
@@ -215,7 +232,7 @@ function Stepper({ current }: { current: Step["name"] }) {
         <li key={s.key} className="flex items-center gap-2" aria-current={i === index ? "step" : undefined}>
           <span
             className={cn(
-              "inline-flex size-6 items-center justify-center rounded-full text-[12px] font-semibold tnum",
+              "tnum inline-flex size-6 items-center justify-center rounded-full text-[12px] font-semibold",
               i < index ? "bg-up-soft text-up" : i === index ? "bg-foreground text-background" : "bg-surface-2 text-subtle",
             )}
           >
@@ -270,7 +287,7 @@ function MappingStep({
           <FileSpreadsheetIcon className="size-5 text-subtle" />
           <div className="leading-tight">
             <div className="text-[14px] font-medium">{fileName}</div>
-            <div className="text-[12px] text-subtle tnum">
+            <div className="tnum text-[12px] text-subtle">
               {table.rows.length} Zeilen · Trennzeichen „{table.delimiter === "\t" ? "Tab" : table.delimiter}“
             </div>
           </div>
@@ -281,7 +298,9 @@ function MappingStep({
       <Card className="flex flex-col gap-5 p-5">
         <div className="flex flex-col gap-1">
           <h2 className="text-[15px] font-semibold">Spalten zuordnen</h2>
-          <p className="text-[13px] text-muted">Pflicht sind Datum, Typ und Betrag. Für Wertpapiere zusätzlich ISIN oder Ticker und Stückzahl.</p>
+          <p className="text-[13px] text-muted">
+            Pflicht sind Datum, Typ und Betrag. Für Wertpapiere zusätzlich ISIN oder Ticker und Stückzahl.
+          </p>
         </div>
         <div className="grid gap-x-4 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
           {IMPORT_FIELDS.map((field) => (
@@ -290,7 +309,13 @@ function MappingStep({
                 {IMPORT_FIELD_LABELS[field]}
                 {REQUIRED_FIELDS.includes(field) && <span className="text-down"> *</span>}
               </Label>
-              <Select id={`map-${field}`} value={mapping.columns[field] ?? NONE} onValueChange={(v) => setColumn(field, v)} options={columnOptions} ariaLabel={IMPORT_FIELD_LABELS[field]} />
+              <Select
+                id={`map-${field}`}
+                value={mapping.columns[field] ?? NONE}
+                onValueChange={(v) => setColumn(field, v)}
+                options={columnOptions}
+                ariaLabel={IMPORT_FIELD_LABELS[field]}
+              />
             </div>
           ))}
         </div>
@@ -340,7 +365,9 @@ function MappingStep({
         <Card className="flex flex-col gap-4 p-5">
           <div className="flex flex-col gap-1">
             <h2 className="text-[15px] font-semibold">Typen zuordnen</h2>
-            <p className="text-[13px] text-muted">Welcher Wert in der Spalte „{mapping.columns.type}“ entspricht welchem Transaktionstyp?</p>
+            <p className="text-[13px] text-muted">
+              Welcher Wert in der Spalte „{mapping.columns.type}“ entspricht welchem Transaktionstyp?
+            </p>
           </div>
           <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
             {typeValues.map((value) => (
@@ -349,7 +376,10 @@ function MappingStep({
                 <Select
                   value={mapping.typeMap[value] ?? "IGNORE"}
                   onValueChange={(v) => onChange({ ...mapping, typeMap: { ...mapping.typeMap, [value]: v as TransactionType | "IGNORE" } })}
-                  options={[{ value: "IGNORE", label: "Ignorieren" }, ...TRANSACTION_TYPES.map((t) => ({ value: t, label: TRANSACTION_TYPE_LABELS[t] }))]}
+                  options={[
+                    { value: "IGNORE", label: "Ignorieren" },
+                    ...TRANSACTION_TYPES.map((t) => ({ value: t, label: TRANSACTION_TYPE_LABELS[t] })),
+                  ]}
                   ariaLabel={`Typ für ${value}`}
                   className="w-48"
                 />
@@ -376,7 +406,7 @@ function MappingStep({
               {sample.map((row, i) => (
                 <tr key={i} className="border-t border-border">
                   {table.headers.map((h) => (
-                    <td key={h} className="max-w-48 truncate px-3 py-2 whitespace-nowrap tnum">
+                    <td key={h} className="tnum max-w-48 truncate px-3 py-2 whitespace-nowrap">
                       {row[h]}
                     </td>
                   ))}
@@ -392,7 +422,9 @@ function MappingStep({
           Andere Datei
         </Button>
         <div className="flex items-center gap-3">
-          {missing.length > 0 && <span className="text-[13px] text-down">Fehlt: {missing.map((f) => IMPORT_FIELD_LABELS[f]).join(", ")}</span>}
+          {missing.length > 0 && (
+            <span className="text-[13px] text-down">Fehlt: {missing.map((f) => IMPORT_FIELD_LABELS[f]).join(", ")}</span>
+          )}
           <Button variant="primary" onClick={onNext} disabled={missing.length > 0 || busy}>
             {busy ? "Prüfe …" : "Vorschau"}
           </Button>
@@ -453,7 +485,10 @@ function PreviewStep({
       {preview.newInstruments.length > 0 && (
         <Card className="p-4 text-[13px]">
           <span className="font-medium">{preview.newInstruments.length} neue Wertpapiere</span>
-          <span className="text-muted"> werden angelegt; das Kurssymbol wird automatisch gesucht und lässt sich in der Positionsansicht ändern: </span>
+          <span className="text-muted">
+            {" "}
+            werden angelegt; das Kurssymbol wird automatisch gesucht und lässt sich in der Positionsansicht ändern:{" "}
+          </span>
           <span className="text-muted">{preview.newInstruments.map((i) => i.name ?? i.isin ?? i.symbol).join(", ")}</span>
         </Card>
       )}
@@ -489,7 +524,7 @@ function PreviewStep({
               <tbody>
                 {skipped.map((s) => (
                   <tr key={s.row} className="border-b border-border last:border-0">
-                    <td className="px-4 py-2 text-subtle tnum">{s.row}</td>
+                    <td className="tnum px-4 py-2 text-subtle">{s.row}</td>
                     <td className="px-4 py-2">{s.reason}</td>
                     <td className="max-w-md truncate px-4 py-2 text-subtle">{s.raw}</td>
                   </tr>
@@ -518,11 +553,15 @@ function PreviewStep({
               <tbody>
                 {rows.slice(0, limit).map((r) => (
                   <tr key={r.row} className={cn("border-b border-border last:border-0", r.status !== "new" && "text-muted")}>
-                    <td className="px-4 py-2 whitespace-nowrap tnum">{formatDate(r.executedAt)}</td>
+                    <td className="tnum px-4 py-2 whitespace-nowrap">{formatDate(r.executedAt)}</td>
                     <td className="px-4 py-2 whitespace-nowrap">{TRANSACTION_TYPE_LABELS[r.type]}</td>
-                    <td className="max-w-64 truncate px-4 py-2">{r.name ?? r.isin ?? r.symbol ?? <span className="text-subtle">—</span>}</td>
-                    <td className="px-4 py-2 text-right tnum">{r.quantity ? formatQuantity(r.quantity) : ""}</td>
-                    <td className="px-4 py-2 text-right whitespace-nowrap tnum">{r.cashEUR ? formatMoney(r.cashEUR, "EUR", { signed: true }) : "—"}</td>
+                    <td className="max-w-64 truncate px-4 py-2">
+                      {r.name ?? r.isin ?? r.symbol ?? <span className="text-subtle">—</span>}
+                    </td>
+                    <td className="tnum px-4 py-2 text-right">{r.quantity ? formatQuantity(r.quantity) : ""}</td>
+                    <td className="tnum px-4 py-2 text-right whitespace-nowrap">
+                      {r.cashEUR ? formatMoney(r.cashEUR, "EUR", { signed: true }) : "—"}
+                    </td>
                     <td className="px-4 py-2 whitespace-nowrap">
                       <Badge tone={r.status === "new" ? "up" : r.status === "invalid" ? "down" : "neutral"} title={r.message ?? undefined}>
                         {STATUS_LABEL[r.status]}
@@ -567,7 +606,9 @@ function Summary({ label, value, tone }: { label: string; value: number; tone?: 
   return (
     <div className="flex flex-col gap-1 px-5 py-4">
       <span className="text-[12px] font-medium text-subtle">{label}</span>
-      <span className={cn("text-[22px] font-semibold tnum", tone === "up" && value > 0 && "text-up", tone === "down" && "text-down")}>{value}</span>
+      <span className={cn("tnum text-[22px] font-semibold", tone === "up" && value > 0 && "text-up", tone === "down" && "text-down")}>
+        {value}
+      </span>
     </div>
   );
 }

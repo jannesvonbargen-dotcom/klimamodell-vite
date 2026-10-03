@@ -27,7 +27,7 @@ export function PositionTransactions({ instrument, transactions }: { instrument:
   return (
     <section aria-labelledby="pos-tx-heading" className="flex flex-col gap-3">
       <h2 id="pos-tx-heading" className="text-[17px] font-semibold tracking-[-0.01em]">
-        Transaktionen <span className="ml-1 text-[14px] font-normal text-subtle tnum">{transactions.length}</span>
+        Transaktionen <span className="tnum ml-1 text-[14px] font-normal text-subtle">{transactions.length}</span>
       </h2>
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
@@ -76,12 +76,12 @@ export function PositionTransactions({ instrument, transactions }: { instrument:
                       })
                     }
                   >
-                    <td className="px-5 py-2.5 whitespace-nowrap tnum">{formatDate(t.executedAt)}</td>
+                    <td className="tnum px-5 py-2.5 whitespace-nowrap">{formatDate(t.executedAt)}</td>
                     <td className="px-4 py-2.5">{TRANSACTION_TYPE_LABELS[t.type as TransactionType]}</td>
-                    <td className="px-4 py-2.5 text-right tnum">{t.quantity ? formatQuantity(t.quantity) : "—"}</td>
-                    <td className="px-4 py-2.5 text-right tnum">{t.price ? formatPrice(t.price, t.currency) : "—"}</td>
-                    <td className="px-4 py-2.5 text-right text-muted tnum">{t.fee !== "0" ? formatMoney(t.fee, t.currency) : "—"}</td>
-                    <td className="px-5 py-2.5 text-right font-medium tnum">{gross ? formatMoney(gross, t.currency) : "—"}</td>
+                    <td className="tnum px-4 py-2.5 text-right">{t.quantity ? formatQuantity(t.quantity) : "—"}</td>
+                    <td className="tnum px-4 py-2.5 text-right">{t.price ? formatPrice(t.price, t.currency) : "—"}</td>
+                    <td className="tnum px-4 py-2.5 text-right text-muted">{t.fee !== "0" ? formatMoney(t.fee, t.currency) : "—"}</td>
+                    <td className="tnum px-5 py-2.5 text-right font-medium">{gross ? formatMoney(gross, t.currency) : "—"}</td>
                   </tr>
                 );
               })}

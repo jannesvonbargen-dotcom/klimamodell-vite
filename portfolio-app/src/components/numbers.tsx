@@ -42,7 +42,7 @@ export function Delta({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 tnum font-medium whitespace-nowrap",
+        "tnum inline-flex items-center gap-1 font-medium whitespace-nowrap",
         size === "sm" && "text-[13px]",
         size === "lg" && "text-[15px]",
         color,
@@ -52,7 +52,11 @@ export function Delta({
     >
       {showArrow && <Icon aria-hidden className={cn("shrink-0", size === "sm" ? "size-3.5" : "size-4")} strokeWidth={2.25} />}
       {hasValue && <span>{formatMoney(String(value), currency, { signed: true })}</span>}
-      {hasValue && hasPercent && <span aria-hidden className="opacity-60">·</span>}
+      {hasValue && hasPercent && (
+        <span aria-hidden className="opacity-60">
+          ·
+        </span>
+      )}
       {hasPercent && <span>{formatPercent(String(percent))}</span>}
     </span>
   );
@@ -78,7 +82,16 @@ export function AnimatedText({ value, className, animate = true }: { value: stri
   );
 }
 
-const AVATAR_COLORS = ["var(--series-1)", "var(--series-2)", "var(--series-3)", "var(--series-7)", "var(--series-5)", "var(--series-6)", "var(--series-4)", "var(--series-8)"];
+const AVATAR_COLORS = [
+  "var(--series-1)",
+  "var(--series-2)",
+  "var(--series-3)",
+  "var(--series-7)",
+  "var(--series-5)",
+  "var(--series-6)",
+  "var(--series-4)",
+  "var(--series-8)",
+];
 
 function hash(s: string): number {
   let h = 0;
@@ -91,7 +104,19 @@ function hash(s: string): number {
  * welche Werte im Depot liegen. Ein eigenes Logo kann pro Instrument
  * hinterlegt werden.
  */
-export function InstrumentAvatar({ name, symbol, logoUrl, size = 36, className }: { name: string; symbol: string; logoUrl?: string | null; size?: number; className?: string }) {
+export function InstrumentAvatar({
+  name,
+  symbol,
+  logoUrl,
+  size = 36,
+  className,
+}: {
+  name: string;
+  symbol: string;
+  logoUrl?: string | null;
+  size?: number;
+  className?: string;
+}) {
   const [failed, setFailed] = React.useState(false);
   const initials = name
     .replace(/\b(Inc|Corp|AG|SE|N\.V|S\.A|plc|Co|Ltd|UCITS|ETF|Holding|Group)\.?\b/gi, "")

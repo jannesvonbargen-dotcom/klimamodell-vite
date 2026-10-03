@@ -3,17 +3,7 @@
  * sie verlustfrei zwischen Datenbank, Server und Client wandern.
  */
 
-export const TRANSACTION_TYPES = [
-  "BUY",
-  "SELL",
-  "DIVIDEND",
-  "DEPOSIT",
-  "WITHDRAWAL",
-  "FEE",
-  "TAX",
-  "SAVINGS_PLAN",
-  "INTEREST",
-] as const;
+export const TRANSACTION_TYPES = ["BUY", "SELL", "DIVIDEND", "DEPOSIT", "WITHDRAWAL", "FEE", "TAX", "SAVINGS_PLAN", "INTEREST"] as const;
 export type TransactionType = (typeof TRANSACTION_TYPES)[number];
 
 export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
@@ -31,12 +21,7 @@ export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
 /** Typen, die Stücke bewegen. */
 export const TRADE_TYPES: readonly TransactionType[] = ["BUY", "SELL", "SAVINGS_PLAN"];
 /** Typen, die ein Instrument brauchen. */
-export const INSTRUMENT_TYPES_REQUIRED: readonly TransactionType[] = [
-  "BUY",
-  "SELL",
-  "SAVINGS_PLAN",
-  "DIVIDEND",
-];
+export const INSTRUMENT_TYPES_REQUIRED: readonly TransactionType[] = ["BUY", "SELL", "SAVINGS_PLAN", "DIVIDEND"];
 /** Externe Geldflüsse (zählen nicht als Rendite). */
 export const EXTERNAL_FLOW_TYPES: readonly TransactionType[] = ["DEPOSIT", "WITHDRAWAL"];
 

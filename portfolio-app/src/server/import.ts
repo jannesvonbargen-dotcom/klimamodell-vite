@@ -136,7 +136,8 @@ export function previewImport(candidates: ImportCandidate[]): ImportPreview {
     });
   const ledger = computeLedger([...existing, ...simulated], listSplits());
   const oversells = ledger.issues.filter((i) => i.kind === "OVERSELL" && i.transactionId >= 1_000_000);
-  if (oversells.length) warnings.push(`${oversells.length} Verkauf/Verkäufe mit mehr Stücken als gehalten – fehlen ältere Käufe in der Datei?`);
+  if (oversells.length)
+    warnings.push(`${oversells.length} Verkauf/Verkäufe mit mehr Stücken als gehalten – fehlen ältere Käufe in der Datei?`);
   const negative = ledger.issues.find((i) => i.kind === "NEGATIVE_CASH");
   if (negative && !computeLedger(existing, listSplits()).issues.some((i) => i.kind === "NEGATIVE_CASH")) {
     warnings.push("Das Cash-Konto würde negativ – enthält die Datei auch die Einzahlungen?");
@@ -158,13 +159,31 @@ export function previewImport(candidates: ImportCandidate[]): ImportPreview {
 /** Findet ein passendes Kurssymbol für eine ISIN (Katalog → Anbieter-Suche → ISIN als Platzhalter). */
 async function resolveInstrument(c: ImportCandidate) {
   if (c.assetClass === "CRYPTO" && c.symbol) {
-    return { isin: `X-${c.symbol}`, symbol: `${c.symbol}-EUR`, name: c.name ?? c.symbol, kind: "STOCK" as const, currency: "EUR", sector: "Krypto", country: null, wkn: null };
+    return {
+      isin: `X-${c.symbol}`,
+      symbol: `${c.symbol}-EUR`,
+      name: c.name ?? c.symbol,
+      kind: "STOCK" as const,
+      currency: "EUR",
+      sector: "Krypto",
+      country: null,
+      wkn: null,
+    };
   }
   const isin = c.isin ?? (c.symbol ? `X-${c.symbol}` : null);
   if (!isin) return null;
   const catalog = c.isin ? catalogByIsin(c.isin) : undefined;
   if (catalog) {
-    return { isin, symbol: catalog.symbol, name: catalog.name, kind: catalog.kind, currency: catalog.currency, sector: catalog.sector, country: catalog.country, wkn: catalog.wkn };
+    return {
+      isin,
+      symbol: catalog.symbol,
+      name: catalog.name,
+      kind: catalog.kind,
+      currency: catalog.currency,
+      sector: catalog.sector,
+      country: catalog.country,
+      wkn: catalog.wkn,
+    };
   }
   let symbol = c.symbol ?? null;
   let kind: "STOCK" | "ETF" = c.assetClass === "ETF" ? "ETF" : "STOCK";
@@ -216,7 +235,13 @@ export async function commitImport(candidates: ImportCandidate[], fileName: stri
   const result = db.transaction((tx) => {
     const batch = tx
       .insert(importBatches)
-      .values({ fileName: fileName.slice(0, 200), preset, rowCount: candidates.length, importedCount: toImport.length, skippedCount: candidates.length - toImport.length })
+      .values({
+        fileName: fileName.slice(0, 200),
+        preset,
+        rowCount: candidates.length,
+        importedCount: toImport.length,
+        skippedCount: candidates.length - toImport.length,
+      })
       .returning()
       .get();
     const ids = new Map<string, number>();
@@ -287,7 +312,12 @@ export function undoImportBatch(batchId: number): number {
   if (rows.length === 0) return 0;
   db.update(transactions)
     .set({ deletedAt: new Date().toISOString() })
-    .where(inArray(transactions.id, rows.map((r) => r.id)))
+    .where(
+      inArray(
+        transactions.id,
+        rows.map((r) => r.id),
+      ),
+    )
     .run();
   return rows.length;
 }

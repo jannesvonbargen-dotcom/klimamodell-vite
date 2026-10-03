@@ -38,11 +38,7 @@ export function validateFields(tx: TransactionDraft): FieldErrors {
  * Prüft, ob die Transaktion (neu oder geändert) im Gesamtverlauf zu einem
  * Verkauf von mehr Stücken als gehalten führt – auch bei späteren Verkäufen.
  */
-export function validateTimeline(
-  draft: TransactionDraft,
-  existing: readonly Transaction[],
-  splits: readonly Split[] = [],
-): FieldErrors {
+export function validateTimeline(draft: TransactionDraft, existing: readonly Transaction[], splits: readonly Split[] = []): FieldErrors {
   const candidate: Transaction = { ...draft, id: draft.id ?? Number.MAX_SAFE_INTEGER };
   const others = existing.filter((t) => t.id !== draft.id);
   const before = computeLedger(others, splits).issues.filter((i) => i.kind === "OVERSELL").length;
@@ -66,11 +62,7 @@ export function validateTimeline(
 }
 
 /** Prüft, ob das Löschen einer Transaktion spätere Verkäufe ungültig macht. */
-export function validateDeletion(
-  id: number,
-  existing: readonly Transaction[],
-  splits: readonly Split[] = [],
-): string | null {
+export function validateDeletion(id: number, existing: readonly Transaction[], splits: readonly Split[] = []): string | null {
   const before = computeLedger(existing, splits).issues.filter((i) => i.kind === "OVERSELL").length;
   const after = computeLedger(
     existing.filter((t) => t.id !== id),

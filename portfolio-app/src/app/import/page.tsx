@@ -11,19 +11,23 @@ export default function ImportPage() {
   const batches = listImportBatches();
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title="Import" description="Transaktionen aus einer CSV-Datei übernehmen. Bereits vorhandene Buchungen werden erkannt und übersprungen." />
+      <PageHeader
+        title="Import"
+        description="Transaktionen aus einer CSV-Datei übernehmen. Bereits vorhandene Buchungen werden erkannt und übersprungen."
+      />
       <ImportWizard />
       <div className="grid gap-4 lg:grid-cols-3">
         <HelpCard title="Trade Republic">
-          In der App unter <strong>Profil → Kontoauszüge → Transaktionsexport</strong> eine CSV-Datei erstellen und hier hineinziehen. Das Format wird
-          automatisch erkannt (Käufe, Sparpläne, Dividenden, Zinsen, Steuern, Ein- und Auszahlungen).
+          In der App unter <strong>Profil → Kontoauszüge → Transaktionsexport</strong> eine CSV-Datei erstellen und hier hineinziehen. Das
+          Format wird automatisch erkannt (Käufe, Sparpläne, Dividenden, Zinsen, Steuern, Ein- und Auszahlungen).
         </HelpCard>
         <HelpCard title="pytr">
-          <code className="rounded bg-surface-2 px-1">pytr export_transactions</code> erzeugt eine Semikolon-CSV im Portfolio-Performance-Format. Spalten und Typen
-          werden vorgeschlagen.
+          <code className="rounded bg-surface-2 px-1">pytr export_transactions</code> erzeugt eine Semikolon-CSV im
+          Portfolio-Performance-Format. Spalten und Typen werden vorgeschlagen.
         </HelpCard>
         <HelpCard title="Andere Broker">
-          Jede CSV mit Kopfzeile funktioniert: Spalten zuordnen, Typen zuordnen, Vorschau prüfen. Duplikate werden über Datum, ISIN, Stückzahl und Betrag erkannt.
+          Jede CSV mit Kopfzeile funktioniert: Spalten zuordnen, Typen zuordnen, Vorschau prüfen. Duplikate werden über Datum, ISIN,
+          Stückzahl und Betrag erkannt.
         </HelpCard>
       </div>
       {batches.length > 0 && <ImportHistory batches={batches} />}

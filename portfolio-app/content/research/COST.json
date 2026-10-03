@@ -1,0 +1,183 @@
+{
+  "symbol": "COST",
+  "isin": "US22160K1051",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Costco Wholesale Corporation",
+    "isin": "US22160K1051",
+    "sector": "Consumer Defensive",
+    "industry": "Discount Stores",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 408288941350,
+    "beta": 0.855,
+    "price": 920.65,
+    "currency": "USD",
+    "range": [844.06, 1096.5],
+    "website": "https://www.costco.com",
+    "lastDividend": 5.54,
+    "employees": 341000,
+    "ceo": "Ron Vachris"
+  },
+  "income": {
+    "fiscalYearEnds": ["2022-08-28", "2023-09-03", "2024-09-01", "2025-08-31", "2026-08-30"],
+    "revenue": [226954000000, 242290000000, 254453000000, 275235000000, 303154000000],
+    "netIncome": [5844000000, 6292000000, 7367000000, 8099000000, 9226000000],
+    "epsDiluted": [13.14, 14.16, 16.56, 18.21, 20.76],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2025-08-31", "2026-08-30"],
+    "freeCashFlow": [7837000000, 9390000000],
+    "operatingCashFlow": [13335000000, 15825000000]
+  },
+  "ratios": {
+    "grossMargin": 0.1282,
+    "operatingMargin": 0.0385,
+    "netMargin": 0.0304,
+    "debtToEquity": 0.2395,
+    "dividendYield": 0.006017,
+    "payoutRatio": 0.2664,
+    "epsTTM": 20.7804
+  },
+  "metrics": {
+    "roe": 0.2802,
+    "netDebtToEbitda": -0.81,
+    "fcfYield": 0.023
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2026-08-30",
+    "revenueAvg": 302315201803,
+    "epsAvg": 20.50416
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2027-08-30",
+      "revenueAvg": 328580594988,
+      "epsAvg": 22.79506,
+      "analystsRevenue": 25,
+      "analystsEps": 26
+    },
+    {
+      "fiscalYearEnd": "2028-08-30",
+      "revenueAvg": 353370845062,
+      "epsAvg": 24.94516,
+      "analystsRevenue": 23,
+      "analystsEps": 23
+    }
+  ],
+  "analysts": {
+    "strongBuy": 0,
+    "buy": 39,
+    "hold": 19,
+    "sell": 1,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 1275,
+    "targetLow": 955,
+    "targetConsensus": 1092.67,
+    "targetMedian": 1089.5
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-09-08",
+      "firm": "Freedom Broker",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-01-05",
+      "firm": "Mizuho",
+      "action": "upgrade",
+      "previous": "Neutral",
+      "new": "Outperform"
+    },
+    {
+      "date": "2025-12-24",
+      "firm": "Northcoast Research",
+      "action": "upgrade",
+      "previous": "Neutral",
+      "new": "Buy"
+    },
+    {
+      "date": "2025-12-15",
+      "firm": "Roth Capital",
+      "action": "downgrade",
+      "previous": "Neutral",
+      "new": "Sell"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-09-28",
+      "firm": "Argus Research",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-28",
+      "firm": "Deutsche Bank",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-25",
+      "firm": "Wells Fargo",
+      "action": "maintain",
+      "previous": "Equal Weight",
+      "new": "Equal Weight"
+    },
+    {
+      "date": "2026-09-25",
+      "firm": "Freedom Broker",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-25",
+      "firm": "Mizuho",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-09-25",
+      "firm": "Roth Capital",
+      "action": "maintain",
+      "previous": "Sell",
+      "new": "Sell"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 3,
+    "downgrades": 1,
+    "total": 66
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Costco Wholesale Corporation",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=909832",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/COST/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.costco.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

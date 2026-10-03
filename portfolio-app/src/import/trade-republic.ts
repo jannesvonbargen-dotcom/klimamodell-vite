@@ -131,7 +131,15 @@ export function parseTradeRepublic(table: CsvTable): ParseResult {
       wkn: null,
       symbol: isCrypto && symbol ? symbol.toUpperCase() : null,
       name: r.name?.trim() || null,
-      assetClass: isCrypto ? "CRYPTO" : assetClass === "ETF" || assetClass === "FUND" ? "ETF" : assetClass === "BOND" ? "BOND" : assetClass ? "STOCK" : null,
+      assetClass: isCrypto
+        ? "CRYPTO"
+        : assetClass === "ETF" || assetClass === "FUND"
+          ? "ETF"
+          : assetClass === "BOND"
+            ? "BOND"
+            : assetClass
+              ? "STOCK"
+              : null,
       currency,
       fxRate: "1",
       note: description,
@@ -168,7 +176,8 @@ export function parseTradeRepublic(table: CsvTable): ParseResult {
     }
 
     if (category === "CORPORATE_ACTION") {
-      if (type === "SPLIT") skipped.push({ row: rowNo, reason: "Aktiensplit – bitte in der Positionsansicht als Split erfassen", raw: rawText });
+      if (type === "SPLIT")
+        skipped.push({ row: rowNo, reason: "Aktiensplit – bitte in der Positionsansicht als Split erfassen", raw: rawText });
       else skipped.push({ row: rowNo, reason: `Kapitalmaßnahme ${type} – Geldbetrag steht in einer eigenen Zeile`, raw: rawText });
       return;
     }
@@ -193,7 +202,11 @@ export function parseTradeRepublic(table: CsvTable): ParseResult {
         return;
       }
       // amount = Brutto, tax/fee negativ → netto = amount + fee + tax
-      return cash("DIVIDEND", amount, { quantity: shares.isZero() ? null : shares.toString(), fee: feeRaw.abs().toString(), tax: taxRaw.abs().toString() });
+      return cash("DIVIDEND", amount, {
+        quantity: shares.isZero() ? null : shares.toString(),
+        fee: feeRaw.abs().toString(),
+        tax: taxRaw.abs().toString(),
+      });
     }
 
     if (type === "INTEREST_PAYMENT") {
@@ -221,7 +234,9 @@ export function parseTradeRepublic(table: CsvTable): ParseResult {
     if (BY_SIGN_TYPES.has(type)) {
       if (amount.isZero()) return;
       const label = BY_SIGN_LABELS[type];
-      return cash(amount.gt(0) ? "DEPOSIT" : "WITHDRAWAL", amount.abs(), { note: [label, description].filter(Boolean).join(" – ") || null });
+      return cash(amount.gt(0) ? "DEPOSIT" : "WITHDRAWAL", amount.abs(), {
+        note: [label, description].filter(Boolean).join(" – ") || null,
+      });
     }
 
     skipped.push({ row: rowNo, reason: `Nicht unterstützt: ${category} ${type}`, raw: rawText });

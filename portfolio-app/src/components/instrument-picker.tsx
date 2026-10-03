@@ -22,7 +22,16 @@ export interface PickedInstrument {
 }
 
 export function fromSearchResult(r: SearchResult): PickedInstrument {
-  return { symbol: r.symbol, name: r.name, isin: r.isin, wkn: r.wkn, kind: r.kind, currency: r.currency, sector: r.sector, country: r.country };
+  return {
+    symbol: r.symbol,
+    name: r.name,
+    isin: r.isin,
+    wkn: r.wkn,
+    kind: r.kind,
+    currency: r.currency,
+    sector: r.sector,
+    country: r.country,
+  };
 }
 
 const ORIGIN_LABEL: Record<SearchResult["origin"], string> = {
@@ -145,7 +154,9 @@ export function InstrumentPicker({
           <Command.List className="max-h-72 overflow-y-auto">
             {loading && visibleResults.length === 0 && <div className="px-3 py-6 text-center text-[13px] text-subtle">Suche …</div>}
             {!loading && visibleResults.length === 0 && (
-              <Command.Empty className="px-3 py-6 text-center text-[13px] text-subtle">Keine Treffer. Ticker oder ISIN probieren.</Command.Empty>
+              <Command.Empty className="px-3 py-6 text-center text-[13px] text-subtle">
+                Keine Treffer. Ticker oder ISIN probieren.
+              </Command.Empty>
             )}
             {visibleResults.map((r) => (
               <Command.Item
@@ -167,7 +178,9 @@ export function InstrumentPicker({
                     {r.exchange ? ` · ${r.exchange}` : ""}
                   </div>
                 </div>
-                <span className={cn("shrink-0 text-[11px]", r.origin === "portfolio" ? "text-up" : "text-subtle")}>{ORIGIN_LABEL[r.origin]}</span>
+                <span className={cn("shrink-0 text-[11px]", r.origin === "portfolio" ? "text-up" : "text-subtle")}>
+                  {ORIGIN_LABEL[r.origin]}
+                </span>
               </Command.Item>
             ))}
           </Command.List>

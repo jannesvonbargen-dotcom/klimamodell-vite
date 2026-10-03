@@ -1,0 +1,162 @@
+{
+  "symbol": "NVDA",
+  "isin": "US67066G1040",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "NVIDIA Corporation",
+    "isin": "US67066G1040",
+    "sector": "Technology",
+    "industry": "Semiconductors",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 5666502950000,
+    "beta": 2.217,
+    "price": 233.95,
+    "currency": "USD",
+    "range": [164.27, 237.88],
+    "website": "https://www.nvidia.com",
+    "lastDividend": 0.28,
+    "employees": 42000,
+    "ceo": "Jensen Huang"
+  },
+  "income": {
+    "fiscalYearEnds": ["2022-01-30", "2023-01-29", "2024-01-28", "2025-01-26", "2026-01-25"],
+    "revenue": [26914000000, 26974000000, 60922000000, 130497000000, 215938000000],
+    "netIncome": [9752000000, 4368000000, 29760000000, 72880000000, 120067000000],
+    "epsDiluted": [0.38, 0.17, 1.19, 2.94, 4.9],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2025-01-26", "2026-01-25"],
+    "freeCashFlow": [60853000000, 96676000000],
+    "operatingCashFlow": [64089000000, 102718000000]
+  },
+  "ratios": {
+    "grossMargin": 0.7467,
+    "operatingMargin": 0.6521,
+    "netMargin": 0.6366,
+    "debtToEquity": 0.1697,
+    "dividendYield": 0.002223,
+    "payoutRatio": 0.0351,
+    "epsTTM": 7.9735
+  },
+  "metrics": {
+    "roe": 1.1011,
+    "netDebtToEbitda": 0.0703,
+    "fcfYield": 0.0224
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2026-01-25",
+    "revenueAvg": 213656385457,
+    "epsAvg": 4.69388
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2027-01-25",
+      "revenueAvg": 409403045599,
+      "epsAvg": 9.2745,
+      "analystsRevenue": 40,
+      "analystsEps": 33
+    },
+    {
+      "fiscalYearEnd": "2028-01-25",
+      "revenueAvg": 691849424639,
+      "epsAvg": 15.75022,
+      "analystsRevenue": 43,
+      "analystsEps": 33
+    }
+  ],
+  "analysts": {
+    "strongBuy": 2,
+    "buy": 58,
+    "hold": 16,
+    "sell": 3,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 515,
+    "targetLow": 210,
+    "targetConsensus": 338.96,
+    "targetMedian": 322.5
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2025-10-15",
+      "firm": "HSBC",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-10-01",
+      "firm": "Cantor Fitzgerald",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-09-29",
+      "firm": "Rosenblatt",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-04",
+      "firm": "Rosenblatt",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-04",
+      "firm": "Needham",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-27",
+      "firm": "Citigroup",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-27",
+      "firm": "Mizuho",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 1,
+    "downgrades": 0,
+    "total": 145
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von NVIDIA Corporation",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=1045810",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/NVDA/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.nvidia.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

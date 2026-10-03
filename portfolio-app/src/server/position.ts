@@ -60,13 +60,27 @@ export async function getPositionDetail(isin: string): Promise<PositionDetail | 
   const allTx = rows.map(toTransaction);
   const splits = listSplits();
   const instruments = instrumentMap();
-  const symbols = [...new Set(allTx.filter((t) => t.instrumentId).map((t) => instruments.get(t.instrumentId!)?.symbol).filter((s): s is string => !!s))];
+  const symbols = [
+    ...new Set(
+      allTx
+        .filter((t) => t.instrumentId)
+        .map((t) => instruments.get(t.instrumentId!)?.symbol)
+        .filter((s): s is string => !!s),
+    ),
+  ];
   if (!symbols.includes(instrument.symbol)) symbols.push(instrument.symbol);
   const [quotes, fx, fundamentals] = await Promise.all([getQuotes(symbols), getFxRates(), getFundamentals(instrument.symbol)]);
   syncInstrumentCurrencies(quotes.quotes);
   instrument = getInstrumentByIsin(isin)!;
   const today = todayInBerlin();
-  const valuation = valuePortfolio({ transactions: allTx, splits, instruments: instrumentMap(), quotes: quotes.quotes, fx: fx.rates, today });
+  const valuation = valuePortfolio({
+    transactions: allTx,
+    splits,
+    instruments: instrumentMap(),
+    quotes: quotes.quotes,
+    fx: fx.rates,
+    today,
+  });
   const row = valuation.positions.find((p) => p.instrumentId === instrument!.id);
   const ledgerPos = valuation.ledger.positions.get(instrument.id);
   const own = rows.filter((r) => r.instrumentId === instrument!.id);
@@ -85,7 +99,9 @@ export async function getPositionDetail(isin: string): Promise<PositionDetail | 
 
   return {
     instrument,
-    quote: q ? { price: q.price, previousClose: q.previousClose, currency: q.currency, asOf: q.asOf, stale: Boolean(q.stale), source: q.source } : null,
+    quote: q
+      ? { price: q.price, previousClose: q.previousClose, currency: q.currency, asOf: q.asOf, stale: Boolean(q.stale), source: q.source }
+      : null,
     marketOpen: marketStatus(exchangeForInstrument(instrument.symbol, instrument.currency)).open,
     position: row
       ? {
@@ -183,11 +199,14 @@ export async function getInstrumentChart(isin: string, range: InstrumentRange): 
   // Marker: Transaktionskurs in Notierungswährung umgerechnet, split-bereinigt
   const quoteCurrency = quote?.currency ?? instrument.currency;
   const first = points[0]?.key ?? "";
-  const visible = rows.filter((r) => (intraday ? r.executedAt.slice(0, 16) : r.executedAt.slice(0, 10)) >= first.slice(0, intraday ? 16 : 10));
+  const visible = rows.filter(
+    (r) => (intraday ? r.executedAt.slice(0, 16) : r.executedAt.slice(0, 10)) >= first.slice(0, intraday ? 16 : 10),
+  );
   let fxSeries: Array<{ key: string; close: string }> = [];
   if (quoteCurrency !== "EUR" && visible.some((r) => r.currency !== quoteCurrency)) {
     const ccy = quoteCurrency === "GBp" ? "GBP" : quoteCurrency;
-    fxSeries = (await getFxHistory([ccy], subtractDays(visible[visible.length - 1]?.executedAt.slice(0, 10) ?? today, 10), today)).get(ccy) ?? [];
+    fxSeries =
+      (await getFxHistory([ccy], subtractDays(visible[visible.length - 1]?.executedAt.slice(0, 10) ?? today, 10), today)).get(ccy) ?? [];
   }
   const fxOn = (date: string): ReturnType<typeof d> | null => {
     const hit = fxSeries.filter((p) => p.key <= date).at(-1);
@@ -214,7 +233,12 @@ export async function getInstrumentChart(isin: string, range: InstrumentRange): 
       for (const s of splits) if (r.executedAt.slice(0, 10) < s.effectiveDate) factor = factor.times(d(s.ratioTo).div(s.ratioFrom));
       const key = nearestKey(points, intraday ? r.executedAt.slice(0, 16) : r.executedAt.slice(0, 10));
       if (!key) return null;
-      return { key, type: r.type as "BUY" | "SELL" | "SAVINGS_PLAN", price: Number(unit.div(factor).toDecimalPlaces(4).toString()), quantity: qty.toString() };
+      return {
+        key,
+        type: r.type as "BUY" | "SELL" | "SAVINGS_PLAN",
+        price: Number(unit.div(factor).toDecimalPlaces(4).toString()),
+        quantity: qty.toString(),
+      };
     })
     .filter((m): m is NonNullable<typeof m> => m !== null);
 

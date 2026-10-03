@@ -10,7 +10,15 @@ import { Segmented } from "../transaction-dialog";
 import { Card } from "../ui/misc";
 
 /** Feste Reihenfolge der Kategorienfarben (dataviz-Referenzpalette). */
-const SERIES = ["var(--series-1)", "var(--series-2)", "var(--series-3)", "var(--series-4)", "var(--series-5)", "var(--series-6)", "var(--series-7)"];
+const SERIES = [
+  "var(--series-1)",
+  "var(--series-2)",
+  "var(--series-3)",
+  "var(--series-4)",
+  "var(--series-5)",
+  "var(--series-6)",
+  "var(--series-7)",
+];
 const OTHER = "var(--subtle-foreground)";
 const MAX_SLICES = 6;
 
@@ -54,7 +62,11 @@ export function Allocation({ allocation }: { allocation: Record<Dimension, Alloc
         <p className="py-8 text-center text-[13px] text-subtle">Noch keine Positionen.</p>
       ) : (
         <div className="grid items-center gap-5 sm:grid-cols-[160px_1fr]">
-          <div className="relative mx-auto size-40" role="img" aria-label={`Allokation nach ${dim === "sector" ? "Sektor" : dim === "region" ? "Region" : "Anlageklasse"}`}>
+          <div
+            className="relative mx-auto size-40"
+            role="img"
+            aria-label={`Allokation nach ${dim === "sector" ? "Sektor" : dim === "region" ? "Region" : "Anlageklasse"}`}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -73,14 +85,23 @@ export function Allocation({ allocation }: { allocation: Record<Dimension, Alloc
                   onMouseLeave={() => setHover(null)}
                 >
                   {slices.map((s, i) => (
-                    <Cell key={s.label} fill={s.color} opacity={hover === null || hover === i ? 1 : 0.35} style={{ transition: "opacity 150ms ease" }} />
+                    <Cell
+                      key={s.label}
+                      fill={s.color}
+                      opacity={hover === null || hover === i ? 1 : 0.35}
+                      style={{ transition: "opacity 150ms ease" }}
+                    />
                   ))}
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-[18px] font-semibold tnum">{focused ? formatPercent(focused.share, { signed: false, digits: 1 }) : slices.length}</span>
-              <span className="max-w-24 truncate text-[11px] text-subtle">{focused ? focused.label : slices.length === 1 ? "Gruppe" : "Gruppen"}</span>
+              <span className="tnum text-[18px] font-semibold">
+                {focused ? formatPercent(focused.share, { signed: false, digits: 1 }) : slices.length}
+              </span>
+              <span className="max-w-24 truncate text-[11px] text-subtle">
+                {focused ? focused.label : slices.length === 1 ? "Gruppe" : "Gruppen"}
+              </span>
             </div>
           </div>
           <ul className="flex flex-col gap-0.5">
@@ -89,12 +110,15 @@ export function Allocation({ allocation }: { allocation: Record<Dimension, Alloc
                 key={s.label}
                 onMouseEnter={() => setHover(i)}
                 onMouseLeave={() => setHover(null)}
-                className={cn("flex items-center gap-3 rounded-lg px-2 py-1.5 text-[13px] transition-colors duration-150", hover === i && "bg-surface-2")}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-2 py-1.5 text-[13px] transition-colors duration-150",
+                  hover === i && "bg-surface-2",
+                )}
               >
                 <span className="size-2.5 shrink-0 rounded-[3px]" style={{ background: s.color }} aria-hidden />
                 <span className="min-w-0 flex-1 truncate">{s.label}</span>
-                <span className="text-subtle tnum">{formatMoney(s.valueEUR, "EUR", { compact: Number(s.valueEUR) >= 100000 })}</span>
-                <span className="w-14 text-right font-medium tnum">{formatPercent(s.share, { signed: false, digits: 1 })}</span>
+                <span className="tnum text-subtle">{formatMoney(s.valueEUR, "EUR", { compact: Number(s.valueEUR) >= 100000 })}</span>
+                <span className="tnum w-14 text-right font-medium">{formatPercent(s.share, { signed: false, digits: 1 })}</span>
               </li>
             ))}
           </ul>

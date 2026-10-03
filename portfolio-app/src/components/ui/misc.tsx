@@ -1,6 +1,11 @@
 "use client";
 
-import { DropdownMenu as MenuPrimitive, Popover as PopoverPrimitive, Switch as SwitchPrimitive, Tooltip as TooltipPrimitive } from "radix-ui";
+import {
+  DropdownMenu as MenuPrimitive,
+  Popover as PopoverPrimitive,
+  Switch as SwitchPrimitive,
+  Tooltip as TooltipPrimitive,
+} from "radix-ui";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +20,15 @@ export function TooltipProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function Tooltip({ content, children, side = "top" }: { content: React.ReactNode; children: React.ReactNode; side?: "top" | "bottom" | "left" | "right" }) {
+export function Tooltip({
+  content,
+  children,
+  side = "top",
+}: {
+  content: React.ReactNode;
+  children: React.ReactNode;
+  side?: "top" | "bottom" | "left" | "right";
+}) {
   return (
     <TooltipPrimitive.Root>
       <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
@@ -38,13 +51,21 @@ export const Popover = PopoverPrimitive.Root;
 export const PopoverTrigger = PopoverPrimitive.Trigger;
 export const PopoverAnchor = PopoverPrimitive.Anchor;
 
-export function PopoverContent({ className, align = "start", sideOffset = 6, ...props }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+export function PopoverContent({
+  className,
+  align = "start",
+  sideOffset = 6,
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
         align={align}
         sideOffset={sideOffset}
-        className={cn("anim-pop z-[60] rounded-xl border border-border-strong bg-surface p-1 shadow-[var(--shadow-pop)] outline-none", className)}
+        className={cn(
+          "anim-pop z-[60] rounded-xl border border-border-strong bg-surface p-1 shadow-[var(--shadow-pop)] outline-none",
+          className,
+        )}
         {...props}
       />
     </PopoverPrimitive.Portal>
@@ -62,14 +83,21 @@ export function MenuContent({ className, align = "end", ...props }: React.Compon
       <MenuPrimitive.Content
         align={align}
         sideOffset={6}
-        className={cn("anim-pop z-[60] min-w-44 rounded-xl border border-border-strong bg-surface p-1 shadow-[var(--shadow-pop)]", className)}
+        className={cn(
+          "anim-pop z-[60] min-w-44 rounded-xl border border-border-strong bg-surface p-1 shadow-[var(--shadow-pop)]",
+          className,
+        )}
         {...props}
       />
     </MenuPrimitive.Portal>
   );
 }
 
-export function MenuItem({ className, destructive, ...props }: React.ComponentProps<typeof MenuPrimitive.Item> & { destructive?: boolean }) {
+export function MenuItem({
+  className,
+  destructive,
+  ...props
+}: React.ComponentProps<typeof MenuPrimitive.Item> & { destructive?: boolean }) {
   return (
     <MenuPrimitive.Item
       className={cn(
@@ -124,13 +152,21 @@ export function Badge({
     warn: "bg-warn-soft text-warn",
     accent: "bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] text-accent",
   } as const;
-  return <span className={cn("inline-flex h-6 items-center gap-1 rounded-md px-2 text-[12px] font-medium whitespace-nowrap", tones[tone], className)} {...props} />;
+  return (
+    <span
+      className={cn("inline-flex h-6 items-center gap-1 rounded-md px-2 text-[12px] font-medium whitespace-nowrap", tones[tone], className)}
+      {...props}
+    />
+  );
 }
 
 export function Kbd({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
   return (
     <kbd
-      className={cn("inline-flex h-5 min-w-5 items-center justify-center rounded border border-border-strong bg-surface-2 px-1 font-sans text-[11px] font-medium text-muted", className)}
+      className={cn(
+        "inline-flex h-5 min-w-5 items-center justify-center rounded border border-border-strong bg-surface-2 px-1 font-sans text-[11px] font-medium text-muted",
+        className,
+      )}
       {...props}
     />
   );

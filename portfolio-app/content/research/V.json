@@ -1,0 +1,183 @@
+{
+  "symbol": "V",
+  "isin": "US92826C8394",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Visa Inc.",
+    "isin": "US92826C8394",
+    "sector": "Financial Services",
+    "industry": "Financial - Credit Services",
+    "country": "US",
+    "exchange": "NYSE",
+    "marketCap": 673369247119,
+    "beta": 0.761,
+    "price": 360.66,
+    "currency": "USD",
+    "range": [293.89, 385.57],
+    "website": "https://www.visa.com/en-us",
+    "lastDividend": 2.68,
+    "employees": 34100,
+    "ceo": "Ryan McInerney"
+  },
+  "income": {
+    "fiscalYearEnds": ["2021-09-30", "2022-09-30", "2023-09-30", "2024-09-30", "2025-09-30"],
+    "revenue": [24105000000, 29310000000, 32653000000, 35926000000, 40000000000],
+    "netIncome": [12311000000, 14957000000, 17273000000, 19743000000, 20058000000],
+    "epsDiluted": [5.63, 7, 8.28, 9.73, 10.2],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2024-09-30", "2025-09-30"],
+    "freeCashFlow": [18693000000, 21577000000],
+    "operatingCashFlow": [19950000000, 23059000000]
+  },
+  "ratios": {
+    "grossMargin": 0.8018,
+    "operatingMargin": 0.6068,
+    "netMargin": 0.5078,
+    "debtToEquity": 0.6782,
+    "dividendYield": 0.00743,
+    "payoutRatio": 0.2212,
+    "epsTTM": 11.8069
+  },
+  "metrics": {
+    "roe": 0.6126,
+    "netDebtToEbitda": 0.3952,
+    "fcfYield": 0.0312
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2025-09-30",
+    "revenueAvg": 39899646411,
+    "epsAvg": 11.44316
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2026-09-30",
+      "revenueAvg": 45854805998,
+      "epsAvg": 13.22566,
+      "analystsRevenue": 28,
+      "analystsEps": 24
+    },
+    {
+      "fiscalYearEnd": "2027-09-30",
+      "revenueAvg": 50825716483,
+      "epsAvg": 15.02241,
+      "analystsRevenue": 27,
+      "analystsEps": 25
+    }
+  ],
+  "analysts": {
+    "strongBuy": 0,
+    "buy": 53,
+    "hold": 9,
+    "sell": 0,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 466,
+    "targetLow": 350,
+    "targetConsensus": 422.24,
+    "targetMedian": 420
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-02-17",
+      "firm": "Freedom Capital Markets",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-02-17",
+      "firm": "Freedom Broker",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    },
+    {
+      "date": "2025-12-11",
+      "firm": "B of A Securities",
+      "action": "upgrade",
+      "previous": "Neutral",
+      "new": "Buy"
+    },
+    {
+      "date": "2025-12-08",
+      "firm": "HSBC",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-08-31",
+      "firm": "RBC Capital",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-08-25",
+      "firm": "Wolfe Research",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-08-05",
+      "firm": "Truist Securities",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-03",
+      "firm": "Cantor Fitzgerald",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-07-30",
+      "firm": "Wells Fargo",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-07-29",
+      "firm": "Baird",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 4,
+    "downgrades": 0,
+    "total": 43
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Visa Inc.",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=1403161",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/V/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.visa.com/en-us",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

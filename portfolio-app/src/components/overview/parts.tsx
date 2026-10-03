@@ -11,12 +11,24 @@ import { useTransactionDialog } from "../transaction-dialog";
 import { Button } from "../ui/button";
 import { Card } from "../ui/misc";
 
-export function StatTile({ label, value, share, sub, className }: { label: string; value: string; share?: string | null; sub?: React.ReactNode; className?: string }) {
+export function StatTile({
+  label,
+  value,
+  share,
+  sub,
+  className,
+}: {
+  label: string;
+  value: string;
+  share?: string | null;
+  sub?: React.ReactNode;
+  className?: string;
+}) {
   return (
     <Card className={cn("flex flex-col gap-1.5 p-5", className)}>
       <div className="flex items-center justify-between">
         <span className="text-[13px] font-medium text-muted">{label}</span>
-        {share !== undefined && <span className="text-[12px] text-subtle tnum">{formatPercent(share, { signed: false, digits: 1 })}</span>}
+        {share !== undefined && <span className="tnum text-[12px] text-subtle">{formatPercent(share, { signed: false, digits: 1 })}</span>}
       </div>
       <div className="text-[24px] font-semibold tracking-[-0.02em]">
         <AnimatedText value={formatMoney(value)} />
@@ -31,12 +43,24 @@ export function StatTile({ label, value, share, sub, className }: { label: strin
   );
 }
 
-export function Kpi({ label, value, percent, hint, neutral }: { label: string; value: string; percent?: string | null; hint?: string; neutral?: boolean }) {
+export function Kpi({
+  label,
+  value,
+  percent,
+  hint,
+  neutral,
+}: {
+  label: string;
+  value: string;
+  percent?: string | null;
+  hint?: string;
+  neutral?: boolean;
+}) {
   return (
     <div className="flex flex-col gap-1 px-5 py-4">
       <span className="text-[12px] font-medium text-subtle">{label}</span>
       {neutral ? (
-        <span className="text-[16px] font-semibold tnum">{formatMoney(value)}</span>
+        <span className="tnum text-[16px] font-semibold">{formatMoney(value)}</span>
       ) : (
         <Delta value={value} percent={percent} className="text-[15px]" />
       )}
@@ -104,7 +128,15 @@ export function QuoteStatus({
   );
 }
 
-export function Notice({ tone = "warn", children, action }: { tone?: "warn" | "info"; children: React.ReactNode; action?: React.ReactNode }) {
+export function Notice({
+  tone = "warn",
+  children,
+  action,
+}: {
+  tone?: "warn" | "info";
+  children: React.ReactNode;
+  action?: React.ReactNode;
+}) {
   return (
     <div
       role="status"
@@ -114,7 +146,11 @@ export function Notice({ tone = "warn", children, action }: { tone?: "warn" | "i
       )}
     >
       <div className="flex items-center gap-2.5">
-        {tone === "warn" ? <AlertTriangleIcon className="size-4 shrink-0 text-warn" /> : <RepeatIcon className="size-4 shrink-0 text-accent" />}
+        {tone === "warn" ? (
+          <AlertTriangleIcon className="size-4 shrink-0 text-warn" />
+        ) : (
+          <RepeatIcon className="size-4 shrink-0 text-accent" />
+        )}
         <span>{children}</span>
       </div>
       {action}
@@ -127,13 +163,22 @@ export function EmptyPortfolio() {
   return (
     <Card className="flex flex-col items-center gap-5 px-6 py-16 text-center">
       <svg viewBox="0 0 120 64" className="h-16 w-28 text-subtle" aria-hidden>
-        <path d="M4 52 L28 40 L46 46 L70 24 L90 30 L116 8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 6" />
+        <path
+          d="M4 52 L28 40 L46 46 L70 24 L90 30 L116 8"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="4 6"
+        />
         <circle cx="116" cy="8" r="4" fill="var(--up)" />
       </svg>
       <div className="flex max-w-md flex-col gap-2">
         <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Noch keine Positionen</h2>
         <p className="text-[14px] text-muted">
-          Erfasse deine erste Transaktion oder importiere den Transaktionsexport aus der Trade-Republic-App. Alle Daten bleiben auf diesem Rechner.
+          Erfasse deine erste Transaktion oder importiere den Transaktionsexport aus der Trade-Republic-App. Alle Daten bleiben auf diesem
+          Rechner.
         </p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">

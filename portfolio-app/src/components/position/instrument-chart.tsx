@@ -73,10 +73,16 @@ export function InstrumentChartView({ isin, initial }: { isin: string; initial: 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <div className="text-[32px] leading-none font-semibold tracking-[-0.02em] tnum">{current ? formatPrice(String(current.price), data.currency) : "—"}</div>
+        <div className="tnum text-[32px] leading-none font-semibold tracking-[-0.02em]">
+          {current ? formatPrice(String(current.price), data.currency) : "—"}
+        </div>
         <div className="flex min-h-6 flex-wrap items-center gap-x-2">
           {change !== null && changePct !== null && (
-            <Delta value={change.toDecimalPlaces(4).toString()} percent={changePct.toDecimalPlaces(6).toString()} currency={data.currency} />
+            <Delta
+              value={change.toDecimalPlaces(4).toString()}
+              percent={changePct.toDecimalPlaces(6).toString()}
+              currency={data.currency}
+            />
           )}
           <span className="text-[13px] text-subtle">{active !== null && current ? label(current.key, data.intraday) : rangeInfo.long}</span>
           {markerAtActive.map((m, i) => (
@@ -89,7 +95,10 @@ export function InstrumentChartView({ isin, initial }: { isin: string; initial: 
       </div>
 
       <div
-        className={cn("relative h-[260px] rounded-xl outline-none transition-opacity duration-200 focus-visible:ring-2 focus-visible:ring-ring", loading && "opacity-50")}
+        className={cn(
+          "relative h-[260px] rounded-xl transition-opacity duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          loading && "opacity-50",
+        )}
         tabIndex={shown ? 0 : -1}
         role="img"
         aria-label={shown ? `Kursverlauf ${rangeInfo.long}. Pfeiltasten zum Durchgehen.` : "Keine Kursdaten"}
@@ -97,14 +106,25 @@ export function InstrumentChartView({ isin, initial }: { isin: string; initial: 
           if (!shown) return;
           if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
             e.preventDefault();
-            setActive((cur) => Math.max(0, Math.min(points.length - 1, (cur ?? points.length - 1) + (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 10 : 1))));
+            setActive((cur) =>
+              Math.max(
+                0,
+                Math.min(points.length - 1, (cur ?? points.length - 1) + (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 10 : 1)),
+              ),
+            );
           } else if (e.key === "Escape") setActive(null);
         }}
         onBlur={() => setActive(null)}
       >
         {shown ? (
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={points} margin={{ top: 8, right: 0, bottom: 4, left: 4 }} onMouseMove={handleMove} onTouchMove={handleMove} onMouseLeave={() => setActive(null)}>
+            <AreaChart
+              data={points}
+              margin={{ top: 8, right: 0, bottom: 4, left: 4 }}
+              onMouseMove={handleMove}
+              onTouchMove={handleMove}
+              onMouseLeave={() => setActive(null)}
+            >
               <defs>
                 <linearGradient id="instFill" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor={color} stopOpacity={0.14} />
@@ -124,9 +144,26 @@ export function InstrumentChartView({ isin, initial }: { isin: string; initial: 
               />
               <Tooltip content={() => null} cursor={false} isAnimationActive={false} />
               {base && <ReferenceLine y={base} stroke="var(--chart-grid)" strokeWidth={1} />}
-              <Area type="monotone" dataKey="price" stroke={color} strokeWidth={2} fill="url(#instFill)" isAnimationActive={false} dot={false} activeDot={false} />
+              <Area
+                type="monotone"
+                dataKey="price"
+                stroke={color}
+                strokeWidth={2}
+                fill="url(#instFill)"
+                isAnimationActive={false}
+                dot={false}
+                activeDot={false}
+              />
               {data.markers.map((m, i) => (
-                <ReferenceDot key={`${m.key}-${i}`} x={m.key} y={m.price} r={5} fill={MARKER_COLOR[m.type]} stroke="var(--surface)" strokeWidth={2} />
+                <ReferenceDot
+                  key={`${m.key}-${i}`}
+                  x={m.key}
+                  y={m.price}
+                  r={5}
+                  fill={MARKER_COLOR[m.type]}
+                  stroke="var(--surface)"
+                  strokeWidth={2}
+                />
               ))}
               {active !== null && current && (
                 <>
@@ -159,9 +196,7 @@ export function InstrumentChartView({ isin, initial }: { isin: string; initial: 
         )}
       </div>
       {shown && changePct !== null && active === null && range !== "1D" && (
-        <p className="sr-only">
-          Veränderung im Zeitraum: {formatPercent(changePct.toDecimalPlaces(6).toString())}
-        </p>
+        <p className="sr-only">Veränderung im Zeitraum: {formatPercent(changePct.toDecimalPlaces(6).toString())}</p>
       )}
     </div>
   );

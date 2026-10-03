@@ -138,7 +138,17 @@ interface PriceInfo {
   quoteCurrency: string;
 }
 
-function TransactionForm({ state, today, onDone, onDelete }: { state: DialogState; today: string; onDone: () => void; onDelete?: () => void }) {
+function TransactionForm({
+  state,
+  today,
+  onDone,
+  onDelete,
+}: {
+  state: DialogState;
+  today: string;
+  onDone: () => void;
+  onDelete?: () => void;
+}) {
   const router = useRouter();
   const editing = state.mode === "edit" ? state.tx : null;
   const defaults = state.mode === "create" ? state.defaults : undefined;
@@ -325,13 +335,22 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
             options={MORE_TYPES.map((t) => ({ value: t, label: TRANSACTION_TYPE_LABELS[t] }))}
             placeholder="Weitere …"
             ariaLabel="Weitere Transaktionstypen"
-            className={cn("h-8 w-auto gap-1.5 rounded-full px-3 text-[13px]", MORE_TYPES.includes(type) && "border-foreground bg-foreground text-background")}
+            className={cn(
+              "h-8 w-auto gap-1.5 rounded-full px-3 text-[13px]",
+              MORE_TYPES.includes(type) && "border-foreground bg-foreground text-background",
+            )}
           />
         </div>
 
         {needsInstrument && (
           <Field label="Wertpapier" htmlFor="tx-instrument" error={err("instrumentId")}>
-            <InstrumentPicker id="tx-instrument" value={instrument} onChange={changeInstrument} autoFocus={!instrument} invalid={!!err("instrumentId")} />
+            <InstrumentPicker
+              id="tx-instrument"
+              value={instrument}
+              onChange={changeInstrument}
+              autoFocus={!instrument}
+              invalid={!!err("instrumentId")}
+            />
           </Field>
         )}
 
@@ -361,7 +380,14 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
             <div className="grid grid-cols-2 gap-3">
               {entryMode === "quantity" ? (
                 <Field label="Stückzahl" htmlFor="tx-qty" error={err("quantity")} hint="Bis 6 Nachkommastellen">
-                  <Input id="tx-qty" inputMode="decimal" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="0" aria-invalid={!!err("quantity")} />
+                  <Input
+                    id="tx-qty"
+                    inputMode="decimal"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    placeholder="0"
+                    aria-invalid={!!err("quantity")}
+                  />
                 </Field>
               ) : (
                 <Field
@@ -370,7 +396,14 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
                   error={err("amount") ?? err("quantity")}
                   hint={preview?.qty ? `≈ ${formatQuantity(preview.qty.toString())} Stück` : "Kurswert ohne Gebühr"}
                 >
-                  <Input id="tx-amount" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0,00" aria-invalid={!!err("amount")} />
+                  <Input
+                    id="tx-amount"
+                    inputMode="decimal"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0,00"
+                    aria-invalid={!!err("amount")}
+                  />
                 </Field>
               )}
               <Field
@@ -378,11 +411,7 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
                 htmlFor="tx-price"
                 error={err("price")}
                 hint={
-                  priceInfo
-                    ? priceInfo.kind === "live"
-                      ? "Aktueller Kurs"
-                      : `Schlusskurs ${formatDate(priceInfo.priceDate)}`
-                    : undefined
+                  priceInfo ? (priceInfo.kind === "live" ? "Aktueller Kurs" : `Schlusskurs ${formatDate(priceInfo.priceDate)}`) : undefined
                 }
               >
                 <Input
@@ -403,11 +432,24 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
 
         {!isTrade && (
           <Field
-            label={type === "DIVIDEND" || type === "INTEREST" ? `Bruttobetrag (${currency})` : type === "TAX" ? `Betrag (${currency}, negativ = Erstattung)` : `Betrag (${currency})`}
+            label={
+              type === "DIVIDEND" || type === "INTEREST"
+                ? `Bruttobetrag (${currency})`
+                : type === "TAX"
+                  ? `Betrag (${currency}, negativ = Erstattung)`
+                  : `Betrag (${currency})`
+            }
             htmlFor="tx-amount"
             error={err("amount")}
           >
-            <Input id="tx-amount" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0,00" aria-invalid={!!err("amount")} />
+            <Input
+              id="tx-amount"
+              inputMode="decimal"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0,00"
+              aria-invalid={!!err("amount")}
+            />
           </Field>
         )}
 
@@ -416,8 +458,20 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
             <Select id="tx-currency" value={currency} onValueChange={changeCurrency} options={currencyOptions} ariaLabel="Währung" />
           </Field>
           {currency !== "EUR" ? (
-            <Field label={`Wechselkurs (1 € = x ${currency})`} htmlFor="tx-fx" error={err("fxRate")} hint={priceInfo?.fx ? `EZB ${formatDate(priceInfo.fx.date)}` : undefined}>
-              <Input id="tx-fx" inputMode="decimal" value={fxRate} onChange={(e) => setFxRate(e.target.value)} placeholder="1,0000" aria-invalid={!!err("fxRate")} />
+            <Field
+              label={`Wechselkurs (1 € = x ${currency})`}
+              htmlFor="tx-fx"
+              error={err("fxRate")}
+              hint={priceInfo?.fx ? `EZB ${formatDate(priceInfo.fx.date)}` : undefined}
+            >
+              <Input
+                id="tx-fx"
+                inputMode="decimal"
+                value={fxRate}
+                onChange={(e) => setFxRate(e.target.value)}
+                placeholder="1,0000"
+                aria-invalid={!!err("fxRate")}
+              />
             </Field>
           ) : (
             type !== "FEE" &&
@@ -453,7 +507,12 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
         {showMore ? (
           <div className="grid gap-3">
             {type !== "TAX" && type !== "FEE" && (
-              <Field label={`Steuern (${currency})`} htmlFor="tx-tax" error={err("tax")} hint={type === "DIVIDEND" ? "Einbehaltene Quellen-/Kapitalertragsteuer" : undefined}>
+              <Field
+                label={`Steuern (${currency})`}
+                htmlFor="tx-tax"
+                error={err("tax")}
+                hint={type === "DIVIDEND" ? "Einbehaltene Quellen-/Kapitalertragsteuer" : undefined}
+              >
                 <Input id="tx-tax" inputMode="decimal" value={tax} onChange={(e) => setTax(e.target.value)} placeholder="0,00" />
               </Field>
             )}
@@ -462,7 +521,11 @@ function TransactionForm({ state, today, onDone, onDelete }: { state: DialogStat
             </Field>
           </div>
         ) : (
-          <button type="button" onClick={() => setShowMore(true)} className="pressable self-start text-[13px] font-medium text-accent hover:underline">
+          <button
+            type="button"
+            onClick={() => setShowMore(true)}
+            className="pressable self-start text-[13px] font-medium text-accent hover:underline"
+          >
             Steuern und Notiz hinzufügen
           </button>
         )}
@@ -502,7 +565,9 @@ function TypeChip({ active, onClick, children }: { active: boolean; onClick: () 
       onClick={onClick}
       className={cn(
         "pressable h-8 rounded-full border px-3 text-[13px] font-medium",
-        active ? "border-foreground bg-foreground text-background" : "border-border-strong text-muted hover:bg-surface-2 hover:text-foreground",
+        active
+          ? "border-foreground bg-foreground text-background"
+          : "border-border-strong text-muted hover:bg-surface-2 hover:text-foreground",
       )}
     >
       {children}

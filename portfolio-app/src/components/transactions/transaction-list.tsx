@@ -122,34 +122,48 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-56 flex-1 sm:max-w-80">
           <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-subtle" />
-          <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Wertpapier, ISIN oder Notiz" aria-label="Transaktionen durchsuchen" className="h-9 pl-9" />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Wertpapier, ISIN oder Notiz"
+            aria-label="Transaktionen durchsuchen"
+            className="h-9 pl-9"
+          />
         </div>
         <Select value={type} onValueChange={setType} options={TYPE_FILTERS} ariaLabel="Nach Typ filtern" className="h-9 w-48" />
-        <span className="ml-auto text-[12px] text-subtle tnum">
+        <span className="tnum ml-auto text-[12px] text-subtle">
           {filtered.length} von {rows.length}
         </span>
       </div>
 
       {groups.map((g) => (
         <section key={g.key} aria-label={g.label} className="flex flex-col gap-1.5">
-          <h2 className="sticky top-14 z-10 bg-background/90 py-1.5 text-[12px] font-semibold tracking-wide text-subtle uppercase backdrop-blur lg:top-0">{g.label}</h2>
+          <h2 className="sticky top-14 z-10 bg-background/90 py-1.5 text-[12px] font-semibold tracking-wide text-subtle uppercase backdrop-blur lg:top-0">
+            {g.label}
+          </h2>
           <Card className="divide-y divide-border overflow-hidden">
             {g.rows.map((r) => (
-              <div key={r.id} className="group relative flex items-center gap-3 px-4 py-3 transition-colors duration-150 hover:bg-surface-2/60 sm:px-5">
+              <div
+                key={r.id}
+                className="group relative flex items-center gap-3 px-4 py-3 transition-colors duration-150 hover:bg-surface-2/60 sm:px-5"
+              >
                 <button
                   type="button"
                   onClick={() => openEdit(toEditable(r))}
                   className="absolute inset-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
                   aria-label={`${TRANSACTION_TYPE_LABELS[r.type]} vom ${formatDate(r.executedAt)} bearbeiten`}
                 />
-                <div className="hidden w-12 shrink-0 text-[12px] leading-tight text-subtle sm:block tnum">
+                <div className="tnum hidden w-12 shrink-0 text-[12px] leading-tight text-subtle sm:block">
                   <div className="text-[15px] font-semibold text-foreground">{r.executedAt.slice(8, 10)}.</div>
                   {r.executedAt.length > 10 ? r.executedAt.slice(11, 16) : ""}
                 </div>
                 {r.instrument ? (
                   <InstrumentAvatar name={r.instrument.name} symbol={r.instrument.symbol} size={32} />
                 ) : (
-                  <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[13px] font-semibold text-muted" aria-hidden>
+                  <span
+                    className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[13px] font-semibold text-muted"
+                    aria-hidden
+                  >
                     €
                   </span>
                 )}
@@ -165,9 +179,9 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
                     )}
                   </div>
                   <div className="truncate text-[14px]">{r.instrument?.name ?? r.note ?? "Verrechnungskonto"}</div>
-                  <div className="truncate text-[12px] text-subtle tnum sm:hidden">{formatDate(r.executedAt)}</div>
+                  <div className="tnum truncate text-[12px] text-subtle sm:hidden">{formatDate(r.executedAt)}</div>
                 </div>
-                <div className="hidden text-right text-[12px] leading-tight text-subtle md:block tnum">
+                <div className="tnum hidden text-right text-[12px] leading-tight text-subtle md:block">
                   {r.quantity && ["BUY", "SELL", "SAVINGS_PLAN"].includes(r.type) && (
                     <>
                       <div>{formatQuantity(r.quantity)} Stk.</div>
@@ -177,7 +191,12 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
                   {r.type === "DIVIDEND" && r.tax !== "0" && <div>Steuer {formatMoney(r.tax, r.currency)}</div>}
                 </div>
                 <div className="w-28 text-right">
-                  <span className={cn("text-[14px] font-medium tnum", r.cashEUR && !r.cashEUR.startsWith("-") && r.cashEUR !== "0" ? "text-up" : "")}>
+                  <span
+                    className={cn(
+                      "tnum text-[14px] font-medium",
+                      r.cashEUR && !r.cashEUR.startsWith("-") && r.cashEUR !== "0" ? "text-up" : "",
+                    )}
+                  >
                     {r.cashEUR ? formatMoney(r.cashEUR, "EUR", { signed: true }) : "—"}
                   </span>
                   {r.currency !== "EUR" && <div className="text-[11px] text-subtle">{r.currency}</div>}
@@ -186,7 +205,7 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
                   <MenuTrigger asChild>
                     <button
                       type="button"
-                      className="pressable relative z-10 rounded-md p-1.5 text-subtle opacity-100 hover:bg-surface-3 hover:text-foreground focus-visible:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
+                      className="pressable relative z-10 rounded-md p-1.5 text-subtle opacity-100 hover:bg-surface-3 hover:text-foreground focus-visible:opacity-100 data-[state=open]:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                       aria-label="Aktionen"
                     >
                       <MoreHorizontalIcon className="size-4" />
@@ -209,7 +228,11 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
       ))}
 
       {filtered.length > limit && (
-        <button type="button" onClick={() => setLimit((l) => l + BATCH)} className="pressable self-center rounded-lg px-4 py-2 text-[13px] font-medium text-accent hover:bg-surface-2">
+        <button
+          type="button"
+          onClick={() => setLimit((l) => l + BATCH)}
+          className="pressable self-center rounded-lg px-4 py-2 text-[13px] font-medium text-accent hover:bg-surface-2"
+        >
           Weitere {Math.min(BATCH, filtered.length - limit)} anzeigen
         </button>
       )}

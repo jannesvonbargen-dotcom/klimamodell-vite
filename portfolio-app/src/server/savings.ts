@@ -12,7 +12,16 @@ import { type ActionResult, createTransaction } from "./transactions";
 
 export interface SavingsPlanInput {
   instrumentId?: number | null;
-  instrument?: { isin?: string | null; symbol: string; name: string; kind?: "STOCK" | "ETF" | "OTHER"; currency?: string | null; sector?: string | null; country?: string | null; wkn?: string | null } | null;
+  instrument?: {
+    isin?: string | null;
+    symbol: string;
+    name: string;
+    kind?: "STOCK" | "ETF" | "OTHER";
+    currency?: string | null;
+    sector?: string | null;
+    country?: string | null;
+    wkn?: string | null;
+  } | null;
   amount: string;
   interval: SavingsInterval;
   executionDay: number;
@@ -58,13 +67,24 @@ export function saveSavingsPlan(id: number | null, input: SavingsPlanInput): Act
   const instrumentId = resolveInstrumentId(input);
   if (!instrumentId) return { ok: false, errors: { instrumentId: "Wertpapier nicht gefunden." } };
   const fee = parseLocaleNumber(input.fee ?? "0", "auto")?.toString() ?? "0";
-  const values = { instrumentId, amount: amount!, interval: input.interval, executionDay: input.executionDay, startDate: input.startDate, fee };
+  const values = {
+    instrumentId,
+    amount: amount!,
+    interval: input.interval,
+    executionDay: input.executionDay,
+    startDate: input.startDate,
+    fee,
+  };
   const db = getDb();
   if (id) {
     db.update(savingsPlans).set(values).where(eq(savingsPlans.id, id)).run();
     return { ok: true, id };
   }
-  const row = db.insert(savingsPlans).values({ ...values, active: true }).returning().get();
+  const row = db
+    .insert(savingsPlans)
+    .values({ ...values, active: true })
+    .returning()
+    .get();
   return { ok: true, id: row.id };
 }
 
@@ -111,7 +131,8 @@ export async function confirmExecution(planId: number, dueDate: string, override
   let priceEUR: string | null = null;
   if (overridePrice) priceEUR = parseLocaleNumber(overridePrice, "auto")?.toString() ?? null;
   else if (quote.price && quote.fx) priceEUR = d(quote.price).div(quote.fx).toDecimalPlaces(4).toString();
-  if (!priceEUR || d(priceEUR).lte(0)) return { ok: false, errors: { price: "Kein Kurs für diesen Tag – bitte manuell angeben." }, message: "Kein Kurs verfügbar." };
+  if (!priceEUR || d(priceEUR).lte(0))
+    return { ok: false, errors: { price: "Kein Kurs für diesen Tag – bitte manuell angeben." }, message: "Kein Kurs verfügbar." };
 
   const qty = roundQty(d(plan.amount).div(priceEUR));
   const result = createTransaction(

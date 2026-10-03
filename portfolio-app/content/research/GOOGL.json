@@ -1,0 +1,183 @@
+{
+  "symbol": "GOOGL",
+  "isin": "US02079K3059",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Alphabet Inc.",
+    "isin": "US02079K3059",
+    "sector": "Communication Services",
+    "industry": "Internet Content & Information",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 4157075226741,
+    "beta": 1.225,
+    "price": 343.5,
+    "currency": "USD",
+    "range": [235.84, 408.61],
+    "website": "https://www.abc.xyz",
+    "lastDividend": 0.86,
+    "employees": 198933,
+    "ceo": "Sundar Pichai"
+  },
+  "income": {
+    "fiscalYearEnds": ["2021-12-31", "2022-12-31", "2023-12-31", "2024-12-31", "2025-12-31"],
+    "revenue": [257637000000, 282836000000, 307394000000, 350018000000, 402836000000],
+    "netIncome": [76033000000, 59972000000, 73795000000, 100118000000, 132170000000],
+    "epsDiluted": [5.61, 4.56, 5.8, 8.04, 10.81],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2024-12-31", "2025-12-31"],
+    "freeCashFlow": [72764000000, 73266000000],
+    "operatingCashFlow": [125299000000, 164713000000]
+  },
+  "ratios": {
+    "grossMargin": 0.609,
+    "operatingMargin": 0.3315,
+    "netMargin": 0.5477,
+    "debtToEquity": 0.176,
+    "dividendYield": 0.002527,
+    "payoutRatio": 0.0422,
+    "epsTTM": 20.0975
+  },
+  "metrics": {
+    "roe": 0.5084,
+    "netDebtToEbitda": 0.1753,
+    "fcfYield": 0.0129
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2025-12-31",
+    "revenueAvg": 400299098598,
+    "epsAvg": 10.63583
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2026-12-31",
+      "revenueAvg": 497816675870,
+      "epsAvg": 20.60907,
+      "analystsRevenue": 38,
+      "analystsEps": 41
+    },
+    {
+      "fiscalYearEnd": "2027-12-31",
+      "revenueAvg": 613479410270,
+      "epsAvg": 15.15132,
+      "analystsRevenue": 37,
+      "analystsEps": 41
+    }
+  ],
+  "analysts": {
+    "strongBuy": 2,
+    "buy": 70,
+    "hold": 10,
+    "sell": 1,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 485,
+    "targetLow": 350,
+    "targetConsensus": 431.57,
+    "targetMedian": 425
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-05-04",
+      "firm": "Freedom Broker",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Hold"
+    },
+    {
+      "date": "2026-02-23",
+      "firm": "Wells Fargo",
+      "action": "upgrade",
+      "previous": "Equal Weight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-01-08",
+      "firm": "Cantor Fitzgerald",
+      "action": "upgrade",
+      "previous": "Neutral",
+      "new": "Overweight"
+    },
+    {
+      "date": "2025-11-18",
+      "firm": "Loop Capital",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-09-28",
+      "firm": "Piper Sandler",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-09-18",
+      "firm": "Tigress Financial",
+      "action": "maintain",
+      "previous": "Strong Buy",
+      "new": "Strong Buy"
+    },
+    {
+      "date": "2026-09-17",
+      "firm": "Evercore ISI Group",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-09-03",
+      "firm": "Rosenblatt",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-07-23",
+      "firm": "Cantor Fitzgerald",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-07-23",
+      "firm": "Barclays",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 3,
+    "downgrades": 1,
+    "total": 144
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Alphabet Inc.",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=1652044",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/GOOGL/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.abc.xyz",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

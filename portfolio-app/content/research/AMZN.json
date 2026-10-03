@@ -1,0 +1,169 @@
+{
+  "symbol": "AMZN",
+  "isin": "US0231351067",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Amazon.com, Inc.",
+    "isin": "US0231351067",
+    "sector": "Consumer Cyclical",
+    "industry": "Specialty Retail",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 2705625792000,
+    "beta": 1.443,
+    "price": 251.52,
+    "currency": "USD",
+    "range": [196, 287.2],
+    "website": "https://www.amazon.com",
+    "lastDividend": 0,
+    "employees": 1576000,
+    "ceo": "Andrew R. Jassy"
+  },
+  "income": {
+    "fiscalYearEnds": ["2021-12-31", "2022-12-31", "2023-12-31", "2024-12-31", "2025-12-31"],
+    "revenue": [469822000000, 513983000000, 574785000000, 637959000000, 716924000000],
+    "netIncome": [33364000000, -2722000000, 30425000000, 59248000000, 77670000000],
+    "epsDiluted": [3.24, -0.27, 2.9, 5.53, 7.17],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2024-12-31", "2025-12-31"],
+    "freeCashFlow": [32878000000, 7695000000],
+    "operatingCashFlow": [115877000000, 139514000000]
+  },
+  "ratios": {
+    "grossMargin": 0.5077,
+    "operatingMargin": 0.1208,
+    "netMargin": 0.1744,
+    "debtToEquity": 0.4047,
+    "dividendYield": 0,
+    "payoutRatio": 0,
+    "epsTTM": 12.5773
+  },
+  "metrics": {
+    "roe": 0.305,
+    "netDebtToEbitda": 0.5709,
+    "fcfYield": -0.0043
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2025-12-31",
+    "revenueAvg": 714693754647,
+    "epsAvg": 7.15268
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2026-12-31",
+      "revenueAvg": 828514499252,
+      "epsAvg": 12.77315,
+      "analystsRevenue": 42,
+      "analystsEps": 38
+    },
+    {
+      "fiscalYearEnd": "2027-12-31",
+      "revenueAvg": 949774063242,
+      "epsAvg": 10.62504,
+      "analystsRevenue": 43,
+      "analystsEps": 40
+    }
+  ],
+  "analysts": {
+    "strongBuy": 0,
+    "buy": 85,
+    "hold": 8,
+    "sell": 1,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 390,
+    "targetLow": 200,
+    "targetConsensus": 326.83,
+    "targetMedian": 325
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-02-06",
+      "firm": "DA Davidson",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Neutral"
+    },
+    {
+      "date": "2025-11-18",
+      "firm": "Rothschild & Co",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Neutral"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-09-30",
+      "firm": "Rosenblatt",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-03",
+      "firm": "Wells Fargo",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-07-31",
+      "firm": "Benchmark",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-07-31",
+      "firm": "Wedbush",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-07-31",
+      "firm": "TD Cowen",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-07-31",
+      "firm": "UBS",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 0,
+    "downgrades": 2,
+    "total": 146
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Amazon.com, Inc.",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=1018724",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/AMZN/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.amazon.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

@@ -70,7 +70,15 @@ describe("Trade-Republic-Transaktionsexport", () => {
     const { candidates, skipped } = parseTradeRepublic(parseCsv(TR_CSV));
     expect(candidates.map((c) => c.type)).toEqual(["DEPOSIT", "BUY", "SAVINGS_PLAN", "DIVIDEND", "WITHDRAWAL", "SELL", "INTEREST", "TAX"]);
     const buy = candidates[1];
-    expect(buy).toMatchObject({ isin: "US0378331005", quantity: "2", price: "210.5", amount: "421", fee: "1", tax: "0", executedAt: "2026-04-02T09:31" });
+    expect(buy).toMatchObject({
+      isin: "US0378331005",
+      quantity: "2",
+      price: "210.5",
+      amount: "421",
+      fee: "1",
+      tax: "0",
+      executedAt: "2026-04-02T09:31",
+    });
     const div = candidates[3];
     expect(div).toMatchObject({ amount: "0.44", tax: "0.12", quantity: "2" });
     const tax = candidates[7];
@@ -100,7 +108,15 @@ describe("Generischer Import", () => {
     expect(detectPreset(table.headers)).toBe("pytr");
     const mapping = suggestMapping(table, "pytr");
     expect(mapping.numberFormat).toBe("de");
-    expect(mapping.columns).toMatchObject({ date: "Datum", type: "Typ", amount: "Wert", isin: "ISIN", shares: "Stück", fee: "Gebühren", tax: "Steuern" });
+    expect(mapping.columns).toMatchObject({
+      date: "Datum",
+      type: "Typ",
+      amount: "Wert",
+      isin: "ISIN",
+      shares: "Stück",
+      fee: "Gebühren",
+      tax: "Steuern",
+    });
     const { candidates, skipped } = normalizeGeneric(table, mapping);
     expect(skipped).toHaveLength(0);
     expect(candidates.map((c) => c.type)).toEqual(["DEPOSIT", "BUY", "DIVIDEND", "SELL", "TAX"]);
@@ -120,7 +136,14 @@ describe("Generischer Import", () => {
     expect(mapping.columns.name).toBe("Wertpapiername");
     expect(mapping.columns.symbol).toBe("Ticker-Symbol");
     const { candidates } = normalizeGeneric(table, mapping);
-    expect(candidates[0]).toMatchObject({ type: "BUY", executedAt: "2025-03-15", quantity: "10", amount: "1233.56", fee: "1", wkn: "716460" });
+    expect(candidates[0]).toMatchObject({
+      type: "BUY",
+      executedAt: "2025-03-15",
+      quantity: "10",
+      amount: "1233.56",
+      fee: "1",
+      wkn: "716460",
+    });
     expect(candidates[1]).toMatchObject({ type: "DIVIDEND", amount: "22", tax: "5.8" });
   });
 

@@ -2,8 +2,22 @@
 
 import { revalidatePath } from "next/cache";
 import type { ImportCandidate } from "@/import/types";
-import { confirmExecution, deleteSavingsPlan, saveSavingsPlan, type SavingsPlanInput, setSavingsPlanActive, skipExecution } from "@/server/savings";
+import {
+  confirmExecution,
+  deleteSavingsPlan,
+  saveSavingsPlan,
+  type SavingsPlanInput,
+  setSavingsPlanActive,
+  skipExecution,
+} from "@/server/savings";
 import { addSplit, deleteSplit, updateInstrument } from "@/server/repo";
+import {
+  addToWatchlist,
+  removeFromWatchlist,
+  removeSymbolFromWatchlist,
+  updateWatchlistItem,
+  type WatchlistInput,
+} from "@/server/watchlist";
 import { commitImport, type CommitResult, type ImportPreview, previewImport, restoreImportBatch, undoImportBatch } from "@/server/import";
 import {
   type ActionResult,
@@ -48,7 +62,6 @@ export async function restoreTransactionAction(id: number): Promise<ActionResult
 }
 
 // Import -------------------------------------------------------------------
-
 
 export async function previewImportAction(candidates: ImportCandidate[]): Promise<ImportPreview> {
   return previewImport(candidates.slice(0, 20_000));
@@ -121,7 +134,12 @@ export async function updateInstrumentAction(
   return { ok: true };
 }
 
-export async function addSplitAction(instrumentId: number, effectiveDate: string, ratioFrom: string, ratioTo: string): Promise<ActionResult> {
+export async function addSplitAction(
+  instrumentId: number,
+  effectiveDate: string,
+  ratioFrom: string,
+  ratioTo: string,
+): Promise<ActionResult> {
   const from = Number(ratioFrom.replace(",", "."));
   const to = Number(ratioTo.replace(",", "."));
   if (!/^\d{4}-\d{2}-\d{2}$/.test(effectiveDate)) return { ok: false, errors: { effectiveDate: "Datum fehlt." } };
@@ -134,4 +152,31 @@ export async function addSplitAction(instrumentId: number, effectiveDate: string
 export async function deleteSplitAction(id: number): Promise<void> {
   deleteSplit(id);
   refresh();
+}
+
+// Watchlist ------------------------------------------------------------------
+
+export async function addToWatchlistAction(input: WatchlistInput): Promise<ActionResult<{ id: number }>> {
+  const result = addToWatchlist(input);
+  if (result.ok) refresh();
+  return result;
+}
+
+export async function removeFromWatchlistAction(id: number): Promise<void> {
+  removeFromWatchlist(id);
+  refresh();
+}
+
+export async function removeSymbolFromWatchlistAction(symbol: string): Promise<void> {
+  removeSymbolFromWatchlist(symbol);
+  refresh();
+}
+
+export async function updateWatchlistItemAction(
+  id: number,
+  patch: { alertAbove?: string | null; alertBelow?: string | null; note?: string | null },
+): Promise<ActionResult> {
+  const result = updateWatchlistItem(id, patch);
+  if (result.ok) refresh();
+  return result;
 }

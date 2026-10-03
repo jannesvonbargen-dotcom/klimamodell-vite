@@ -7,7 +7,16 @@ import { germanHolidaySet } from "@/domain/market-hours";
 import type { Instrument, Split, Transaction } from "@/domain/types";
 import { type PortfolioTotals, type PositionValuation, valuePortfolio } from "@/domain/valuation";
 import { catalogByIsin } from "@/market/catalog";
-import { getDailyHistory, getFxHistory, getFxRates, getIntraday, getQuotes, providerInfo, type ProviderInfo, syncInstrumentCurrencies } from "./market";
+import {
+  getDailyHistory,
+  getFxHistory,
+  getFxRates,
+  getIntraday,
+  getQuotes,
+  providerInfo,
+  type ProviderInfo,
+  syncInstrumentCurrencies,
+} from "./market";
 import { instrumentMap, listExecutions, listSavingsPlans, listSplits, listTransactions } from "./repo";
 
 /** Serverseitige Aufbereitung der Depotdaten für die Oberfläche. */
@@ -84,7 +93,8 @@ export function pendingSavingsSuggestions(today = todayInBerlin()) {
   const out: Array<{ planId: number; instrumentId: number; dueDate: string; amount: string; fee: string }> = [];
   for (const plan of plans) {
     for (const date of dueExecutionDates(plan, today, holidays)) {
-      if (!handled.has(`${plan.id}|${date}`)) out.push({ planId: plan.id, instrumentId: plan.instrumentId, dueDate: date, amount: plan.amount, fee: plan.fee });
+      if (!handled.has(`${plan.id}|${date}`))
+        out.push({ planId: plan.id, instrumentId: plan.instrumentId, dueDate: date, amount: plan.amount, fee: plan.fee });
     }
   }
   return out.sort((a, b) => (a.dueDate < b.dueDate ? -1 : 1));
@@ -223,7 +233,16 @@ export async function getPerformance(range: RangeKey): Promise<PerformanceData> 
     // Letzter Punkt = jetzt, damit heutige Buchungen und Live-Kurse enthalten sind
     const now = nowInBerlin();
     const allKeysWithNow = keys[keys.length - 1] < now ? [...keys, now] : keys;
-    const series = buildValueSeries({ transactions, splits, instruments, prices: merged, fx, keys: [baseline, ...allKeysWithNow], latestPrices, latestFx: fxNow.rates });
+    const series = buildValueSeries({
+      transactions,
+      splits,
+      instruments,
+      prices: merged,
+      fx,
+      keys: [baseline, ...allKeysWithNow],
+      latestPrices,
+      latestFx: fxNow.rates,
+    });
     return { range, intraday: true, points: series.map(toChartPoint) };
   }
 

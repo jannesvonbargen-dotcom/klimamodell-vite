@@ -41,6 +41,7 @@ export interface ShellProps {
   markets: ShellMarket[];
   provider: { label: string; isDemo: boolean };
   pendingSavings: number;
+  alertCount: number;
 }
 
 const NAV = [
@@ -79,7 +80,7 @@ export function AppShell(props: ShellProps) {
   );
 }
 
-function ShellInner({ children, markets, provider, pendingSavings }: ShellProps) {
+function ShellInner({ children, markets, provider, pendingSavings, alertCount }: ShellProps) {
   const pathname = usePathname();
   const [paletteOpen, setPaletteOpen] = React.useState(false);
   const [navOpen, setNavOpen] = React.useState(false);
@@ -89,7 +90,8 @@ function ShellInner({ children, markets, provider, pendingSavings }: ShellProps)
   React.useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null;
-      const typing = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT" || target.isContentEditable);
+      const typing =
+        target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT" || target.isContentEditable);
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setPaletteOpen((o) => !o);
@@ -128,11 +130,25 @@ function ShellInner({ children, markets, provider, pendingSavings }: ShellProps)
               active ? "bg-surface-2 text-foreground" : "text-muted hover:bg-surface-2/60 hover:text-foreground",
             )}
           >
-            <Icon className={cn("size-[18px]", active ? "text-foreground" : "text-subtle group-hover:text-foreground")} strokeWidth={1.75} />
+            <Icon
+              className={cn("size-[18px]", active ? "text-foreground" : "text-subtle group-hover:text-foreground")}
+              strokeWidth={1.75}
+            />
             <span className="flex-1">{item.label}</span>
             {item.href === "/sparplaene" && pendingSavings > 0 && (
-              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-semibold text-white tnum" aria-label={`${pendingSavings} offene Ausführungen`}>
+              <span
+                className="tnum inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-semibold text-white"
+                aria-label={`${pendingSavings} offene Ausführungen`}
+              >
                 {pendingSavings}
+              </span>
+            )}
+            {item.href === "/watchlist" && alertCount > 0 && (
+              <span
+                className="tnum inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-warn px-1.5 text-[11px] font-semibold text-black"
+                aria-label={`${alertCount} ausgelöste Kursalarme`}
+              >
+                {alertCount}
               </span>
             )}
           </Link>
@@ -213,7 +229,13 @@ function ShellInner({ children, markets, provider, pendingSavings }: ShellProps)
       </header>
 
       <main id="main" className="min-w-0">
-        <div className="mx-auto w-full max-w-[1160px] px-4 pt-6 pb-16 sm:px-6 lg:px-10 lg:pt-10">{children}</div>
+        <div className="mx-auto w-full max-w-[1160px] px-4 pt-6 pb-10 sm:px-6 lg:px-10 lg:pt-10">
+          {children}
+          <footer className="mt-16 border-t border-border pt-4 text-[12px] text-subtle">
+            Keine Anlageberatung. Informationen ohne Gewähr. Auch als solide geltende Aktien können stark fallen. · Alle Daten bleiben auf
+            diesem Rechner.
+          </footer>
+        </div>
       </main>
 
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
@@ -226,7 +248,14 @@ function Brand({ compact = false }: { compact?: boolean }) {
     <Link href="/" className="flex items-center gap-2.5 px-1.5" aria-label="Depot – zur Übersicht">
       <svg viewBox="0 0 24 24" className="size-6" aria-hidden>
         <rect width="24" height="24" rx="7" fill="var(--foreground)" />
-        <path d="M6 15.5l3.5-4 3 2.5L18 7.5" fill="none" stroke="var(--background)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M6 15.5l3.5-4 3 2.5L18 7.5"
+          fill="none"
+          stroke="var(--background)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
       {!compact && <span className="text-[15px] font-semibold tracking-[-0.01em]">Depot</span>}
       {compact && <span className="text-[15px] font-semibold tracking-[-0.01em]">Depot</span>}
@@ -243,7 +272,9 @@ function MarketStatusList({ markets }: { markets: ShellMarket[] }) {
             <span className={cn("size-1.5 rounded-full", m.open ? "bg-up" : "bg-subtle/60")} aria-hidden />
             {m.name}
           </span>
-          <span className="text-subtle tnum">{m.open ? `offen bis ${formatTimeBerlin(m.nextChange)}` : `öffnet ${nextOpenLabel(m.nextChange)}`}</span>
+          <span className="tnum text-subtle">
+            {m.open ? `offen bis ${formatTimeBerlin(m.nextChange)}` : `öffnet ${nextOpenLabel(m.nextChange)}`}
+          </span>
         </div>
       ))}
     </div>
@@ -335,7 +366,8 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
     fn();
   };
 
-  const itemClass = "flex h-10 cursor-pointer items-center gap-3 rounded-lg px-3 text-[14px] outline-none data-[selected=true]:bg-surface-2 [&_svg]:size-4 [&_svg]:text-subtle";
+  const itemClass =
+    "flex h-10 cursor-pointer items-center gap-3 rounded-lg px-3 text-[14px] outline-none data-[selected=true]:bg-surface-2 [&_svg]:size-4 [&_svg]:text-subtle";
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={handleOpenChange}>
@@ -343,7 +375,9 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[var(--overlay)]" />
         <DialogPrimitive.Content className="fixed top-[14vh] left-1/2 z-50 w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-2xl border border-border-strong bg-surface shadow-[var(--shadow-pop)] outline-none">
           <DialogPrimitive.Title className="sr-only">Befehlspalette</DialogPrimitive.Title>
-          <DialogPrimitive.Description className="sr-only">Seiten öffnen, Aktionen ausführen, Positionen finden</DialogPrimitive.Description>
+          <DialogPrimitive.Description className="sr-only">
+            Seiten öffnen, Aktionen ausführen, Positionen finden
+          </DialogPrimitive.Description>
           <Command loop label="Befehlspalette">
             <Command.Input
               value={query}
@@ -354,9 +388,17 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
             <Command.List className="max-h-[min(60vh,420px)] overflow-y-auto p-1.5">
               <Command.Empty className="px-3 py-8 text-center text-[13px] text-subtle">Nichts gefunden.</Command.Empty>
               {visibleResults.length > 0 && (
-                <Command.Group heading="Positionen" className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:text-subtle">
+                <Command.Group
+                  heading="Positionen"
+                  className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:text-subtle"
+                >
                   {visibleResults.map((r) => (
-                    <Command.Item key={r.symbol} value={`pos ${r.name} ${r.symbol}`} onSelect={() => run(() => router.push(`/position/${encodeURIComponent(r.isin ?? r.symbol)}`))} className={itemClass}>
+                    <Command.Item
+                      key={r.symbol}
+                      value={`pos ${r.name} ${r.symbol}`}
+                      onSelect={() => run(() => router.push(`/position/${encodeURIComponent(r.isin ?? r.symbol)}`))}
+                      className={itemClass}
+                    >
                       <LayoutGridIcon />
                       {r.name}
                       <span className="ml-auto text-[12px] text-subtle">{r.symbol}</span>
@@ -364,7 +406,10 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
                   ))}
                 </Command.Group>
               )}
-              <Command.Group heading="Aktionen" className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:text-subtle">
+              <Command.Group
+                heading="Aktionen"
+                className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:text-subtle"
+              >
                 <Command.Item value="neue transaktion kauf erfassen" onSelect={() => run(() => openCreate())} className={itemClass}>
                   <PlusIcon /> Transaktion erfassen <Kbd className="ml-auto">N</Kbd>
                 </Command.Item>
@@ -384,11 +429,19 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
                   <SunIcon /> Helles Design
                 </Command.Item>
               </Command.Group>
-              <Command.Group heading="Seiten" className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:text-subtle">
+              <Command.Group
+                heading="Seiten"
+                className="[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[12px] [&_[cmdk-group-heading]]:text-subtle"
+              >
                 {NAV.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <Command.Item key={item.href} value={`seite ${item.label}`} onSelect={() => run(() => router.push(item.href))} className={itemClass}>
+                    <Command.Item
+                      key={item.href}
+                      value={`seite ${item.label}`}
+                      onSelect={() => run(() => router.push(item.href))}
+                      className={itemClass}
+                    >
                       <Icon /> {item.label}
                     </Command.Item>
                   );

@@ -118,7 +118,9 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01" on, "cv11" on;
+    font-feature-settings:
+      "ss01" on,
+      "cv11" on;
     /* Zahlen überall gleich breit – nichts springt beim Aktualisieren */
     font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased;
@@ -164,7 +166,13 @@
 
   /* Popover, Menüs, Selects: vom Auslöser aus einblenden */
   .anim-pop {
-    transform-origin: var(--radix-popover-content-transform-origin, var(--radix-dropdown-menu-content-transform-origin, var(--radix-select-content-transform-origin, var(--radix-tooltip-content-transform-origin, top))));
+    transform-origin: var(
+      --radix-popover-content-transform-origin,
+      var(
+        --radix-dropdown-menu-content-transform-origin,
+        var(--radix-select-content-transform-origin, var(--radix-tooltip-content-transform-origin, top))
+      )
+    );
   }
   .anim-pop[data-state="open"],
   .anim-pop[data-state="delayed-open"],

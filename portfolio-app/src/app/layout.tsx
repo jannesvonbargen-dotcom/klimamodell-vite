@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { todayInBerlin } from "@/domain/market-hours";
 import { providerInfo } from "@/server/market";
 import { marketInfos, pendingSavingsSuggestions } from "@/server/portfolio";
+import { triggeredAlertCount } from "@/server/watchlist";
 import "./globals.css";
 
 // Alle Seiten lesen die lokale Datenbank → immer zur Anfragezeit rendern
@@ -24,12 +25,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
   const provider = providerInfo();
+  const alertCount = await triggeredAlertCount().catch(() => 0);
   return (
     <html lang="de" className={`${GeistSans.variable} ${GeistMono.variable} dark`} suppressHydrationWarning>
       <body>
-        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2"
+        >
           Zum Inhalt springen
         </a>
         <ThemeProvider>
@@ -38,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             markets={marketInfos()}
             provider={{ label: provider.label, isDemo: provider.isDemo }}
             pendingSavings={pendingSavingsSuggestions().length}
+            alertCount={alertCount}
           >
             {children}
           </AppShell>

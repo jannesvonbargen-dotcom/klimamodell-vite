@@ -127,7 +127,7 @@ export function PerformanceSection({
       <div className="flex flex-col gap-3">
         <div
           className={cn(
-            "relative h-[220px] rounded-xl outline-none transition-opacity duration-200 focus-visible:ring-2 focus-visible:ring-ring sm:h-[260px]",
+            "relative h-[220px] rounded-xl transition-opacity duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-[260px]",
             loading && "opacity-50",
           )}
           tabIndex={shown ? 0 : -1}
@@ -175,7 +175,14 @@ export function PerformanceSection({
                 {activePoint && (
                   <>
                     <ReferenceLine x={activePoint.key} stroke="var(--subtle-foreground)" strokeWidth={1} />
-                    <ReferenceDot x={activePoint.key} y={activePoint.value} r={4.5} fill={color} stroke="var(--background)" strokeWidth={2} />
+                    <ReferenceDot
+                      x={activePoint.key}
+                      y={activePoint.value}
+                      r={4.5}
+                      fill={color}
+                      stroke="var(--background)"
+                      strokeWidth={2}
+                    />
                   </>
                 )}
               </AreaChart>
@@ -187,7 +194,12 @@ export function PerformanceSection({
           )}
         </div>
         <div className="flex items-center justify-between gap-3">
-          <Segmented value={range} onChange={selectRange} options={RANGES.map((r) => ({ value: r.value, label: r.label }))} ariaLabel="Zeitraum" />
+          <Segmented
+            value={range}
+            onChange={selectRange}
+            options={RANGES.map((r) => ({ value: r.value, label: r.label }))}
+            ariaLabel="Zeitraum"
+          />
           {shown && (
             <span className="hidden text-[12px] text-subtle sm:inline">
               {pointLabel(first.key, data.intraday)} – {pointLabel(last.key, data.intraday)}

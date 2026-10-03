@@ -1,0 +1,197 @@
+{
+  "symbol": "AAPL",
+  "isin": "US0378331005",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Apple Inc.",
+    "isin": "US0378331005",
+    "sector": "Technology",
+    "industry": "Consumer Electronics",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 4901023823640,
+    "beta": 1.085,
+    "price": 333.69,
+    "currency": "USD",
+    "range": [243.42, 345.34],
+    "website": "https://www.apple.com",
+    "lastDividend": 1.06,
+    "employees": 166000,
+    "ceo": "John Ternus"
+  },
+  "income": {
+    "fiscalYearEnds": ["2021-09-25", "2022-09-24", "2023-09-30", "2024-09-28", "2025-09-27"],
+    "revenue": [365817000000, 394328000000, 383285000000, 391035000000, 416161000000],
+    "netIncome": [94680000000, 99803000000, 96995000000, 93736000000, 112010000000],
+    "epsDiluted": [5.61, 6.11, 6.13, 6.08, 7.46],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2024-09-28", "2025-09-27"],
+    "freeCashFlow": [108807000000, 98767000000],
+    "operatingCashFlow": [118254000000, 111482000000]
+  },
+  "ratios": {
+    "grossMargin": 0.4865,
+    "operatingMargin": 0.3317,
+    "netMargin": 0.2762,
+    "debtToEquity": 0.7841,
+    "dividendYield": 0.003177,
+    "payoutRatio": 0.1213,
+    "epsTTM": 8.7752
+  },
+  "metrics": {
+    "roe": 1.3718,
+    "netDebtToEbitda": 0.2657,
+    "fcfYield": 0.0279
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2025-09-27",
+    "revenueAvg": 415406882375,
+    "epsAvg": 7.38183
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2026-09-27",
+      "revenueAvg": 477611950398,
+      "epsAvg": 8.83557,
+      "analystsRevenue": 30,
+      "analystsEps": 29
+    },
+    {
+      "fiscalYearEnd": "2027-09-27",
+      "revenueAvg": 524594952984,
+      "epsAvg": 9.60818,
+      "analystsRevenue": 30,
+      "analystsEps": 30
+    }
+  ],
+  "analysts": {
+    "strongBuy": 1,
+    "buy": 70,
+    "hold": 32,
+    "sell": 9,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 400,
+    "targetLow": 245,
+    "targetConsensus": 341.68,
+    "targetMedian": 357.5
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-08-17",
+      "firm": "Rothschild & Co",
+      "action": "upgrade",
+      "previous": "Neutral",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-08-10",
+      "firm": "Jefferies",
+      "action": "downgrade",
+      "previous": "Hold",
+      "new": "Underperform"
+    },
+    {
+      "date": "2026-08-04",
+      "firm": "China Renaissance",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Hold"
+    },
+    {
+      "date": "2026-07-17",
+      "firm": "HSBC",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-07-14",
+      "firm": "Keybanc",
+      "action": "downgrade",
+      "previous": "Sector Weight",
+      "new": "Underweight"
+    },
+    {
+      "date": "2026-06-22",
+      "firm": "KGI Securities",
+      "action": "downgrade",
+      "previous": "Outperform",
+      "new": "Hold"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-10-01",
+      "firm": "Morgan Stanley",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-10-01",
+      "firm": "Needham",
+      "action": "maintain",
+      "previous": "Hold",
+      "new": "Hold"
+    },
+    {
+      "date": "2026-09-29",
+      "firm": "Morgan Stanley",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-09-23",
+      "firm": "B of A Securities",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-18",
+      "firm": "Evercore ISI Group",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-09-17",
+      "firm": "B of A Securities",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 6,
+    "downgrades": 5,
+    "total": 114
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Apple Inc.",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=320193",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/AAPL/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.apple.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

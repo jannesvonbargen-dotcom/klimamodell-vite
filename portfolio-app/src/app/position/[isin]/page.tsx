@@ -8,7 +8,16 @@ import { PositionActions } from "@/components/position/position-actions";
 import { PositionTransactions } from "@/components/position/position-transactions";
 import { Badge, Card } from "@/components/ui/misc";
 import { d } from "@/domain/decimal";
-import { formatCompact, formatDate, formatDateTimeBerlin, formatMoney, formatNumber, formatPercent, formatPrice, formatQuantity } from "@/lib/format";
+import {
+  formatCompact,
+  formatDate,
+  formatDateTimeBerlin,
+  formatMoney,
+  formatNumber,
+  formatPercent,
+  formatPrice,
+  formatQuantity,
+} from "@/lib/format";
 import { getInstrumentChart, getPositionDetail } from "@/server/position";
 
 export async function generateMetadata(props: PageProps<"/position/[isin]">): Promise<Metadata> {
@@ -24,7 +33,10 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
   if (!detail || !chart) notFound();
   const { instrument, position, quote, fundamentals: f } = detail;
   const placeholderIsin = instrument.isin.startsWith("X-");
-  const dayPct = quote?.previousClose && d(quote.previousClose).gt(0) ? d(quote.price).minus(quote.previousClose).div(quote.previousClose).toString() : null;
+  const dayPct =
+    quote?.previousClose && d(quote.previousClose).gt(0)
+      ? d(quote.price).minus(quote.previousClose).div(quote.previousClose).toString()
+      : null;
 
   return (
     <div className="flex flex-col gap-8">
@@ -56,7 +68,16 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
           {quote ? (
             <>
               <span className="inline-flex items-center gap-1.5">
-                <span className={quote.stale ? "size-1.5 rounded-full bg-warn" : detail.marketOpen ? "size-1.5 rounded-full bg-up" : "size-1.5 rounded-full bg-subtle"} aria-hidden />
+                <span
+                  className={
+                    quote.stale
+                      ? "size-1.5 rounded-full bg-warn"
+                      : detail.marketOpen
+                        ? "size-1.5 rounded-full bg-up"
+                        : "size-1.5 rounded-full bg-subtle"
+                  }
+                  aria-hidden
+                />
                 {detail.marketOpen ? "Börse geöffnet" : "Börse geschlossen"}
               </span>
               <span>· Kurs von {formatDateTimeBerlin(quote.asOf)}</span>
@@ -71,13 +92,21 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
 
       {position ? (
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Stat label="Wert" value={formatMoney(position.marketValueEUR)} sub={`${formatQuantity(position.quantity)} Stück · ${formatPercent(position.weight, { signed: false, digits: 1 })} vom Depot`} />
+          <Stat
+            label="Wert"
+            value={formatMoney(position.marketValueEUR)}
+            sub={`${formatQuantity(position.quantity)} Stück · ${formatPercent(position.weight, { signed: false, digits: 1 })} vom Depot`}
+          />
           <Stat
             label="Einstand"
             value={formatMoney(position.costEUR)}
             sub={`Ø ${position.avgCostLocal ? formatPrice(position.avgCostLocal, position.costCurrency ?? "EUR") : formatPrice(position.avgCostEUR)} je Stück`}
           />
-          <Stat label="Gewinn/Verlust" value={<Delta value={position.unrealizedEUR} percent={position.unrealizedPct} className="text-[16px]" />} sub="unrealisiert" />
+          <Stat
+            label="Gewinn/Verlust"
+            value={<Delta value={position.unrealizedEUR} percent={position.unrealizedPct} className="text-[16px]" />}
+            sub="unrealisiert"
+          />
           <Stat
             label="Heute"
             value={<Delta value={position.dayChangeEUR} percent={position.dayChangePct} className="text-[16px]" />}
@@ -103,7 +132,12 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
             <Metric label="Land" value={f?.country ?? instrument.country} />
           </dl>
           {f?.fiftyTwoWeekLow && f.fiftyTwoWeekHigh && (
-            <FiftyTwoWeek low={f.fiftyTwoWeekLow} high={f.fiftyTwoWeekHigh} current={quote?.price ?? null} currency={quote?.currency ?? instrument.currency} />
+            <FiftyTwoWeek
+              low={f.fiftyTwoWeekLow}
+              high={f.fiftyTwoWeekHigh}
+              current={quote?.price ?? null}
+              currency={quote?.currency ?? instrument.currency}
+            />
           )}
         </Card>
 
@@ -112,16 +146,16 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
           <dl className="flex flex-col gap-3 text-[14px]">
             <Row label="Realisiert" value={<Delta value={detail.realizedEUR} size="sm" />} />
             <Row label="Dividenden netto" value={<span className="tnum">{formatMoney(detail.dividendsNetEUR)}</span>} />
-            <Row label="Dividenden brutto" value={<span className="text-muted tnum">{formatMoney(detail.dividendsGrossEUR)}</span>} />
-            <Row label="Gebühren" value={<span className="text-muted tnum">{formatMoney(detail.feesEUR)}</span>} />
-            <Row label="Erster Kauf" value={<span className="text-muted tnum">{formatDate(detail.firstBuyAt)}</span>} />
+            <Row label="Dividenden brutto" value={<span className="tnum text-muted">{formatMoney(detail.dividendsGrossEUR)}</span>} />
+            <Row label="Gebühren" value={<span className="tnum text-muted">{formatMoney(detail.feesEUR)}</span>} />
+            <Row label="Erster Kauf" value={<span className="tnum text-muted">{formatDate(detail.firstBuyAt)}</span>} />
           </dl>
           {detail.dividendsByYear.length > 0 && (
             <div className="flex flex-col gap-1.5 border-t border-border pt-3">
               <span className="text-[12px] font-medium text-subtle">Dividenden je Jahr (netto)</span>
               {detail.dividendsByYear.map((y) => (
                 <div key={y.year} className="flex justify-between text-[13px]">
-                  <span className="text-muted tnum">
+                  <span className="tnum text-muted">
                     {y.year} <span className="text-subtle">· {y.count}×</span>
                   </span>
                   <span className="tnum">{formatMoney(y.netEUR)}</span>
@@ -141,7 +175,7 @@ function Stat({ label, value, sub }: { label: string; value: React.ReactNode; su
   return (
     <Card className="flex flex-col gap-1 p-4">
       <span className="text-[12px] font-medium text-subtle">{label}</span>
-      <span className="text-[18px] font-semibold tracking-[-0.01em] tnum">{value}</span>
+      <span className="tnum text-[18px] font-semibold tracking-[-0.01em]">{value}</span>
       {sub && <span className="text-[12px] text-subtle">{sub}</span>}
     </Card>
   );
@@ -151,7 +185,7 @@ function Metric({ label, value }: { label: string; value: string | null | undefi
   return (
     <div className="flex flex-col gap-0.5">
       <dt className="text-[12px] text-subtle">{label}</dt>
-      <dd className={value ? "text-[15px] font-medium tnum" : "text-[14px] text-subtle"}>{value ?? "keine Daten"}</dd>
+      <dd className={value ? "tnum text-[15px] font-medium" : "text-[14px] text-subtle"}>{value ?? "keine Daten"}</dd>
     </div>
   );
 }
@@ -176,10 +210,19 @@ function FiftyTwoWeek({ low, high, current, currency }: { low: string; high: str
         <span>52-Wochen-Spanne</span>
         {pos !== null && <span className="tnum">{Math.round(pos)} % der Spanne</span>}
       </div>
-      <div className="relative h-1.5 rounded-full bg-surface-3" role="img" aria-label={`52 Wochen: Tief ${formatPrice(low, currency)}, Hoch ${formatPrice(high, currency)}`}>
-        {pos !== null && <span className="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-foreground" style={{ left: `${pos}%` }} />}
+      <div
+        className="relative h-1.5 rounded-full bg-surface-3"
+        role="img"
+        aria-label={`52 Wochen: Tief ${formatPrice(low, currency)}, Hoch ${formatPrice(high, currency)}`}
+      >
+        {pos !== null && (
+          <span
+            className="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-foreground"
+            style={{ left: `${pos}%` }}
+          />
+        )}
       </div>
-      <div className="flex justify-between text-[13px] tnum">
+      <div className="tnum flex justify-between text-[13px]">
         <span>{formatPrice(low, currency)}</span>
         <span>{formatPrice(high, currency)}</span>
       </div>

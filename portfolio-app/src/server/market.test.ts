@@ -58,7 +58,8 @@ describe("Kursdienst", () => {
       primary: provider({ id: "primary", quotes: async () => Promise.reject(new Error("429")) }),
       fallback: provider({
         id: "backup",
-        quotes: async () => new Map([["XYZ", { symbol: "XYZ", price: "5", previousClose: null, currency: "USD", asOf: new Date().toISOString() }]]),
+        quotes: async () =>
+          new Map([["XYZ", { symbol: "XYZ", price: "5", previousClose: null, currency: "USD", asOf: new Date().toISOString() }]]),
       }),
     });
     const result = await getQuotes(["XYZ"]);
@@ -75,7 +76,11 @@ describe("Kursdienst", () => {
     overrideProvidersForTest({ primary: provider({ dailyHistory: async () => points }) });
     expect((await getDailyHistory("HIST", "2026-09-28", "2026-09-30")).map((p) => p.close)).toEqual(["10", "11", "12"]);
     overrideProvidersForTest({ primary: provider({ dailyHistory: async () => Promise.reject(new Error("offline")) }) });
-    expect((await getDailyHistory("HIST", "2026-09-28", "2026-09-30")).map((p) => p.key)).toEqual(["2026-09-28", "2026-09-29", "2026-09-30"]);
+    expect((await getDailyHistory("HIST", "2026-09-28", "2026-09-30")).map((p) => p.key)).toEqual([
+      "2026-09-28",
+      "2026-09-29",
+      "2026-09-30",
+    ]);
   });
 
   it("trennt Demo- und Echtdaten im Cache", async () => {

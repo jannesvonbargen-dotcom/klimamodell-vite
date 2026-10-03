@@ -1,0 +1,183 @@
+{
+  "symbol": "MSFT",
+  "isin": "US5949181045",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "Microsoft Corporation",
+    "isin": "US5949181045",
+    "sector": "Technology",
+    "industry": "Software - Infrastructure",
+    "country": "US",
+    "exchange": "NASDAQ",
+    "marketCap": 3842944891500,
+    "beta": 1.099,
+    "price": 517.53,
+    "currency": "USD",
+    "range": [349.2, 553.72],
+    "website": "https://www.microsoft.com",
+    "lastDividend": 3.64,
+    "employees": 223000,
+    "ceo": "Satya Nadella"
+  },
+  "income": {
+    "fiscalYearEnds": ["2022-06-30", "2023-06-30", "2024-06-30", "2025-06-30", "2026-06-30"],
+    "revenue": [198270000000, 211915000000, 245122000000, 281724000000, 331839000000],
+    "netIncome": [72738000000, 72361000000, 88136000000, 101832000000, 133749000000],
+    "epsDiluted": [9.65, 9.68, 11.8, 13.64, 17.95],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2025-06-30", "2026-06-30"],
+    "freeCashFlow": [71611000000, 66987000000],
+    "operatingCashFlow": [136162000000, 182935000000]
+  },
+  "ratios": {
+    "grossMargin": 0.6794,
+    "operatingMargin": 0.4678,
+    "netMargin": 0.4031,
+    "debtToEquity": 0.2912,
+    "dividendYield": 0.00703,
+    "payoutRatio": 0.1977,
+    "epsTTM": 18.0036
+  },
+  "metrics": {
+    "roe": 0.3322,
+    "netDebtToEbitda": 0.5198,
+    "fcfYield": 0.01743
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2026-06-30",
+    "revenueAvg": 329466482561,
+    "epsAvg": 17.00426
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2027-06-30",
+      "revenueAvg": 390602325014,
+      "epsAvg": 19.73471,
+      "analystsRevenue": 39,
+      "analystsEps": 31
+    },
+    {
+      "fiscalYearEnd": "2028-06-30",
+      "revenueAvg": 466621329838,
+      "epsAvg": 23.48481,
+      "analystsRevenue": 39,
+      "analystsEps": 29
+    }
+  ],
+  "analysts": {
+    "strongBuy": 0,
+    "buy": 67,
+    "hold": 15,
+    "sell": 0,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 725,
+    "targetLow": 440,
+    "targetConsensus": 563.5,
+    "targetMedian": 550
+  },
+  "ratingChanges12m": [
+    {
+      "date": "2026-09-23",
+      "firm": "Stifel",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-02-05",
+      "firm": "Stifel",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Hold"
+    },
+    {
+      "date": "2025-11-18",
+      "firm": "Rothschild & Co",
+      "action": "downgrade",
+      "previous": "Buy",
+      "new": "Neutral"
+    },
+    {
+      "date": "2025-10-27",
+      "firm": "Guggenheim",
+      "action": "upgrade",
+      "previous": "Neutral",
+      "new": "Buy"
+    }
+  ],
+  "latestRatings": [
+    {
+      "date": "2026-10-01",
+      "firm": "Wells Fargo",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-09-30",
+      "firm": "Piper Sandler",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-09-23",
+      "firm": "Stifel",
+      "action": "upgrade",
+      "previous": "Hold",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-09-22",
+      "firm": "Oppenheimer",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-09-21",
+      "firm": "Cantor Fitzgerald",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-09-15",
+      "firm": "Citizens",
+      "action": "maintain",
+      "previous": "Market Outperform",
+      "new": "Market Outperform"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 2,
+    "downgrades": 2,
+    "total": 103
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von Microsoft Corporation",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=789019",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/MSFT/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.microsoft.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

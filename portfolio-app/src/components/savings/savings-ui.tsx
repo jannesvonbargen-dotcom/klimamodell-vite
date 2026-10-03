@@ -4,7 +4,13 @@ import { MoreHorizontalIcon, PauseIcon, PencilIcon, PlayIcon, PlusIcon, Trash2Ic
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
-import { confirmExecutionAction, deleteSavingsPlanAction, saveSavingsPlanAction, setSavingsPlanActiveAction, skipExecutionAction } from "@/app/actions";
+import {
+  confirmExecutionAction,
+  deleteSavingsPlanAction,
+  saveSavingsPlanAction,
+  setSavingsPlanActiveAction,
+  skipExecutionAction,
+} from "@/app/actions";
 import { SAVINGS_INTERVAL_LABELS, type SavingsInterval, type SavingsPlan } from "@/domain/types";
 import { formatDate, formatDateLong, formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -36,7 +42,8 @@ export interface PendingView {
 const WEEKDAYS = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
 
 function scheduleLabel(p: Pick<SavingsPlan, "interval" | "executionDay">): string {
-  if (p.interval === "WEEKLY" || p.interval === "BIWEEKLY") return `${SAVINGS_INTERVAL_LABELS[p.interval]}, ${WEEKDAYS[p.executionDay - 1] ?? ""}`;
+  if (p.interval === "WEEKLY" || p.interval === "BIWEEKLY")
+    return `${SAVINGS_INTERVAL_LABELS[p.interval]}, ${WEEKDAYS[p.executionDay - 1] ?? ""}`;
   return `${SAVINGS_INTERVAL_LABELS[p.interval]} zum ${p.executionDay}.`;
 }
 
@@ -73,7 +80,7 @@ export function PendingExecutions({ pending }: { pending: PendingView[] }) {
     <section aria-labelledby="pending-heading" className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
         <h2 id="pending-heading" className="text-[17px] font-semibold tracking-[-0.01em]">
-          Zu bestätigen <span className="ml-1 text-[14px] font-normal text-subtle tnum">{pending.length}</span>
+          Zu bestätigen <span className="tnum ml-1 text-[14px] font-normal text-subtle">{pending.length}</span>
         </h2>
         {pending.length > 1 && (
           <Button size="sm" variant="secondary" onClick={confirmAll} disabled={busy !== null}>
@@ -91,7 +98,7 @@ export function PendingExecutions({ pending }: { pending: PendingView[] }) {
                 <div className="truncate text-[14px] font-medium">{p.instrumentName}</div>
                 <div className="text-[12px] text-subtle">Fällig am {formatDateLong(p.dueDate)} · Kurs vom Ausführungstag</div>
               </div>
-              <span className="text-[14px] font-medium tnum">{formatMoney(p.amount)}</span>
+              <span className="tnum text-[14px] font-medium">{formatMoney(p.amount)}</span>
               <div className="flex gap-1.5">
                 <Button
                   size="sm"
@@ -124,7 +131,9 @@ export function PlanList({ plans, today }: { plans: PlanView[]; today: string })
     return (
       <Card className="flex flex-col items-center gap-3 px-6 py-14 text-center">
         <p className="text-[16px] font-semibold">Noch keine Sparpläne</p>
-        <p className="max-w-sm text-[13px] text-muted">Lege einen Sparplan an, z. B. 100 € monatlich in einen MSCI-World-ETF. Ausführungen bestätigst du hier mit einem Klick.</p>
+        <p className="max-w-sm text-[13px] text-muted">
+          Lege einen Sparplan an, z. B. 100 € monatlich in einen MSCI-World-ETF. Ausführungen bestätigst du hier mit einem Klick.
+        </p>
         <NewPlanButton today={today} variant="outline" />
       </Card>
     );
@@ -147,7 +156,11 @@ export function PlanList({ plans, today }: { plans: PlanView[]; today: string })
               {!p.active && <Badge>Pausiert</Badge>}
               <Menu>
                 <MenuTrigger asChild>
-                  <button type="button" className="pressable rounded-md p-1.5 text-subtle hover:bg-surface-2 hover:text-foreground" aria-label="Aktionen">
+                  <button
+                    type="button"
+                    className="pressable rounded-md p-1.5 text-subtle hover:bg-surface-2 hover:text-foreground"
+                    aria-label="Aktionen"
+                  >
                     <MoreHorizontalIcon className="size-4" />
                   </button>
                 </MenuTrigger>
@@ -180,15 +193,15 @@ export function PlanList({ plans, today }: { plans: PlanView[]; today: string })
             <dl className="grid grid-cols-3 gap-3 text-[13px]">
               <div>
                 <dt className="text-[12px] text-subtle">Rate</dt>
-                <dd className="font-medium tnum">{formatMoney(p.amount)}</dd>
+                <dd className="tnum font-medium">{formatMoney(p.amount)}</dd>
               </div>
               <div>
                 <dt className="text-[12px] text-subtle">Nächste Ausführung</dt>
-                <dd className="font-medium tnum">{p.active && p.nextDate ? formatDate(p.nextDate) : "—"}</dd>
+                <dd className="tnum font-medium">{p.active && p.nextDate ? formatDate(p.nextDate) : "—"}</dd>
               </div>
               <div>
                 <dt className="text-[12px] text-subtle">Bisher investiert</dt>
-                <dd className="font-medium tnum">{formatMoney(p.investedEUR)}</dd>
+                <dd className="tnum font-medium">{formatMoney(p.investedEUR)}</dd>
                 <dd className="text-[11px] text-subtle">{p.executions} Ausführungen</dd>
               </div>
             </dl>
@@ -212,7 +225,17 @@ export function NewPlanButton({ today, variant = "primary" }: { today: string; v
   );
 }
 
-function PlanDialog({ open, onOpenChange, plan, today }: { open: boolean; onOpenChange: (o: boolean) => void; plan: PlanView | null; today: string }) {
+function PlanDialog({
+  open,
+  onOpenChange,
+  plan,
+  today,
+}: {
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+  plan: PlanView | null;
+  today: string;
+}) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent aria-describedby={undefined}>
@@ -294,7 +317,9 @@ function PlanForm({ plan, today, onDone }: { plan: PlanView | null; today: strin
             <Select id="plan-day" value={day} onValueChange={setDay} options={dayOptions} ariaLabel="Ausführungstag" />
           </Field>
         </div>
-        <p className="text-[12px] text-subtle">Fällt der Termin auf ein Wochenende oder einen Feiertag, wird am nächsten Handelstag ausgeführt.</p>
+        <p className="text-[12px] text-subtle">
+          Fällt der Termin auf ein Wochenende oder einen Feiertag, wird am nächsten Handelstag ausgeführt.
+        </p>
       </DialogBody>
       <DialogFooter>
         <Button type="button" variant="ghost" onClick={onDone}>

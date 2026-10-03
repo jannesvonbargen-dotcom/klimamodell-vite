@@ -107,7 +107,9 @@ describe("Sparpläne", () => {
   });
 
   it("liefert den nächsten Termin und ignoriert inaktive Pläne", () => {
-    expect(nextExecutionDate({ interval: "MONTHLY", executionDay: 2, startDate: "2026-01-01", active: true }, "2026-10-03")).toBe("2026-11-02");
+    expect(nextExecutionDate({ interval: "MONTHLY", executionDay: 2, startDate: "2026-01-01", active: true }, "2026-10-03")).toBe(
+      "2026-11-02",
+    );
     expect(dueExecutionDates({ interval: "MONTHLY", executionDay: 2, startDate: "2026-01-01", active: false }, "2026-10-03")).toEqual([]);
   });
 });
@@ -119,7 +121,9 @@ describe("Validierung", () => {
     expect(errors.quantity).toBeDefined();
     expect(errors.price).toBeDefined();
     expect(validateFields({ ...tx("DEPOSIT", "2026-01-01"), amount: "100" })).toEqual({});
-    expect(validateFields({ ...tx("BUY", "2026-01-01"), instrumentId: 1, quantity: "1.1234567", price: "5" }).quantity).toMatch(/6 Nachkommastellen/);
+    expect(validateFields({ ...tx("BUY", "2026-01-01"), instrumentId: 1, quantity: "1.1234567", price: "5" }).quantity).toMatch(
+      /6 Nachkommastellen/,
+    );
   });
 
   it("verhindert Verkäufe von mehr Stücken als gehalten – auch rückwirkend", () => {

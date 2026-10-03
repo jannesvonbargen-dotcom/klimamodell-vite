@@ -117,7 +117,11 @@ function validate(draft: TransactionDraft, id?: number): FieldErrors {
   return validateTimeline({ ...draft, id }, listTransactions(), listSplits());
 }
 
-export function createTransaction(input: TransactionInput, source: "manual" | "savings_plan" = "manual", extra: { savingsPlanId?: number } = {}): ActionResult<{ id: number }> {
+export function createTransaction(
+  input: TransactionInput,
+  source: "manual" | "savings_plan" = "manual",
+  extra: { savingsPlanId?: number } = {},
+): ActionResult<{ id: number }> {
   const needsInstrument = ["BUY", "SELL", "SAVINGS_PLAN", "DIVIDEND"].includes(input.type);
   const instrumentId = needsInstrument ? resolveInstrumentId(input) : null;
   const { draft, errors } = toDraft(input, instrumentId);

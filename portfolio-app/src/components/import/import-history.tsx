@@ -31,7 +31,7 @@ export function ImportHistory({ batches }: { batches: BatchRow[] }) {
           <div key={b.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
             <div className="min-w-0 leading-tight">
               <div className="truncate text-[14px] font-medium">{b.fileName}</div>
-              <div className="text-[12px] text-subtle tnum">
+              <div className="tnum text-[12px] text-subtle">
                 {formatDateTimeBerlin(b.createdAt)} · {b.importedCount} importiert von {b.rowCount} Zeilen
                 {b.activeCount !== b.importedCount && ` · ${b.activeCount} aktiv`}
               </div>

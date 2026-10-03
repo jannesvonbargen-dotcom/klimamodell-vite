@@ -1,4 +1,11 @@
-import { type Fundamentals, type MarketDataProvider, type PricePoint, ProviderError, type ProviderQuote, type SearchResult } from "../types";
+import {
+  type Fundamentals,
+  type MarketDataProvider,
+  type PricePoint,
+  ProviderError,
+  type ProviderQuote,
+  type SearchResult,
+} from "../types";
 import { dec, fetchJson, inferCurrency } from "./http";
 
 /**

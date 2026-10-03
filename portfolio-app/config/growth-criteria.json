@@ -1,0 +1,30 @@
+{
+  "_hinweis": "Kriterien der Rubrik „Solide Wachstumswerte“. Werte anpassen und Seite neu laden. Erklärung aller Felder: config/README.md",
+  "staleAfterDays": 90,
+  "maxFailedOptional": 1,
+  "candidates": ["MSFT", "V", "COST", "WMT", "JPM", "GOOGL", "AAPL", "AMZN", "META", "NVDA"],
+  "criteria": {
+    "minMarketCapUSD": { "enabled": true, "required": true, "value": 10000000000 },
+    "profitableYears": { "enabled": true, "required": true, "value": 3 },
+    "positiveFreeCashFlow": {
+      "enabled": true,
+      "required": true,
+      "notApplicableIndustries": ["Banks - Diversified", "Banks - Regional", "Insurance - Diversified"]
+    },
+    "maxDebtToEquity": {
+      "enabled": true,
+      "required": true,
+      "value": 1.0,
+      "notApplicableIndustries": ["Banks - Diversified", "Banks - Regional", "Insurance - Diversified"]
+    },
+    "maxBeta": { "enabled": true, "required": true, "value": 1.2 },
+    "maxVolatility": { "enabled": true, "required": true, "value": 0.35 },
+    "maxDrawdown": { "enabled": true, "required": true, "value": 0.3 },
+    "minRevenueCagr": { "enabled": true, "required": false, "value": 0.06, "years": 4 },
+    "minEpsCagr": { "enabled": true, "required": false, "value": 0.06, "years": 4 },
+    "minGrowthYears": { "enabled": true, "required": false, "value": 3, "of": 4 },
+    "minExpectedRevenueGrowth": { "enabled": true, "required": false, "value": 0.05 },
+    "minBuyShare": { "enabled": true, "required": false, "value": 0.5 },
+    "minTargetUpside": { "enabled": true, "required": false, "value": 0.05 }
+  }
+}

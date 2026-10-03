@@ -78,11 +78,17 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
     <section aria-labelledby="positions-heading" className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
         <h2 id="positions-heading" className="text-[17px] font-semibold tracking-[-0.01em]">
-          Positionen <span className="ml-1 text-[14px] font-normal text-subtle tnum">{positions.length}</span>
+          Positionen <span className="tnum ml-1 text-[14px] font-normal text-subtle">{positions.length}</span>
         </h2>
         <div className="relative w-full max-w-60">
           <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-subtle" />
-          <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Suchen" aria-label="Positionen durchsuchen" className="h-9 pl-9" />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Suchen"
+            aria-label="Positionen durchsuchen"
+            className="h-9 pl-9"
+          />
         </div>
       </div>
 
@@ -103,7 +109,11 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
                     <button
                       type="button"
                       onClick={() => toggle(c.key)}
-                      className={cn("inline-flex items-center gap-1 rounded hover:text-foreground", active && "text-foreground", c.className && "flex-row-reverse")}
+                      className={cn(
+                        "inline-flex items-center gap-1 rounded hover:text-foreground",
+                        active && "text-foreground",
+                        c.className && "flex-row-reverse",
+                      )}
                     >
                       {c.label}
                       {active ? (
@@ -123,16 +133,28 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
           </thead>
           <tbody>
             {rows.map((p) => (
-              <tr key={p.instrumentId} className="group relative border-b border-border transition-colors duration-150 last:border-0 hover:bg-surface-2/60">
+              <tr
+                key={p.instrumentId}
+                className="group relative border-b border-border transition-colors duration-150 last:border-0 hover:bg-surface-2/60"
+              >
                 <td className="py-3 pr-4 pl-5">
-                  <Link href={positionHref(p)} className="flex min-w-0 items-center gap-3 outline-none after:absolute after:inset-0 focus-visible:after:rounded-lg focus-visible:after:ring-2 focus-visible:after:ring-ring">
+                  <Link
+                    href={positionHref(p)}
+                    className="flex min-w-0 items-center gap-3 outline-none after:absolute after:inset-0 focus-visible:after:rounded-lg focus-visible:after:ring-2 focus-visible:after:ring-ring"
+                  >
                     <InstrumentAvatar name={p.instrument.name} symbol={p.instrument.symbol} logoUrl={p.instrument.logoUrl} size={32} />
                     <span className="min-w-0">
                       <span className="block max-w-[260px] truncate font-medium">{p.instrument.name}</span>
                       <span className="flex items-center gap-1.5 text-[12px] text-subtle">
                         {p.instrument.symbol}
                         {p.priceSource !== "quote" && (
-                          <Tooltip content={p.priceSource === "last-transaction" ? "Kein aktueller Kurs – bewertet mit letztem Transaktionskurs" : "Kein Kurs verfügbar"}>
+                          <Tooltip
+                            content={
+                              p.priceSource === "last-transaction"
+                                ? "Kein aktueller Kurs – bewertet mit letztem Transaktionskurs"
+                                : "Kein Kurs verfügbar"
+                            }
+                          >
                             <span className="relative z-10 rounded bg-warn-soft px-1 text-[11px] text-warn">ohne Kurs</span>
                           </Tooltip>
                         )}
@@ -145,12 +167,14 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
                     </span>
                   </Link>
                 </td>
-                <td className="px-4 text-right text-muted tnum">{formatQuantity(p.quantity)}</td>
-                <td className="px-4 text-right tnum">
+                <td className="tnum px-4 text-right text-muted">{formatQuantity(p.quantity)}</td>
+                <td className="tnum px-4 text-right">
                   <div>{formatMoney(p.costEUR)}</div>
-                  <div className="text-[12px] text-subtle">{p.avgCostLocal ? formatPrice(p.avgCostLocal, p.costCurrency ?? "EUR") : formatPrice(p.avgCostEUR)} Ø</div>
+                  <div className="text-[12px] text-subtle">
+                    {p.avgCostLocal ? formatPrice(p.avgCostLocal, p.costCurrency ?? "EUR") : formatPrice(p.avgCostEUR)} Ø
+                  </div>
                 </td>
-                <td className="px-4 text-right tnum">
+                <td className="tnum px-4 text-right">
                   <div className="font-medium">{formatMoney(p.marketValueEUR)}</div>
                   <div className="text-[12px] text-subtle">{formatPrice(p.priceLocal, p.priceCurrency ?? "EUR")}</div>
                 </td>
@@ -162,7 +186,9 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
                 </td>
                 <td className="px-4 text-right">
                   <Delta percent={p.dayChangePct} size="sm" className="justify-end" />
-                  <div className="text-[12px] text-subtle tnum">{p.dayChangeEUR ? formatMoney(p.dayChangeEUR, "EUR", { signed: true }) : "—"}</div>
+                  <div className="tnum text-[12px] text-subtle">
+                    {p.dayChangeEUR ? formatMoney(p.dayChangeEUR, "EUR", { signed: true }) : "—"}
+                  </div>
                 </td>
                 <td className="pr-5 pl-4 text-right">
                   <WeightBar weight={p.weight} />
@@ -182,12 +208,12 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
               <InstrumentAvatar name={p.instrument.name} symbol={p.instrument.symbol} logoUrl={p.instrument.logoUrl} size={36} />
               <div className="min-w-0 flex-1">
                 <div className="truncate text-[14px] font-medium">{p.instrument.name}</div>
-                <div className="text-[12px] text-subtle tnum">
+                <div className="tnum text-[12px] text-subtle">
                   {formatQuantity(p.quantity)} Stk. · {formatPercent(p.weight, { signed: false, digits: 1 })}
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-[14px] font-medium tnum">{formatMoney(p.marketValueEUR)}</div>
+                <div className="tnum text-[14px] font-medium">{formatMoney(p.marketValueEUR)}</div>
                 <Delta percent={p.unrealizedPct} size="sm" className="justify-end" />
               </div>
             </Link>

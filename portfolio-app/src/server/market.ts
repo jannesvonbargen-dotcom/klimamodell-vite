@@ -32,7 +32,12 @@ let providersOverride: Providers | null = null;
 /** Nur für Tests: Anbieter ersetzen (null = wieder aus der Konfiguration). */
 export function overrideProvidersForTest(value: Partial<Providers> | null): void {
   providersOverride = value
-    ? { primary: value.primary ?? new MockProvider(), fallback: value.fallback ?? null, fx: value.fx ?? new MockFxProvider(), warnings: value.warnings ?? [] }
+    ? {
+        primary: value.primary ?? new MockProvider(),
+        fallback: value.fallback ?? null,
+        fx: value.fx ?? new MockFxProvider(),
+        warnings: value.warnings ?? [],
+      }
     : null;
 }
 

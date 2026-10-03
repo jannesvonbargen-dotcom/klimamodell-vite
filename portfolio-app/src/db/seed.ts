@@ -9,7 +9,7 @@ import type { PricePoint } from "@/market/types";
 import { getFxHistory, getDailyHistory } from "@/server/market";
 import { setSetting, upsertInstrument } from "@/server/repo";
 import { getDb } from "./client";
-import { instruments, savingsPlanExecutions, savingsPlans, settings, splits, transactions } from "./schema";
+import { instruments, savingsPlanExecutions, savingsPlans, settings, splits, transactions, watchlist } from "./schema";
 
 /**
  * Beispieldepot zum Ausprobieren. Alle Transaktionen werden mit
@@ -147,16 +147,32 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
   // Dividenden (Beispielwerte je Aktie, Steuer pauschal 26,375 %)
   const dividends: Array<{ inst: typeof apple; date: string; perShare: string }> = [];
   for (const year of [2023, 2024, 2025, 2026]) {
-    dividends.push({ inst: sap, date: `${year}-05-${year === 2023 ? "16" : "20"}`, perShare: ["2.05", "2.20", "2.35", "2.50"][year - 2023] });
-    dividends.push({ inst: allianz, date: `${year}-05-0${year === 2023 ? 8 : 9}`, perShare: ["11.40", "13.80", "15.40", "17.10"][year - 2023] });
+    dividends.push({
+      inst: sap,
+      date: `${year}-05-${year === 2023 ? "16" : "20"}`,
+      perShare: ["2.05", "2.20", "2.35", "2.50"][year - 2023],
+    });
+    dividends.push({
+      inst: allianz,
+      date: `${year}-05-0${year === 2023 ? 8 : 9}`,
+      perShare: ["11.40", "13.80", "15.40", "17.10"][year - 2023],
+    });
     for (const [month, day] of [
       [2, 16],
       [5, 18],
       [8, 17],
       [11, 16],
     ]) {
-      dividends.push({ inst: apple, date: `${year}-${String(month).padStart(2, "0")}-${day}`, perShare: year < 2024 ? "0.24" : year < 2025 ? "0.25" : "0.26" });
-      dividends.push({ inst: msft, date: `${year}-${String(month + 1).padStart(2, "0")}-${String(day - 2).padStart(2, "0")}`, perShare: year < 2024 ? "0.75" : year < 2025 ? "0.83" : "0.91" });
+      dividends.push({
+        inst: apple,
+        date: `${year}-${String(month).padStart(2, "0")}-${day}`,
+        perShare: year < 2024 ? "0.24" : year < 2025 ? "0.25" : "0.26",
+      });
+      dividends.push({
+        inst: msft,
+        date: `${year}-${String(month + 1).padStart(2, "0")}-${String(day - 2).padStart(2, "0")}`,
+        perShare: year < 2024 ? "0.75" : year < 2025 ? "0.83" : "0.91",
+      });
     }
   }
 
@@ -169,7 +185,15 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
   for (const p of plans) {
     const row = db
       .insert(savingsPlans)
-      .values({ instrumentId: p.inst.id, amount: p.amount, interval: "MONTHLY", executionDay: p.day, startDate: SEED_START, active: true, fee: "0" })
+      .values({
+        instrumentId: p.inst.id,
+        amount: p.amount,
+        interval: "MONTHLY",
+        executionDay: p.day,
+        startDate: SEED_START,
+        active: true,
+        fee: "0",
+      })
       .returning()
       .get();
     planIds.push(row.id);
@@ -194,9 +218,11 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
   const lastConfirmable = addMonths(`${today.slice(0, 8)}01`, 0);
   for (let i = 0; i < plans.length; i++) {
     const p = plans[i];
-    const dates = dueExecutionDates({ interval: "MONTHLY", executionDay: p.day, startDate: SEED_START, active: true }, today, holidays).filter(
-      (date) => date < lastConfirmable,
-    );
+    const dates = dueExecutionDates(
+      { interval: "MONTHLY", executionDay: p.day, startDate: SEED_START, active: true },
+      today,
+      holidays,
+    ).filter((date) => date < lastConfirmable);
     for (const date of dates) {
       const price = d(await book.close(p.inst.symbol, date));
       const qty = roundQty(d(p.amount).div(price));
@@ -246,10 +272,39 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
     if (ledger.cashEUR.lte(0)) continue;
     const gross = roundMoney(ledger.cashEUR.times("0.025").div(12));
     if (gross.lte(0)) continue;
-    insertRow({ ...base, type: "INTEREST", executedAt: `${date}T23:00`, amount: gross.toString(), tax: roundMoney(gross.times("0.26375")).toString() });
+    insertRow({
+      ...base,
+      type: "INTEREST",
+      executedAt: `${date}T23:00`,
+      amount: gross.toString(),
+      tax: roundMoney(gross.times("0.26375")).toString(),
+    });
+  }
+
+  // Watchlist-Beispiele (ohne erfundene Kursschwellen: Alarm 10 % unter dem letzten Schlusskurs)
+  const watchIds: number[] = [];
+  for (const symbol of ["V", "COST"]) {
+    const entry = catalogBySymbol(symbol);
+    if (!entry) continue;
+    const last = await book.close(symbol, today);
+    const row = db
+      .insert(watchlist)
+      .values({
+        symbol,
+        name: entry.name,
+        isin: entry.isin,
+        currency: entry.currency,
+        alertBelow: roundMoney(d(last).times("0.9")).toString(),
+        note: "Beispiel aus „Solide Wachstumswerte“",
+      })
+      .onConflictDoNothing()
+      .returning()
+      .get();
+    if (row) watchIds.push(row.id);
   }
 
   setSetting("seedPlanIds", planIds);
+  setSetting("seedWatchlistIds", watchIds);
   setSetting("seededAt", new Date().toISOString());
   return { transactions: count };
 }
@@ -262,6 +317,9 @@ export function removeDemoData(): void {
     const planIdsRow = tx.select().from(settings).where(eq(settings.key, "seedPlanIds")).get();
     const planIds: number[] = planIdsRow ? JSON.parse(planIdsRow.value) : [];
     if (planIds.length) tx.delete(savingsPlans).where(inArray(savingsPlans.id, planIds)).run();
+    const watchRow = tx.select().from(settings).where(eq(settings.key, "seedWatchlistIds")).get();
+    const watchIds: number[] = watchRow ? JSON.parse(watchRow.value) : [];
+    if (watchIds.length) tx.delete(watchlist).where(inArray(watchlist.id, watchIds)).run();
     const used = new Set(
       tx
         .select({ id: transactions.instrumentId })
@@ -284,4 +342,5 @@ export function removeDemoData(): void {
     }
   });
   setSetting("seedPlanIds", []);
+  setSetting("seedWatchlistIds", []);
 }

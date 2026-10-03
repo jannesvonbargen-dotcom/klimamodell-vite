@@ -47,7 +47,15 @@ vi.mock("yahoo-finance2", () => {
       return {
         quotes: [
           { isYahooFinance: true, symbol: "APC.DE", shortname: "APPLE INC", exchDisp: "XETRA", quoteType: "EQUITY", score: 1 },
-          { isYahooFinance: true, symbol: "AAPL", longname: "Apple Inc.", exchDisp: "NASDAQ", quoteType: "EQUITY", sector: "Technology", score: 1 },
+          {
+            isYahooFinance: true,
+            symbol: "AAPL",
+            longname: "Apple Inc.",
+            exchDisp: "NASDAQ",
+            quoteType: "EQUITY",
+            sector: "Technology",
+            score: 1,
+          },
           { isYahooFinance: true, symbol: "AAPL250117C00100000", quoteType: "OPTION", score: 1 },
           { isYahooFinance: false, index: "x" },
         ],
@@ -65,7 +73,12 @@ describe("YahooProvider", () => {
     const { YahooProvider } = await import("./yahoo");
     const quotes = await new YahooProvider().quotes(["AAPL", "BROKEN"]);
     expect([...quotes.keys()]).toEqual(["AAPL"]);
-    expect(quotes.get("AAPL")).toMatchObject({ price: "255.46", previousClose: "252.1", currency: "USD", asOf: "2026-10-02T20:00:00.000Z" });
+    expect(quotes.get("AAPL")).toMatchObject({
+      price: "255.46",
+      previousClose: "252.1",
+      currency: "USD",
+      asOf: "2026-10-02T20:00:00.000Z",
+    });
   });
 
   it("liefert Tageskurse mit Börsendatum und ohne Lücken", async () => {
@@ -96,6 +109,13 @@ describe("YahooProvider", () => {
   it("liefert Kennzahlen inklusive Sektor und Dividendenrendite", async () => {
     const { YahooProvider } = await import("./yahoo");
     const f = await new YahooProvider().fundamentals("AAPL");
-    expect(f).toMatchObject({ marketCap: "3790000000000", trailingPE: "38.7", dividendYield: "0.0041", fiftyTwoWeekHigh: "260.1", sector: "Technology", country: "United States" });
+    expect(f).toMatchObject({
+      marketCap: "3790000000000",
+      trailingPE: "38.7",
+      dividendYield: "0.0041",
+      fiftyTwoWeekHigh: "260.1",
+      sector: "Technology",
+      country: "United States",
+    });
   });
 });

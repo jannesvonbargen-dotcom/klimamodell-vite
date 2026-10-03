@@ -65,10 +65,7 @@ export function ratio(part: Dec, base: Dec): Dec | null {
  */
 export type NumberFormatHint = "auto" | "de" | "en";
 
-export function parseLocaleNumber(
-  raw: string | number | null | undefined,
-  hint: NumberFormatHint = "auto",
-): Dec | null {
+export function parseLocaleNumber(raw: string | number | null | undefined, hint: NumberFormatHint = "auto"): Dec | null {
   if (raw === null || raw === undefined) return null;
   if (typeof raw === "number") return Number.isFinite(raw) ? new Dec(raw) : null;
   let s = raw.trim();
@@ -79,7 +76,10 @@ export function parseLocaleNumber(
     negative = true;
     s = s.slice(1, -1);
   }
-  s = s.replace(/[€$£¥%\s  ']/g, "").replace(/[A-Za-z]{3}$/g, "").replace(/^[A-Za-z]{3}/g, "");
+  s = s
+    .replace(/[€$£¥%\s  ']/g, "")
+    .replace(/[A-Za-z]{3}$/g, "")
+    .replace(/^[A-Za-z]{3}/g, "");
   s = s.replace(/[−–]/g, "-");
   if (s.startsWith("+")) s = s.slice(1);
   if (s.startsWith("-")) {

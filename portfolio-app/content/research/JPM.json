@@ -1,0 +1,154 @@
+{
+  "symbol": "JPM",
+  "isin": "US46625H1005",
+  "asOf": "2026-10-03",
+  "provider": "Financial Modeling Prep",
+  "profile": {
+    "name": "JPMorgan Chase & Co.",
+    "isin": "US46625H1005",
+    "sector": "Financial Services",
+    "industry": "Banks - Diversified",
+    "country": "US",
+    "exchange": "NYSE",
+    "marketCap": 890615533800,
+    "beta": 0.975,
+    "price": 332.38,
+    "currency": "USD",
+    "range": [279.1, 366.5],
+    "website": "https://www.jpmorganchase.com",
+    "lastDividend": 6,
+    "employees": 320560,
+    "ceo": "Jamie Dimon"
+  },
+  "income": {
+    "fiscalYearEnds": ["2021-12-31", "2022-12-31", "2023-12-31", "2024-12-31", "2025-12-31"],
+    "revenue": [127238000000, 153824000000, 236273000000, 270789000000, 279745000000],
+    "netIncome": [48334000000, 37676000000, 49552000000, 58471000000, 57048000000],
+    "epsDiluted": [15.36, 12.09, 16.23, 19.75, 20.05],
+    "currency": "USD"
+  },
+  "cashflow": {
+    "fiscalYearEnds": ["2024-12-31", "2025-12-31"],
+    "freeCashFlow": [-42012000000, -147782000000],
+    "operatingCashFlow": [-42012000000, -147782000000]
+  },
+  "ratios": {
+    "grossMargin": 0.626,
+    "operatingMargin": 0.2819,
+    "netMargin": 0.2186,
+    "debtToEquity": 3.3045,
+    "dividendYield": 0.018052,
+    "payoutRatio": 0.2661,
+    "epsTTM": 23.3324
+  },
+  "metrics": {
+    "roe": 0.1781,
+    "netDebtToEbitda": 9.962,
+    "fcfYield": -0.1825
+  },
+  "lastFiscalYearEstimate": {
+    "fiscalYearEnd": "2025-12-31",
+    "revenueAvg": 183543557830,
+    "epsAvg": 20.19756
+  },
+  "estimates": [
+    {
+      "fiscalYearEnd": "2026-12-31",
+      "revenueAvg": 208077232742,
+      "epsAvg": 24.83767,
+      "analystsRevenue": 10,
+      "analystsEps": 11
+    },
+    {
+      "fiscalYearEnd": "2027-12-31",
+      "revenueAvg": 213934605369,
+      "epsAvg": 25.21223,
+      "analystsRevenue": 10,
+      "analystsEps": 13
+    }
+  ],
+  "analysts": {
+    "strongBuy": 1,
+    "buy": 31,
+    "hold": 27,
+    "sell": 2,
+    "strongSell": 0,
+    "consensus": "Buy",
+    "targetHigh": 420,
+    "targetLow": 305,
+    "targetConsensus": 373.64,
+    "targetMedian": 370
+  },
+  "ratingChanges12m": [],
+  "latestRatings": [
+    {
+      "date": "2026-09-28",
+      "firm": "HSBC",
+      "action": "maintain",
+      "previous": "Hold",
+      "new": "Hold"
+    },
+    {
+      "date": "2026-08-14",
+      "firm": "Wells Fargo",
+      "action": "maintain",
+      "previous": "Overweight",
+      "new": "Overweight"
+    },
+    {
+      "date": "2026-08-03",
+      "firm": "UBS",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    },
+    {
+      "date": "2026-07-20",
+      "firm": "Citigroup",
+      "action": "maintain",
+      "previous": "Neutral",
+      "new": "Neutral"
+    },
+    {
+      "date": "2026-07-17",
+      "firm": "Evercore ISI Group",
+      "action": "maintain",
+      "previous": "Outperform",
+      "new": "Outperform"
+    },
+    {
+      "date": "2026-07-16",
+      "firm": "B of A Securities",
+      "action": "maintain",
+      "previous": "Buy",
+      "new": "Buy"
+    }
+  ],
+  "ratingCounts12m": {
+    "upgrades": 0,
+    "downgrades": 0,
+    "total": 37
+  },
+  "sources": [
+    {
+      "label": "Financial Modeling Prep – Profil, Kennzahlen (TTM), Gewinn- und Cashflow-Rechnung, Analystenschätzungen, Kursziele, Analystenurteile",
+      "url": "https://financialmodelingprep.com/",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "SEC EDGAR – Geschäftsberichte von JPMorgan Chase & Co.",
+      "url": "https://www.sec.gov/edgar/browse/?CIK=19617",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Yahoo Finance – Kurs und Analystenübersicht",
+      "url": "https://finance.yahoo.com/quote/JPM/analysis",
+      "retrieved": "2026-10-03"
+    },
+    {
+      "label": "Unternehmenswebsite",
+      "url": "https://www.jpmorganchase.com",
+      "retrieved": "2026-10-03"
+    }
+  ]
+}

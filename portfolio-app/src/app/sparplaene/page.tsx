@@ -19,7 +19,9 @@ export default function SavingsPage() {
 
   const planViews: PlanView[] = plans.map((p) => {
     const instrument = instruments.get(p.instrumentId)!;
-    const executions = txs.filter((t) => t.savingsPlanId === p.id || (t.type === "SAVINGS_PLAN" && t.instrumentId === p.instrumentId && !t.savingsPlanId));
+    const executions = txs.filter(
+      (t) => t.savingsPlanId === p.id || (t.type === "SAVINGS_PLAN" && t.instrumentId === p.instrumentId && !t.savingsPlanId),
+    );
     return {
       ...p,
       instrument: {
@@ -71,8 +73,8 @@ export default function SavingsPage() {
         description={
           plans.length > 0 ? (
             <>
-              Aktive Pläne entsprechen rund <strong className="text-foreground tnum">{formatMoney(roundMoney(monthly).toString())}</strong> pro Monat.
-              Fällige Ausführungen erscheinen als Vorschlag zum Bestätigen.
+              Aktive Pläne entsprechen rund <strong className="tnum text-foreground">{formatMoney(roundMoney(monthly).toString())}</strong>{" "}
+              pro Monat. Fällige Ausführungen erscheinen als Vorschlag zum Bestätigen.
             </>
           ) : (
             "Regelmäßige Käufe anlegen. Fällige Ausführungen erscheinen als Vorschlag, den du bestätigst."
