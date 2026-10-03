@@ -26,6 +26,7 @@ export const DASH = "—";
 
 export function formatMoney(value: Num, currency = "EUR", options: { signed?: boolean; compact?: boolean } = {}): string {
   if (value === null || value === undefined || value === "") return DASH;
+  if (options.compact && !options.signed) return formatCompact(value, currency);
   const key = `money:${currency}:${options.signed ? "s" : ""}:${options.compact ? "c" : ""}`;
   return nf(key, {
     style: "currency",
@@ -73,14 +74,34 @@ export function formatNumber(value: Num, digits = 2): string {
   return nf(`num:${digits}`, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(asFormattable(value));
 }
 
+/**
+ * Kompakte Darstellung großer Zahlen („3,8 Bio. $“, „57 Mrd. $“). Bewusst ohne
+ * `notation: "compact"`: Dessen Rundung unterscheidet sich zwischen den ICU-Versionen
+ * von Node und Browser („57,0“ vs. „57“) und führt sonst zu Hydration-Fehlern.
+ */
+const COMPACT_UNITS: Array<[number, string]> = [
+  [1e12, "Bio."],
+  [1e9, "Mrd."],
+  [1e6, "Mio."],
+];
+
+function currencySymbol(currency: string): string {
+  return (
+    nf(`sym:${currency}`, { style: "currency", currency })
+      .formatToParts(0)
+      .find((p) => p.type === "currency")?.value ?? currency
+  );
+}
+
 export function formatCompact(value: Num, currency?: string): string {
   if (value === null || value === undefined || value === "") return DASH;
-  return nf(`compact:${currency ?? ""}`, {
-    notation: "compact",
-    compactDisplay: "short",
-    maximumFractionDigits: 1,
-    ...(currency ? { style: "currency", currency } : {}),
-  }).format(asFormattable(value));
+  const n = Number(value);
+  if (!Number.isFinite(n)) return DASH;
+  const unit = COMPACT_UNITS.find(([size]) => Math.abs(n) >= size);
+  const number = unit
+    ? nf("compact:1", { maximumFractionDigits: 1 }).format(n / unit[0])
+    : nf("compact:0", { maximumFractionDigits: 0 }).format(n);
+  return [number, unit?.[1], currency ? currencySymbol(currency) : null].filter(Boolean).join("\u00a0");
 }
 
 const MONTHS_SHORT = ["Jan.", "Feb.", "März", "Apr.", "Mai", "Juni", "Juli", "Aug.", "Sept.", "Okt.", "Nov.", "Dez."];

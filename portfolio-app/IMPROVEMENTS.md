@@ -11,6 +11,7 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Wertpapier-Suchfeld ohne zugänglichen Namen (cmdk überschreibt die ID) – Label über cmdk
 - [x] Befehlspalette wählte bei asynchronen Treffern den falschen Eintrag – Depot-Treffer zuerst
 - [x] Ersatzanbieter sprang nur bei Totalausfall ein – jetzt je fehlendem Symbol (z. B. SAP bei Finnhub-Gratis-Tarif)
+- [x] Hydration-Fehler auf Wachstumswerte-Detailseiten: kompakte Zahlen („57 Mrd. $“) rundeten in Node und Browser verschieden – eigene, deterministische Formatierung
 - [x] 2 Cent Rundungsdifferenz zwischen Tagesveränderung und Endpunkt der 1T-Kurve – Wertverlauf rundet je Position wie die Bewertung
 
 ## 2. Fehlende Funktionen

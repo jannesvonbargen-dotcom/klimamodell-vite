@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatMoney, formatPercent, formatQuantity, signOf } from "../lib/format";
+import { formatCompact, formatDate, formatMoney, formatPercent, formatQuantity, signOf } from "../lib/format";
 import { parseLocaleNumber } from "./decimal";
 import { easterSunday, EXCHANGES, isTradingDay, marketStatus, zonedToUtc } from "./market-hours";
 import { dueExecutionDates, nextExecutionDate, nextTradingDay } from "./savings-plan";
@@ -37,6 +37,16 @@ describe("parseLocaleNumber", () => {
 });
 
 describe("Formatierung", () => {
+  it("formatiert große Zahlen kompakt und deterministisch", () => {
+    const nb = "\u00a0";
+    expect(formatCompact("3842944891500", "USD")).toBe(`3,8${nb}Bio.${nb}$`);
+    expect(formatCompact(57_000_000_000, "USD")).toBe(`57${nb}Mrd.${nb}$`);
+    expect(formatCompact("-1250000", "EUR")).toBe(`-1,3${nb}Mio.${nb}€`);
+    expect(formatCompact(950, "EUR")).toBe(`950${nb}€`);
+    expect(formatCompact(223000)).toBe("223.000");
+    expect(formatMoney("12000", "EUR", { compact: true })).toBe(`12.000${nb}€`);
+  });
+
   it("formatiert deutsch", () => {
     expect(nbsp(formatMoney("1234.5"))).toBe("1.234,50 €");
     expect(nbsp(formatMoney("12.3", "EUR", { signed: true }))).toBe("+12,30 €");

@@ -27,13 +27,13 @@ async function openTransactionDialog(page: Page) {
 test("Übersicht zeigt Vermögen, Verlauf, Positionen und Hinweis", async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto("/");
-  await expect(page.getByText("Gesamtvermögen")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Gesamtvermögen" })).toBeVisible();
   await expect(page.getByText(/^\d{1,3}(\.\d{3})*,\d{2}\s€$/).first()).toBeVisible();
   await expect(page.getByText("Demo-Kurse (simuliert)").first()).toBeVisible();
 
   // Zeitraum wechseln
   await page.getByRole("radio", { name: "1J" }).click();
-  await expect(page.getByText("1 Jahr")).toBeVisible();
+  await expect(page.getByText("1 Jahr", { exact: true })).toBeVisible();
 
   // Positionen: Suche filtert
   const table = page.getByRole("table");
@@ -55,7 +55,7 @@ test("Positionsdetail mit Chart, Kennzahlen und Transaktionen", async ({ page })
   await expect(page.getByText("keine Daten").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: /Transaktionen/ })).toBeVisible();
   await page.getByRole("radio", { name: "5J" }).click();
-  await expect(page.getByText(/5 Jahre/)).toBeVisible();
+  await expect(page.getByText("5 Jahre", { exact: true })).toBeVisible();
 });
 
 test("Transaktion erfassen, Überverkauf verhindern, löschen und rückgängig machen", async ({ page }) => {
