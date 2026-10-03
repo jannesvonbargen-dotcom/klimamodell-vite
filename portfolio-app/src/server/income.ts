@@ -31,7 +31,13 @@ export interface IncomeOverview {
     grossEUR: string | null;
     basedOnDate: string;
   }>;
-  recent: Array<{ date: string; instrument: Pick<Instrument, "name" | "symbol" | "isin">; grossEUR: string; taxEUR: string; netEUR: string }>;
+  recent: Array<{
+    date: string;
+    instrument: Pick<Instrument, "name" | "symbol" | "isin">;
+    grossEUR: string;
+    taxEUR: string;
+    netEUR: string;
+  }>;
   byInstrument: Array<{ instrument: Pick<Instrument, "name" | "symbol" | "isin">; netEUR12m: string; expectedEUR: string; share: string }>;
   years: Array<{
     year: number;

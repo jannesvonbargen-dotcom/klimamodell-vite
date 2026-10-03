@@ -62,7 +62,11 @@ describe("Dividenden", () => {
   });
 
   it("prognostiziert nichts für verkaufte Positionen", () => {
-    const txs = [deposit("2025-01-01", "5000"), buy("2025-01-10", 1, "10", "100"), tx("DIVIDEND", "2026-01-15", { instrumentId: 1, amount: "5", quantity: "10" })];
+    const txs = [
+      deposit("2025-01-01", "5000"),
+      buy("2025-01-10", 1, "10", "100"),
+      tx("DIVIDEND", "2026-01-15", { instrumentId: 1, amount: "5", quantity: "10" }),
+    ];
     const expected = forecastDividends({
       payments: dividendPayments(txs),
       holdings: new Map(),
