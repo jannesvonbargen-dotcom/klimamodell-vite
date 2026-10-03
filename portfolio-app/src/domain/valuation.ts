@@ -91,6 +91,11 @@ export interface ValuationInput {
   instruments: ReadonlyMap<number, Instrument>;
   quotes: ReadonlyMap<string, Quote>;
   fx: FxTable;
+  /**
+   * Wechselkurse zum Vortagesschluss. Damit enthält die Tagesveränderung auch
+   * Währungsbewegungen (wie die Wertentwicklung). Fehlt sie, gilt `fx`.
+   */
+  fxPrevious?: FxTable;
   /** Heutiges Datum (YYYY-MM-DD, Europe/Berlin). */
   today: string;
 }
@@ -102,7 +107,7 @@ export interface ValuationInput {
  * sodass Käufe und Verkäufe des Tages die Kennzahl nicht verfälschen.
  */
 export function valuePortfolio(input: ValuationInput): PortfolioValuation {
-  const { transactions, splits = [], instruments, quotes, fx, today } = input;
+  const { transactions, splits = [], instruments, quotes, fx, fxPrevious, today } = input;
   const ledger = computeLedger(transactions, splits);
   const yesterday = previousDay(today);
   const startOfDay = computeLedger(transactions, splits, { asOf: yesterday });
@@ -155,7 +160,8 @@ export function valuePortfolio(input: ValuationInput): PortfolioValuation {
       priceLocal = d(quote.price);
       priceCurrency = quote.currency;
       priceEUR = priceLocal.div(quoteFx);
-      prevCloseEUR = quote.previousClose ? d(quote.previousClose).div(quoteFx) : null;
+      const prevFx = (fxPrevious && fxRateFor(quote.currency, fxPrevious)) || quoteFx;
+      prevCloseEUR = quote.previousClose ? d(quote.previousClose).div(prevFx) : null;
       priceSource = "quote";
     } else if (p.lastPriceEUR) {
       priceEUR = p.lastPriceEUR;

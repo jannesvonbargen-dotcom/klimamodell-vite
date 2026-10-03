@@ -77,6 +77,72 @@ const LEVELS: Record<string, number> = {
   "IQQH.DE": 7.5,
 };
 
+/**
+ * Ungefähre (split-bereinigte) Kursniveaus Anfang 2023 – zweiter Ankerpunkt,
+ * damit die simulierten Verläufe grob plausibel bleiben.
+ */
+const HISTORIC_DATE = "2023-01-02";
+const HISTORIC: Record<string, number> = {
+  AAPL: 125,
+  MSFT: 240,
+  AMZN: 85,
+  GOOGL: 89,
+  NVDA: 14.6,
+  META: 125,
+  TSLA: 110,
+  "BRK-B": 310,
+  V: 208,
+  MA: 350,
+  JNJ: 177,
+  PG: 151,
+  KO: 63,
+  MCD: 264,
+  COST: 455,
+  LLY: 365,
+  UNH: 530,
+  JPM: 134,
+  AVGO: 56,
+  O: 63,
+  NFLX: 295,
+  AMD: 64,
+  PLTR: 6.4,
+  WMT: 47.5,
+  PEP: 180,
+  "SAP.DE": 97,
+  "SIE.DE": 130,
+  "ALV.DE": 201,
+  "DTE.DE": 18.6,
+  "MBG.DE": 61,
+  "BAS.DE": 46.5,
+  "MUV2.DE": 304,
+  "RHM.DE": 177,
+  "IFX.DE": 28.4,
+  "ADS.DE": 127,
+  "DHL.DE": 35.4,
+  "BMW.DE": 83,
+  "VOW3.DE": 116,
+  "BAYN.DE": 48,
+  "DBK.DE": 10.6,
+  "ASML.AS": 504,
+  "MC.PA": 680,
+  "NOVO-B.CO": 235,
+  "NESN.SW": 107,
+  "TTE.PA": 58,
+  "AIR.PA": 111,
+  "EUNL.DE": 69,
+  "VGWL.DE": 95,
+  "VWCE.DE": 94,
+  "IS3N.DE": 27.5,
+  "XDWD.DE": 77,
+  "SXR8.DE": 380,
+  "SXRV.DE": 590,
+  "IUSQ.DE": 64,
+  "EXS1.DE": 124,
+  "SPYI.DE": 155,
+  "XMME.DE": 52,
+  "IQQH.DE": 8,
+};
+
 const FX_LEVELS: Record<string, { level: number; annualVol: number }> = {
   USD: { level: 1.17, annualVol: 0.07 },
   GBP: { level: 0.87, annualVol: 0.05 },
@@ -163,7 +229,15 @@ function dailyPath(symbol: string, volOverride?: number, levelOverride?: number)
   let anchorIdx = days.indexOf(ANCHOR_DATE);
   if (anchorIdx < 0) anchorIdx = days.length - 1;
   const anchorLog = logs[anchorIdx];
-  const closes = logs.map((l) => level * Math.exp(l - anchorLog));
+  // Zweiter Anker (Anfang 2023): lineare Korrektur im Log-Raum zwischen beiden Ankern
+  const historic = levelOverride === undefined && volOverride === undefined ? HISTORIC[symbol] : undefined;
+  const histIdx = days.indexOf(HISTORIC_DATE);
+  let correction: (i: number) => number = () => 0;
+  if (historic && histIdx >= 0 && histIdx < anchorIdx) {
+    const offset = Math.log(historic / level) - (logs[histIdx] - anchorLog);
+    correction = (i) => (i <= histIdx ? offset : i >= anchorIdx ? 0 : offset * ((anchorIdx - i) / (anchorIdx - histIdx)));
+  }
+  const closes = logs.map((l, i) => level * Math.exp(l - anchorLog + correction(i)));
   const path: DailyPath = { days, index: new Map(days.map((d, i) => [d, i])), closes };
   pathCache.set(cacheKey, path);
   return path;

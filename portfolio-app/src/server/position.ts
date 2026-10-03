@@ -4,7 +4,16 @@ import { exchangeForInstrument, marketStatus, nowInBerlin, todayInBerlin } from 
 import type { Instrument } from "@/domain/types";
 import { valuePortfolio } from "@/domain/valuation";
 import type { Fundamentals } from "@/market/types";
-import { getDailyHistory, getFundamentals, getFxHistory, getFxRates, getIntraday, getQuotes, syncInstrumentCurrencies } from "./market";
+import {
+  getDailyHistory,
+  getFundamentals,
+  getFxHistory,
+  getFxRates,
+  getIntraday,
+  getPreviousCloseFx,
+  getQuotes,
+  syncInstrumentCurrencies,
+} from "./market";
 import { getInstrumentByIsin, instrumentMap, listSplits, listTransactionRows, toTransaction } from "./repo";
 
 /** Daten für die Detailseite einer Position. */
@@ -79,6 +88,7 @@ export async function getPositionDetail(isin: string): Promise<PositionDetail | 
     instruments: instrumentMap(),
     quotes: quotes.quotes,
     fx: fx.rates,
+    fxPrevious: await getPreviousCloseFx([...new Set([...quotes.quotes.values()].map((q) => q.currency))], today),
     today,
   });
   const row = valuation.positions.find((p) => p.instrumentId === instrument!.id);

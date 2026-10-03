@@ -16,6 +16,7 @@ import {
   providerInfo,
   type ProviderInfo,
   syncInstrumentCurrencies,
+  getPreviousCloseFx,
 } from "./market";
 import { instrumentMap, listExecutions, listSavingsPlans, listSplits, listTransactions } from "./repo";
 
@@ -110,7 +111,8 @@ export async function getOverview(): Promise<OverviewData> {
   const [quotes, fx] = await Promise.all([getQuotes(symbols), getFxRates()]);
   syncInstrumentCurrencies(quotes.quotes);
   instruments = instrumentMap();
-  const valuation = valuePortfolio({ transactions, splits, instruments, quotes: quotes.quotes, fx: fx.rates, today });
+  const fxPrevious = await getPreviousCloseFx([...new Set([...quotes.quotes.values()].map((q) => q.currency))], today);
+  const valuation = valuePortfolio({ transactions, splits, instruments, quotes: quotes.quotes, fx: fx.rates, fxPrevious, today });
 
   const positions: PositionRow[] = valuation.positions.map((p) => ({ ...p, instrument: instruments.get(p.instrumentId)! }));
   const years = [...valuation.ledger.byYear.entries()]
@@ -169,6 +171,10 @@ export interface PerformanceData {
   range: RangeKey;
   points: ChartPoint[];
   intraday: boolean;
+  /** Heutiges Datum (Berlin) beim Erzeugen. */
+  today?: string;
+  /** Handelstage der Intraday-Reihe (erster/letzter). */
+  session?: { from: string; to: string };
 }
 
 function toKeyed(points: Array<{ key: string; close: string }>): KeyedSeries {
@@ -243,7 +249,13 @@ export async function getPerformance(range: RangeKey): Promise<PerformanceData> 
       latestPrices,
       latestFx: fxNow.rates,
     });
-    return { range, intraday: true, points: series.map(toChartPoint) };
+    return {
+      range,
+      intraday: true,
+      today,
+      session: { from: sessionDays[0], to: sessionDays[sessionDays.length - 1] },
+      points: series.map(toChartPoint),
+    };
   }
 
   const start = rangeStart(range, today, firstDate);
@@ -254,7 +266,7 @@ export async function getPerformance(range: RangeKey): Promise<PerformanceData> 
   const [quotes, fxNow] = await Promise.all([getQuotes(symbols), getFxRates()]);
   const latestPrices = new Map([...quotes.quotes.entries()].map(([s, q]) => [s, q.price]));
   const series = buildValueSeries({ transactions, splits, instruments, prices, fx, keys, latestPrices, latestFx: fxNow.rates });
-  return { range, intraday: false, points: series.map(toChartPoint) };
+  return { range, intraday: false, today, points: series.map(toChartPoint) };
 }
 
 function toChartPoint(p: { key: string; totalEUR: string; gainEUR: string; twr: string }): ChartPoint {

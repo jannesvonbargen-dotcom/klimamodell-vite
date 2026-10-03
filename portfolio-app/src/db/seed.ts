@@ -110,6 +110,7 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
   for (let date = addMonths("2023-02-01", 0); date <= today; date = addMonths(date, 1)) {
     rows.push({ ...base, type: "DEPOSIT", executedAt: `${date.slice(0, 8)}01T08:00`, amount: "600" });
   }
+  rows.push({ ...base, type: "DEPOSIT", executedAt: "2024-02-26T12:00", amount: "2000", note: "Sonderzahlung" });
 
   // Einzelkäufe und -verkäufe
   const trades: Array<{ type: "BUY" | "SELL"; inst: typeof apple; date: string; qty: string; time: string; multiplier?: string }> = [
@@ -119,7 +120,7 @@ export async function seedDemoData(options: { today?: string } = {}): Promise<{ 
     { type: "BUY", inst: msft, date: "2023-09-12", qty: "6", time: "16:10" },
     { type: "BUY", inst: asml, date: "2024-02-06", qty: "3", time: "09:47" },
     // NVIDIA vor dem 10:1-Split am 10.06.2024 – Kurs unbereinigt (×10)
-    { type: "BUY", inst: nvda, date: "2024-03-01", qty: "2", time: "17:20", multiplier: "10" },
+    { type: "BUY", inst: nvda, date: "2024-03-01", qty: "1", time: "17:20", multiplier: "10" },
     { type: "BUY", inst: novo, date: "2024-05-08", qty: "12", time: "10:15" },
     { type: "BUY", inst: sap, date: "2024-11-19", qty: "4", time: "14:02" },
     { type: "SELL", inst: apple, date: "2025-07-15", qty: "5", time: "15:55" },

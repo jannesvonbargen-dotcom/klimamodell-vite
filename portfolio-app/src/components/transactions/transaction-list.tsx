@@ -27,6 +27,8 @@ export interface TransactionRowView {
   note: string | null;
   source: string;
   cashEUR: string | null;
+  /** Bruttobetrag in Buchungswährung (Kurswert, Dividende brutto …). */
+  grossLocal: string | null;
   problem: string | null;
 }
 
@@ -52,7 +54,7 @@ const TYPE_TONE: Partial<Record<TransactionType, string>> = {
   TAX: "text-down",
 };
 
-const BATCH = 200;
+const BATCH = 100;
 
 export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
   const { openEdit, remove, openCreate } = useTransactionDialog();
@@ -199,7 +201,12 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
                   >
                     {r.cashEUR ? formatMoney(r.cashEUR, "EUR", { signed: true }) : "—"}
                   </span>
-                  {r.currency !== "EUR" && <div className="text-[11px] text-subtle">{r.currency}</div>}
+                  {r.currency !== "EUR" && r.grossLocal && (
+                    <div className="tnum text-[11px] text-subtle">
+                      {["DIVIDEND", "INTEREST"].includes(r.type) ? "brutto " : ""}
+                      {formatMoney(r.grossLocal, r.currency)}
+                    </div>
+                  )}
                 </div>
                 <Menu>
                   <MenuTrigger asChild>

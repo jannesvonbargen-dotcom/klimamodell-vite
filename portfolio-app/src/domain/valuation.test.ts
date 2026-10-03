@@ -50,6 +50,21 @@ describe("valuePortfolio", () => {
     expect(p.dayChangeEUR).toBe("80");
   });
 
+  it("berücksichtigt Währungsbewegungen in der Tagesveränderung", () => {
+    const result = valuePortfolio({
+      transactions: [deposit("2026-01-01", "5000"), buy("2026-01-05", 2, "10", "200", "0", { currency: "USD", fxRate: "1.25" })],
+      instruments: new Map([[2, instrument(2, "AAPL", "USD")]]),
+      // Kurs unverändert, aber der Euro hat gegenüber dem Dollar abgewertet (1,25 → 1,20)
+      quotes: new Map([["AAPL", quote("AAPL", "200", "200", "USD")]]),
+      fx: new Map([["USD", "1.20"]]),
+      fxPrevious: new Map([["USD", "1.25"]]),
+      today: "2026-10-05",
+    });
+    const [p] = result.positions;
+    // 10 × 200 / 1,20 − 10 × 200 / 1,25 = 1666,67 − 1600
+    expect(p.dayChangeEUR).toBe("66.67");
+  });
+
   it("fällt ohne Kurs auf den letzten Transaktionskurs zurück", () => {
     const result = valuePortfolio({
       transactions: [deposit("2026-01-01", "1000"), buy("2026-01-05", 1, "4", "50", "0")],

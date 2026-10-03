@@ -481,3 +481,29 @@ export function providerInfo(): ProviderInfo {
   const { primary, fallback, fx, warnings } = getProviders();
   return { id: primary.id, label: primary.label, isDemo: primary.isDemo, fallback: fallback?.label ?? null, fxLabel: fx.label, warnings };
 }
+
+/**
+ * Wechselkurse zum Vortagesschluss der letzten Handelssitzung (Basis der
+ * Tagesveränderung) – gleiche Basis wie der 1T-Wertverlauf.
+ */
+export async function getPreviousCloseFx(currencies: string[], today: string = todayInBerlin()): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  const foreign = [...new Set(currencies.map((c) => (c === "GBp" || c === "GBX" ? "GBP" : c)).filter((c) => c !== "EUR"))];
+  if (foreign.length === 0) return out;
+  // Letzter Wochentag ≤ heute = (laufende oder letzte) Sitzung
+  const session = new Date(`${today}T00:00:00Z`);
+  while (session.getUTCDay() === 0 || session.getUTCDay() === 6) session.setUTCDate(session.getUTCDate() - 1);
+  const sessionKey = session.toISOString().slice(0, 10);
+  const from = new Date(session);
+  from.setUTCDate(from.getUTCDate() - 12);
+  try {
+    const history = await getFxHistory(foreign, from.toISOString().slice(0, 10), today);
+    for (const [ccy, points] of history) {
+      const prev = points.filter((p) => p.key < sessionKey).at(-1);
+      if (prev) out.set(ccy, prev.close);
+    }
+  } catch {
+    // ohne Historie: Tagesveränderung ohne Währungseffekt
+  }
+  return out;
+}

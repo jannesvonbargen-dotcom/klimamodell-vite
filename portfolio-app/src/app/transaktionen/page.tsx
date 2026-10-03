@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/page-header";
 import { NewTransactionButton } from "@/components/transactions/new-transaction-button";
 import { TransactionList, type TransactionRowView } from "@/components/transactions/transaction-list";
 import { roundMoney } from "@/domain/decimal";
-import { computeLedger } from "@/domain/ledger";
+import { computeLedger, grossAmount } from "@/domain/ledger";
 import { instrumentMap, listSplits, listTransactionRows, toTransaction } from "@/server/repo";
 
 export const metadata: Metadata = { title: "Transaktionen" };
@@ -48,6 +48,7 @@ export default function TransactionsPage() {
       note: r.note,
       source: r.source,
       cashEUR: cash.get(r.id) ?? null,
+      grossLocal: r.amount || (r.quantity && r.price) ? grossAmount(r).abs().toString() : null,
       problem: problems.get(r.id) ?? null,
     };
   });

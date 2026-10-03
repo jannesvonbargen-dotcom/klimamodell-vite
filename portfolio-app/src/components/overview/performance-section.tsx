@@ -18,6 +18,22 @@ const RANGES: Array<{ value: RangeKey; label: string; long: string }> = [
   { value: "MAX", label: "Max", long: "Gesamt" },
 ];
 
+const WEEKDAYS = ["So.", "Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa."];
+
+function weekdayLabel(day: string): string {
+  const [y, m, d] = day.split("-").map(Number);
+  return `${WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}, ${formatDateLong(day)}`;
+}
+
+/** Beschriftung des Zeitraums – am Wochenende/Feiertag zeigt „1T“ den letzten Handelstag. */
+function rangeCaption(data: PerformanceData, first: ChartPoint, last: ChartPoint): string {
+  if (data.intraday && data.session) {
+    if (data.range === "1D") return `${weekdayLabel(data.session.to)} · verglichen mit dem Vortagesschluss`;
+    return `${formatDateLong(data.session.from)} – ${formatDateLong(data.session.to)}`;
+  }
+  return `${formatDateLong(first.key)} – ${formatDateLong(last.key)}`;
+}
+
 function pointLabel(key: string, intraday: boolean): string {
   if (key.length > 10) {
     const time = key.slice(11, 16);
@@ -65,6 +81,10 @@ export function PerformanceSection({
   const scrubbing = active !== null && points[active] !== undefined;
   const activePoint: ChartPoint | undefined = scrubbing ? points[active!] : undefined;
   const rangeInfo = RANGES.find((r) => r.value === range)!;
+  const longLabel =
+    range === "1D" && data.session && data.today && data.session.to !== data.today
+      ? `Letzter Handelstag (${weekdayLabel(data.session.to)})`
+      : rangeInfo.long;
 
   // Kopfzahl: beim Scrubben Wert am Punkt, sonst aktuelles Gesamtvermögen
   const headline = activePoint ? String(activePoint.value) : totalEUR;
@@ -120,7 +140,7 @@ export function PerformanceSection({
         </div>
         <div className="flex min-h-6 flex-wrap items-center gap-x-2 gap-y-1">
           <Delta value={deltaValue} percent={deltaPct} size="lg" />
-          <span className="text-[14px] text-subtle">{activePoint ? pointLabel(activePoint.key, data.intraday) : rangeInfo.long}</span>
+          <span className="text-[14px] text-subtle">{activePoint ? pointLabel(activePoint.key, data.intraday) : longLabel}</span>
         </div>
       </div>
 
@@ -134,7 +154,7 @@ export function PerformanceSection({
           role="img"
           aria-label={
             shown
-              ? `Wertverlauf ${rangeInfo.long}: von ${formatMoney(String(first.value))} auf ${formatMoney(String(last.value))}. Mit den Pfeiltasten durch die Werte gehen.`
+              ? `Wertverlauf ${longLabel}: von ${formatMoney(String(first.value))} auf ${formatMoney(String(last.value))}. Mit den Pfeiltasten durch die Werte gehen.`
               : "Noch kein Wertverlauf"
           }
           onKeyDown={onKeyDown}
@@ -200,11 +220,7 @@ export function PerformanceSection({
             options={RANGES.map((r) => ({ value: r.value, label: r.label }))}
             ariaLabel="Zeitraum"
           />
-          {shown && (
-            <span className="hidden text-[12px] text-subtle sm:inline">
-              {pointLabel(first.key, data.intraday)} – {pointLabel(last.key, data.intraday)}
-            </span>
-          )}
+          {shown && <span className="hidden text-[12px] text-subtle sm:inline">{rangeCaption(data, first, last)}</span>}
         </div>
       </div>
     </section>
