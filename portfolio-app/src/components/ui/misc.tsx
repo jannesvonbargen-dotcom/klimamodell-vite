@@ -36,7 +36,7 @@ export function Tooltip({
         <TooltipPrimitive.Content
           side={side}
           sideOffset={6}
-          className="anim-pop z-[70] max-w-72 rounded-lg bg-foreground px-2.5 py-1.5 text-[12px] leading-snug text-background shadow-[var(--shadow-pop)]"
+          className="anim-pop anim-tip z-[70] max-w-72 rounded-lg bg-foreground px-2.5 py-1.5 text-[12px] leading-snug text-background shadow-[var(--shadow-pop)]"
         >
           {content}
         </TooltipPrimitive.Content>

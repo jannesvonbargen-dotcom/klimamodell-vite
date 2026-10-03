@@ -337,6 +337,8 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
   const { setTheme } = useTheme();
   const [query, setQuery] = React.useState("");
   const [results, setResults] = React.useState<Array<{ symbol: string; name: string; isin: string | null; origin: string }>>([]);
+  const [selected, setSelected] = React.useState("");
+  const resultValue = (r: { name: string; symbol: string }) => `${r.name} ${r.symbol} position`;
 
   const visibleResults = query.trim().length >= 2 ? results : [];
 
@@ -347,7 +349,12 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
     const timer = setTimeout(() => {
       fetch(`/api/search?q=${encodeURIComponent(q)}`, { signal: controller.signal })
         .then((r) => r.json())
-        .then((d) => setResults(d.results.filter((r: { origin: string }) => r.origin === "portfolio").slice(0, 6)))
+        .then((d) => {
+          const list = d.results.filter((r: { origin: string }) => r.origin === "portfolio").slice(0, 6);
+          setResults(list);
+          // Treffer im Depot sind am spezifischsten → zuerst auswählen
+          if (list[0]) setSelected(resultValue(list[0]));
+        })
         .catch(() => undefined);
     }, 120);
     return () => {
@@ -378,7 +385,7 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
           <DialogPrimitive.Description className="sr-only">
             Seiten öffnen, Aktionen ausführen, Positionen finden
           </DialogPrimitive.Description>
-          <Command loop label="Befehlspalette">
+          <Command loop label="Befehlspalette" value={selected} onValueChange={setSelected}>
             <Command.Input
               value={query}
               onValueChange={setQuery}
@@ -395,7 +402,7 @@ function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (
                   {visibleResults.map((r) => (
                     <Command.Item
                       key={r.symbol}
-                      value={`pos ${r.name} ${r.symbol}`}
+                      value={resultValue(r)}
                       onSelect={() => run(() => router.push(`/position/${encodeURIComponent(r.isin ?? r.symbol)}`))}
                       className={itemClass}
                     >

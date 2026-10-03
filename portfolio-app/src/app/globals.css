@@ -185,6 +185,10 @@
   .anim-pop[data-state="instant-open"] {
     animation-duration: 0ms;
   }
+  /* Tooltips: beim Wechsel zum Nachbarn sofort weg, damit nichts überlappt */
+  .anim-tip[data-state="closed"] {
+    animation: none;
+  }
 
   /* Dialoge bleiben zentriert */
   .anim-dialog[data-state="open"] {

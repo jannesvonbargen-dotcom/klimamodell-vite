@@ -166,12 +166,15 @@ function RecommendationCard({ entry: e }: { entry: ResearchEntry }) {
           </div>
         )}
 
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
-          <MiniStat label={`Umsatz p. a. (${m.cagrYears} J.)`} value={m.revenueCagr ? formatPercent(m.revenueCagr, { digits: 1 }) : null} />
-          <MiniStat label={`Gewinn/Aktie p. a.`} value={m.epsCagr ? formatPercent(m.epsCagr, { digits: 1 }) : null} />
-          <MiniStat label="KGV" value={m.peTTM ? formatNumber(m.peTTM, 1) : null} />
-          <MiniStat label="Beta" value={formatNumber(c.profile.beta, 2)} />
-        </dl>
+        <div className="flex flex-col gap-1.5">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
+            <MiniStat label="Umsatz" value={m.revenueCagr ? formatPercent(m.revenueCagr, { digits: 1 }) : null} />
+            <MiniStat label="Gewinn/Aktie" value={m.epsCagr ? formatPercent(m.epsCagr, { digits: 1 }) : null} />
+            <MiniStat label="KGV" value={m.peTTM ? formatNumber(m.peTTM, 1) : null} />
+            <MiniStat label="Beta" value={formatNumber(c.profile.beta, 2)} />
+          </dl>
+          <p className="text-[11px] text-subtle">Umsatz und Gewinn/Aktie: Ø Wachstum pro Jahr über {m.cagrYears} Geschäftsjahre</p>
+        </div>
 
         <div className="flex flex-col gap-2">
           <div className="flex items-baseline justify-between gap-2 text-[12px]">
@@ -214,7 +217,7 @@ function RecommendationCard({ entry: e }: { entry: ResearchEntry }) {
 function MiniStat({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
-      <dt className="truncate text-[12px] text-subtle">{label}</dt>
+      <dt className="text-[12px] text-subtle">{label}</dt>
       <dd className={cn("tnum text-[15px] font-semibold", !value && "text-[13px] font-normal text-subtle")}>{value ?? "keine Daten"}</dd>
     </div>
   );

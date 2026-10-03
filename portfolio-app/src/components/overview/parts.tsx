@@ -57,12 +57,12 @@ export function Kpi({
   neutral?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-1 px-5 py-4">
+    <div className="flex min-w-0 flex-col gap-1 px-4 py-4 sm:px-5">
       <span className="text-[12px] font-medium text-subtle">{label}</span>
       {neutral ? (
         <span className="tnum text-[16px] font-semibold">{formatMoney(value)}</span>
       ) : (
-        <Delta value={value} percent={percent} className="text-[15px]" />
+        <Delta value={value} percent={percent} className="flex-wrap gap-y-0 text-[15px]" />
       )}
       {hint && <span className="text-[11px] text-subtle">{hint}</span>}
     </div>
