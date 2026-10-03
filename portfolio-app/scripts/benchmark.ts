@@ -90,5 +90,42 @@ async function main() {
     await fn();
     console.log(label, Date.now() - t, "ms");
   }
+
+  // Großer CSV-Import (Trade-Republic-ähnlich): 3.000 Zeilen
+  const { previewImport, commitImport } = await import("../src/server/import");
+  const candidates = Array.from({ length: 3000 }, (_, i) => {
+    const day = new Date(Date.UTC(2026, 0, 1) + Math.floor(i / 10) * 86400000).toISOString().slice(0, 10);
+    const isBuy = i % 3 !== 0;
+    const c = catalogBySymbol(syms[i % syms.length])!;
+    return {
+      row: i + 2,
+      type: (isBuy ? "BUY" : "DEPOSIT") as "BUY" | "DEPOSIT",
+      executedAt: `${day}T${String(8 + (i % 10)).padStart(2, "0")}:00`,
+      isin: isBuy ? c.isin : null,
+      wkn: null,
+      symbol: null,
+      name: isBuy ? c.name : null,
+      assetClass: null,
+      quantity: isBuy ? "0.5" : null,
+      price: isBuy ? "40" : null,
+      amount: isBuy ? "20" : "100",
+      currency: "EUR",
+      fxRate: "1",
+      fee: isBuy ? "1" : "0",
+      tax: "0",
+      note: null,
+      externalId: `bench-${i}`,
+      warnings: [],
+    };
+  });
+  let t = Date.now();
+  const preview = previewImport(candidates);
+  console.log("import preview 3000", Date.now() - t, "ms", preview.counts);
+  t = Date.now();
+  const res = await commitImport(candidates, "bench.csv", "trade_republic");
+  console.log("import commit 3000", Date.now() - t, "ms", res.imported);
+  t = Date.now();
+  previewImport(candidates);
+  console.log("import preview erneut (alles Duplikate)", Date.now() - t, "ms");
 }
 main();
