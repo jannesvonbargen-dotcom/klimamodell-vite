@@ -37,9 +37,9 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 ## 4. Randfälle
 
 - [ ] Buchungen in GBp/GBX (London) im Formular explizit unterstützen
-- [ ] Verkauf am Tag eines Splits (Reihenfolge innerhalb des Tages)
+- [x] Kauf/Verkauf am Tag eines Splits: Split wirkt zu Tagesbeginn (per Test abgesichert)
 - [ ] Import: Trade-Republic-Sammelzeilen (Teilausführungen) zusammenführen
-- [ ] Zeitzonen: Buchungen kurz nach Mitternacht UTC (Tageszuordnung im Export)
+- [x] Zeitzonen: Trade-Republic-Buchungen kurz vor Mitternacht UTC behalten ihr Buchungsdatum (sonst z. B. Zinsen vom 31.12. im falschen Steuerjahr)
 
 ## 5. Performance & Barrierefreiheit
 

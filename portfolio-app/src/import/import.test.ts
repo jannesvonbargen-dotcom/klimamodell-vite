@@ -66,6 +66,18 @@ describe("Trade-Republic-Transaktionsexport", () => {
     expect(trTimestamp("2026-05-15T00:00:00.000Z")).toBe("2026-05-15");
   });
 
+  it("nutzt das Buchungsdatum, wenn die Ortszeit auf den nächsten Tag fällt", () => {
+    const csv = [
+      "datetime,date,account_type,category,type,asset_class,name,symbol,shares,price,amount,fee,tax,currency,original_amount,original_currency,fx_rate,description,transaction_id",
+      "2025-12-31T23:30:00.000Z,2025-12-31,DEFAULT,CASH,INTEREST_PAYMENT,,,,,,5.00,,-1.32,EUR,,,,Zinsen,y1",
+      "2026-03-02T07:31:12.120Z,2026-03-02,DEFAULT,TRADING,BUY,STOCK,Apple,US0378331005,1,200,-200,-1,,EUR,,,,Kauf,y2",
+    ].join("\n");
+    const { candidates } = parseTradeRepublic(parseCsv(csv));
+    // Ohne Korrektur wäre das der 01.01.2026 (Berlin) – und damit das falsche Steuerjahr
+    expect(candidates[0].executedAt).toBe("2025-12-31");
+    expect(candidates[1].executedAt).toBe("2026-03-02T08:31");
+  });
+
   it("liest Käufe, Sparpläne, Dividenden, Karte, Verkäufe, Zinsen und Steuern", () => {
     const { candidates, skipped } = parseTradeRepublic(parseCsv(TR_CSV));
     expect(candidates.map((c) => c.type)).toEqual(["DEPOSIT", "BUY", "SAVINGS_PLAN", "DIVIDEND", "WITHDRAWAL", "SELL", "INTEREST", "TAX"]);

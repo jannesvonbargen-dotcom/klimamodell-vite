@@ -108,7 +108,12 @@ export function parseTradeRepublic(table: CsvTable): ParseResult {
     const r = lower(raw);
     const category = (r.category ?? "").toUpperCase();
     const type = (r.type ?? "").toUpperCase();
-    const executedAt = trTimestamp(r.datetime ?? "");
+    let executedAt = trTimestamp(r.datetime ?? "");
+    // Die Spalte „date“ ist das Buchungsdatum von Trade Republic. Fällt die Berliner Ortszeit auf einen
+    // anderen Tag (Buchungen kurz vor Mitternacht UTC, z. B. Zinsen am Monatsende), gilt das Buchungsdatum.
+    const bookingDate = /^\d{4}-\d{2}-\d{2}$/.test((r.date ?? "").trim()) ? r.date.trim() : null;
+    if (executedAt && bookingDate && executedAt.slice(0, 10) !== bookingDate) executedAt = bookingDate;
+    if (!executedAt && bookingDate) executedAt = bookingDate;
     const rawText = Object.values(raw).join(" · ");
     if (!executedAt) {
       skipped.push({ row: rowNo, reason: "Datum nicht lesbar", raw: rawText });
