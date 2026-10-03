@@ -36,6 +36,7 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Lade-Skelette, Fehler- und 404-Seite
 - [x] 1T am Wochenende als „Letzter Handelstag“
 - [x] Kennzahlen-Kacheln auf schmalen Bildschirmen
+- [x] Horizontaler Überlauf auf dem Handy (Sparpläne, Import, Erträge) behoben; E2E-Test prüft alle Seiten bei 390 px
 - [x] Positionsliste: Sparkline je Position (30 Tage), sortierbar
 - [x] Monatsüberschriften der Transaktionsliste mit Summe der Kontobewegungen
 - [ ] Leerer Zustand der Wachstumswerte-Detailseite ohne Text schöner gestalten

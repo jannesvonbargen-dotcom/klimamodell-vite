@@ -117,7 +117,7 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
         </div>
       ) : null}
 
-      <div className="grid gap-3 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3 [&>*]:min-w-0">
         <Card className="flex flex-col gap-4 p-5 lg:col-span-2">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className="text-[15px] font-semibold">Kennzahlen</h2>

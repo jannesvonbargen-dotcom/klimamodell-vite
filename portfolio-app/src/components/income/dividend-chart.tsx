@@ -77,7 +77,8 @@ export function DividendChart({ months, currentMonth }: { months: MonthDatum[]; 
                 dataKey="month"
                 axisLine={false}
                 tickLine={false}
-                interval={1}
+                interval="preserveStartEnd"
+                minTickGap={10}
                 tick={{ fill: "var(--chart-axis)", fontSize: 11 }}
                 tickFormatter={(m: string) => monthLabel(m)}
               />

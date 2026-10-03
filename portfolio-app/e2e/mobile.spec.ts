@@ -18,3 +18,23 @@ test("mobile Navigation und Layout", async ({ page }) => {
   await page.getByRole("button", { name: "Transaktion erfassen" }).click();
   await expect(page.getByRole("dialog", { name: /Transaktion/ })).toBeVisible();
 });
+
+test("keine Seite scrollt auf dem Handy seitlich", async ({ page }) => {
+  for (const url of [
+    "/",
+    "/transaktionen",
+    "/sparplaene",
+    "/ertraege",
+    "/import",
+    "/wachstumswerte",
+    "/wachstumswerte/MSFT",
+    "/watchlist",
+    "/einstellungen",
+    "/position/US0378331005",
+  ]) {
+    await page.goto(url);
+    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow, url).toBeLessThanOrEqual(0);
+  }
+});

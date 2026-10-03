@@ -229,7 +229,7 @@ function Stepper({ current }: { current: Step["name"] }) {
   ];
   const index = steps.findIndex((s) => s.key === current);
   return (
-    <ol className="flex items-center gap-2 text-[13px]" aria-label="Fortschritt">
+    <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]" aria-label="Fortschritt">
       {steps.map((s, i) => (
         <li key={s.key} className="flex items-center gap-2" aria-current={i === index ? "step" : undefined}>
           <span
@@ -240,8 +240,8 @@ function Stepper({ current }: { current: Step["name"] }) {
           >
             {i + 1}
           </span>
-          <span className={cn(i === index ? "font-medium text-foreground" : "text-subtle")}>{s.label}</span>
-          {i < steps.length - 1 && <span className="mx-1 h-px w-6 bg-border-strong" aria-hidden />}
+          <span className={cn(i === index ? "font-medium text-foreground" : "hidden text-subtle sm:inline")}>{s.label}</span>
+          {i < steps.length - 1 && <span className="mx-1 h-px w-4 bg-border-strong sm:w-6" aria-hidden />}
         </li>
       ))}
     </ol>

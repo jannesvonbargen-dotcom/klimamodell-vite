@@ -144,7 +144,7 @@ export function PlanList({ plans, today }: { plans: PlanView[]; today: string })
       <h2 id="plans-heading" className="text-[17px] font-semibold tracking-[-0.01em]">
         Pläne
       </h2>
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
         {plans.map((p) => (
           <Card key={p.id} className={cn("flex flex-col gap-4 p-5", !p.active && "opacity-70")}>
             <div className="flex items-start gap-3">

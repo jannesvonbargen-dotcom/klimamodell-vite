@@ -56,8 +56,8 @@ export default async function IncomePage() {
         </p>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-5">
-        <section aria-labelledby="upcoming-heading" className="flex flex-col gap-3 lg:col-span-3">
+      <div className="grid gap-6 lg:grid-cols-5 [&>*]:min-w-0">
+        <section aria-labelledby="upcoming-heading" className="flex min-w-0 flex-col gap-3 lg:col-span-3">
           <h2 id="upcoming-heading" className="text-[17px] font-semibold tracking-[-0.01em]">
             Dividendenkalender <span className="ml-1 text-[14px] font-normal text-subtle">Schätzung</span>
           </h2>
@@ -105,7 +105,7 @@ export default async function IncomePage() {
           )}
         </section>
 
-        <section aria-labelledby="payers-heading" className="flex flex-col gap-3 lg:col-span-2">
+        <section aria-labelledby="payers-heading" className="flex min-w-0 flex-col gap-3 lg:col-span-2">
           <h2 id="payers-heading" className="text-[17px] font-semibold tracking-[-0.01em]">
             Nach Wertpapier
           </h2>

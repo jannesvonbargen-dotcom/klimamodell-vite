@@ -150,7 +150,7 @@ export default async function ResearchDetailPage(props: PageProps<"/wachstumswer
         </p>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="flex flex-col gap-6 lg:col-span-2">
           {sections ? (
             <Card className="flex flex-col divide-y divide-border">
