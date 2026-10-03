@@ -8,7 +8,8 @@ Orders** auf. Alle Daten liegen in einer SQLite-Datei auf deinem Rechner.
 ## Funktionen
 
 - **Übersicht:** Gesamtvermögen mit Tagesveränderung und Wertverlauf (1T, 1W, 1M, YTD, 1J, Max). Beim Überfahren der Kurve zeigt die
-  Kopfzahl den Wert an der jeweiligen Stelle. Dazu kommen „Investiert“ und „Cash“, sortier- und durchsuchbare Positionen, Kennzahlen
+  Kopfzahl den Wert an der jeweiligen Stelle. Ab 1M lässt sich die zeitgewichtete Rendite mit dem MSCI World (iShares Core MSCI World,
+  EUNL) vergleichen. Dazu kommen „Investiert“ und „Cash“, sortier- und durchsuchbare Positionen, Kennzahlen
   (realisiert, Dividenden, Gebühren, Steuern) und die Aufteilung nach Sektor, Region und Anlageklasse. Börsenstatus und
   Kurszeitpunkt sind immer sichtbar.
 - **Positionsseite:** Kurschart mit markierten Käufen und Verkäufen, Kennzahlen (KGV, Marktkapitalisierung, Dividendenrendite,

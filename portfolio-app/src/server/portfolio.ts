@@ -6,7 +6,7 @@ import { dueExecutionDates } from "@/domain/savings-plan";
 import { germanHolidaySet } from "@/domain/market-hours";
 import type { Instrument, Split, Transaction } from "@/domain/types";
 import { type PortfolioTotals, type PositionValuation, valuePortfolio } from "@/domain/valuation";
-import { catalogByIsin } from "@/market/catalog";
+import { catalogByIsin, catalogBySymbol } from "@/market/catalog";
 import {
   getDailyHistory,
   getFxHistory,
@@ -175,6 +175,8 @@ export interface PerformanceData {
   today?: string;
   /** Handelstage der Intraday-Reihe (erster/letzter). */
   session?: { from: string; to: string };
+  /** Vergleichsindex: Veränderung seit Beginn des Zeitraums je Punkt (Bruch), nur für Tagesreihen. */
+  benchmark?: { symbol: string; label: string; currency: string; values: Array<number | null> };
 }
 
 function toKeyed(points: Array<{ key: string; close: string }>): KeyedSeries {
@@ -266,7 +268,37 @@ export async function getPerformance(range: RangeKey): Promise<PerformanceData> 
   const [quotes, fxNow] = await Promise.all([getQuotes(symbols), getFxRates()]);
   const latestPrices = new Map([...quotes.quotes.entries()].map(([s, q]) => [s, q.price]));
   const series = buildValueSeries({ transactions, splits, instruments, prices, fx, keys, latestPrices, latestFx: fxNow.rates });
-  return { range, intraday: false, today, points: series.map(toChartPoint) };
+  const benchmark = await benchmarkSeries(keys, today).catch(() => undefined);
+  return { range, intraday: false, today, points: series.map(toChartPoint), benchmark };
+}
+
+/** Standard: iShares Core MSCI World (thesaurierend, Xetra, EUR). Änderbar über BENCHMARK_SYMBOL. */
+export function benchmarkConfig(): { symbol: string; label: string } {
+  const symbol = (process.env.BENCHMARK_SYMBOL ?? "EUNL.DE").trim() || "EUNL.DE";
+  const label = symbol === "EUNL.DE" ? "MSCI World" : (catalogBySymbol(symbol)?.name ?? symbol);
+  return { symbol, label };
+}
+
+async function benchmarkSeries(keys: string[], today: string): Promise<PerformanceData["benchmark"]> {
+  const { symbol, label } = benchmarkConfig();
+  const history = await getDailyHistory(symbol, subtractDays(keys[0], 10), today);
+  if (history.length === 0) return undefined;
+  const quote = (await getQuotes([symbol])).quotes.get(symbol);
+  let idx = 0;
+  let last: string | null = null;
+  const raw = keys.map((key, i) => {
+    while (idx < history.length && history[idx].key <= key) last = history[idx++].close;
+    if (i === keys.length - 1 && quote) return quote.price;
+    return last;
+  });
+  const base = raw[0];
+  if (!base || d(base).lte(0)) return undefined;
+  return {
+    symbol,
+    label,
+    currency: quote?.currency ?? catalogBySymbol(symbol)?.currency ?? "EUR",
+    values: raw.map((v) => (v ? Number(d(v).div(base).minus(1).toDecimalPlaces(8)) : null)),
+  };
 }
 
 function toChartPoint(p: { key: string; totalEUR: string; gainEUR: string; twr: string }): ChartPoint {

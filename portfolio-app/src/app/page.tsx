@@ -6,7 +6,7 @@ import { PositionsTable } from "@/components/overview/positions-table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/misc";
 import { formatDate, formatMoney } from "@/lib/format";
-import { getOverview, getPerformance } from "@/server/portfolio";
+import { benchmarkConfig, getOverview, getPerformance } from "@/server/portfolio";
 
 export default async function OverviewPage() {
   const [overview, performance] = await Promise.all([getOverview(), getPerformance("1D")]);
@@ -43,6 +43,7 @@ export default async function OverviewPage() {
           totalEUR={totals.totalEUR}
           dayChangeEUR={totals.dayChangeEUR}
           dayChangePct={totals.dayChangePct}
+          benchmarkLabel={benchmarkConfig().label}
         />
       </div>
 

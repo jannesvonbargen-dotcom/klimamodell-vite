@@ -15,6 +15,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "check": "prettier --check . && eslint && tsc --noEmit && vitest run",
     "db:reset": "tsx scripts/reset.ts",
     "db:generate": "drizzle-kit generate",
     "research:refresh": "tsx scripts/research-refresh.ts"

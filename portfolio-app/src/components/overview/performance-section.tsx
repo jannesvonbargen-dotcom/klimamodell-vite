@@ -1,13 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Area, AreaChart, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, ComposedChart, Line, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { RangeKey } from "@/domain/performance";
-import { formatDateLong, formatMoney } from "@/lib/format";
+import { formatDateLong, formatMoney, formatPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { ChartPoint, PerformanceData } from "@/server/portfolio";
 import { AnimatedText, Delta } from "../numbers";
 import { Segmented } from "../transaction-dialog";
+
+const MINE_COLOR = "var(--series-1)";
+const BENCH_COLOR = "var(--series-2)";
 
 const RANGES: Array<{ value: RangeKey; label: string; long: string }> = [
   { value: "1D", label: "1T", long: "Heute" },
@@ -47,16 +50,19 @@ export function PerformanceSection({
   totalEUR,
   dayChangeEUR,
   dayChangePct,
+  benchmarkLabel = "MSCI World",
 }: {
   initial: PerformanceData;
   totalEUR: string;
   dayChangeEUR: string;
   dayChangePct: string | null;
+  benchmarkLabel?: string;
 }) {
   const [range, setRange] = React.useState<RangeKey>(initial.range);
   const [cache, setCache] = React.useState<Partial<Record<RangeKey, PerformanceData>>>({});
   const [loading, setLoading] = React.useState(false);
   const [active, setActive] = React.useState<number | null>(null);
+  const [compare, setCompare] = React.useState(false);
   // Die Startreihe kommt bei jedem Server-Refresh frisch vom Server
   const data = range === initial.range ? initial : (cache[range] ?? initial);
 
@@ -129,6 +135,16 @@ export function PerformanceSection({
   const max = values.length ? Math.max(...values) : 0;
   const pad = (max - min) * 0.08 || max * 0.01 || 1;
 
+  // Vergleichsmodus: beide Reihen als Veränderung seit Beginn des Zeitraums (eine gemeinsame Achse)
+  const bench = data.benchmark;
+  const comparing = compare && !!bench && !data.intraday;
+  const compareData = comparing
+    ? points.map((p, i) => ({ key: p.key, mine: p.twr * 100, bench: bench.values[i] === null ? null : bench.values[i]! * 100 }))
+    : [];
+  const legendIndex = active ?? points.length - 1;
+  const mineAt = points[legendIndex]?.twr ?? null;
+  const benchAt = comparing ? (bench.values[legendIndex] ?? null) : null;
+
   return (
     <section aria-labelledby="total-heading" className="flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
@@ -145,6 +161,25 @@ export function PerformanceSection({
       </div>
 
       <div className="flex flex-col gap-3">
+        {comparing && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]" aria-live="polite">
+            <span className="inline-flex items-center gap-1.5 text-muted">
+              <span className="h-0.5 w-3.5 rounded-full" style={{ background: MINE_COLOR }} aria-hidden />
+              Dein Depot{" "}
+              <span className="tnum font-medium text-foreground">
+                {mineAt !== null ? formatPercent(String(mineAt), { digits: 1 }) : "—"}
+              </span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-muted">
+              <span className="h-0.5 w-3.5 rounded-full" style={{ background: BENCH_COLOR }} aria-hidden />
+              {bench!.label}{" "}
+              <span className="tnum font-medium text-foreground">
+                {benchAt !== null ? formatPercent(String(benchAt), { digits: 1 }) : "—"}
+              </span>
+            </span>
+            <span className="text-[12px] text-subtle">zeitgewichtet, seit Beginn des Zeitraums</span>
+          </div>
+        )}
         <div
           className={cn(
             "relative h-[220px] rounded-xl transition-opacity duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-[260px]",
@@ -160,7 +195,73 @@ export function PerformanceSection({
           onKeyDown={onKeyDown}
           onBlur={() => setActive(null)}
         >
-          {shown ? (
+          {shown && comparing ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={compareData}
+                margin={{ top: 8, right: 0, bottom: 4, left: 4 }}
+                onMouseMove={handleMove}
+                onTouchMove={handleMove}
+                onMouseLeave={() => setActive(null)}
+                onTouchEnd={() => setActive(null)}
+              >
+                <XAxis dataKey="key" hide />
+                <YAxis
+                  orientation="right"
+                  width={52}
+                  axisLine={false}
+                  tickLine={false}
+                  tickCount={5}
+                  tick={{ fill: "var(--chart-axis)", fontSize: 11 }}
+                  tickFormatter={(v: number) => formatPercent(String(v / 100), { digits: 0 })}
+                />
+                <Tooltip content={() => null} cursor={false} isAnimationActive={false} />
+                <ReferenceLine y={0} stroke="var(--chart-grid)" strokeWidth={1} />
+                <Line
+                  type="monotone"
+                  dataKey="bench"
+                  stroke={BENCH_COLOR}
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={false}
+                  isAnimationActive={false}
+                  connectNulls
+                />
+                <Line
+                  type="monotone"
+                  dataKey="mine"
+                  stroke={MINE_COLOR}
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={false}
+                  isAnimationActive={false}
+                />
+                {activePoint && compareData[active!] && (
+                  <>
+                    <ReferenceLine x={activePoint.key} stroke="var(--subtle-foreground)" strokeWidth={1} />
+                    <ReferenceDot
+                      x={activePoint.key}
+                      y={compareData[active!].mine}
+                      r={4}
+                      fill={MINE_COLOR}
+                      stroke="var(--background)"
+                      strokeWidth={2}
+                    />
+                    {compareData[active!].bench !== null && (
+                      <ReferenceDot
+                        x={activePoint.key}
+                        y={compareData[active!].bench!}
+                        r={4}
+                        fill={BENCH_COLOR}
+                        stroke="var(--background)"
+                        strokeWidth={2}
+                      />
+                    )}
+                  </>
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          ) : shown ? (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={points}
@@ -220,7 +321,33 @@ export function PerformanceSection({
             options={RANGES.map((r) => ({ value: r.value, label: r.label }))}
             ariaLabel="Zeitraum"
           />
-          {shown && <span className="hidden text-[12px] text-subtle sm:inline">{rangeCaption(data, first, last)}</span>}
+          <div className="flex items-center gap-3">
+            {shown && <span className="hidden text-[12px] text-subtle md:inline">{rangeCaption(data, first, last)}</span>}
+            <button
+              type="button"
+              aria-pressed={comparing}
+              disabled={!bench || data.intraday}
+              aria-label={`Mit ${benchmarkLabel} vergleichen`}
+              title={
+                data.intraday
+                  ? "Vergleich ab 1M verfügbar"
+                  : bench
+                    ? `Wertentwicklung mit ${benchmarkLabel} vergleichen`
+                    : "Keine Kurse für den Vergleichsindex"
+              }
+              onClick={() => {
+                setCompare((c) => !c);
+                setActive(null);
+              }}
+              className={cn(
+                "pressable inline-flex h-7 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium transition-colors duration-150 disabled:opacity-40",
+                comparing ? "border-transparent bg-foreground text-background" : "border-border-strong text-muted hover:text-foreground",
+              )}
+            >
+              <span className="size-2 rounded-full" style={{ background: BENCH_COLOR }} aria-hidden />
+              {benchmarkLabel}
+            </button>
+          </div>
         </div>
       </div>
     </section>

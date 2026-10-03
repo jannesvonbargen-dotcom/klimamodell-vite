@@ -83,6 +83,16 @@ describe("Server-Integration", () => {
       const perf = await getPerformance(range);
       expect(perf.points.length).toBeGreaterThan(0);
       expect(perf.points.at(-1)!.value, range).toBe(Number(overview.totals.totalEUR));
+      // Vergleichsindex nur für Tagesreihen, je Punkt ein Wert, Start bei 0
+      if (range === "1D") expect(perf.benchmark).toBeUndefined();
+      else {
+        expect(perf.benchmark?.label).toBe("MSCI World");
+        expect(perf.benchmark?.values).toHaveLength(perf.points.length);
+        expect(perf.benchmark?.values[0]).toBe(0);
+      }
     }
+    // Kopfzahl-Tagesveränderung entspricht dem Endpunkt der 1T-Kurve
+    const day = await getPerformance("1D");
+    expect(day.points.at(-1)!.gain).toBe(Number(overview.totals.dayChangeEUR));
   }, 30_000);
 });

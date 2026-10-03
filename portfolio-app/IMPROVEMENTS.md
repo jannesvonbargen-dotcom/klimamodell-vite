@@ -19,7 +19,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Dividendenkalender: erwartete Ausschüttungen der nächsten 12 Monate (aus bisherigen Zahlungen hochgerechnet, klar als Schätzung)
 - [x] Steuerübersicht je Jahr: Erträge, Gebühren, gezahlte Steuern; Hinweis auf FIFO-Abweichung
 - [ ] Steuerübersicht: Kapitalertragsteuer, Soli und Kirchensteuer getrennt (braucht getrennte Erfassung)
-- [ ] Benchmark-Vergleich (z. B. MSCI World über EUNL.DE) im Wertverlauf, als indexierte zweite Linie
+- [x] Benchmark-Vergleich (MSCI World über EUNL.DE) im Wertverlauf ab 1M, zeitgewichtet seit Beginn des Zeitraums
+- [ ] Benchmark auch für 1T/1W (Intraday-Kurse des Index)
 - [ ] Mehrere Depots/Konten (z. B. TR + zweiter Broker) mit Filter
 - [ ] Kapitalmaßnahmen: Spin-off und Umtausch (ISIN-Wechsel) geführt erfassen
 - [ ] PDF-Import von Abrechnungen (nice to have)
