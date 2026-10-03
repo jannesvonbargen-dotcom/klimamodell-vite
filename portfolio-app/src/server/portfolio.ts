@@ -24,6 +24,8 @@ import { instrumentMap, listExecutions, listSavingsPlans, listSplits, listTransa
 
 export interface PositionRow extends PositionValuation {
   instrument: Instrument;
+  /** Schlusskurse der letzten ~30 Tage plus aktueller Kurs (Zahlungswährung). */
+  spark: number[];
 }
 
 export interface AllocationSlice {
@@ -114,7 +116,21 @@ export async function getOverview(): Promise<OverviewData> {
   const fxPrevious = await getPreviousCloseFx([...new Set([...quotes.quotes.values()].map((q) => q.currency))], today);
   const valuation = valuePortfolio({ transactions, splits, instruments, quotes: quotes.quotes, fx: fx.rates, fxPrevious, today });
 
-  const positions: PositionRow[] = valuation.positions.map((p) => ({ ...p, instrument: instruments.get(p.instrumentId)! }));
+  const sparkFrom = subtractDays(today, 30);
+  const positions: PositionRow[] = await Promise.all(
+    valuation.positions.map(async (p) => {
+      const instrument = instruments.get(p.instrumentId)!;
+      let spark: number[] = [];
+      try {
+        spark = (await getDailyHistory(instrument.symbol, sparkFrom, today)).map((h) => Number(h.close));
+        const q = quotes.quotes.get(instrument.symbol);
+        if (q && spark.length) spark.push(Number(q.price));
+      } catch {
+        // ohne Verlauf
+      }
+      return { ...p, instrument, spark };
+    }),
+  );
   const years = [...valuation.ledger.byYear.entries()]
     .sort(([a], [b]) => b - a)
     .map(([year, s]) => ({

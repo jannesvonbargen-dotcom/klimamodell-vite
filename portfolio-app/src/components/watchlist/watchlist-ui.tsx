@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import type { WatchlistEntry } from "@/server/watchlist";
 import { InstrumentPicker, type PickedInstrument } from "../instrument-picker";
 import { Delta, InstrumentAvatar } from "../numbers";
+import { Sparkline } from "../sparkline";
 import { Button } from "../ui/button";
 import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Field, Input, Textarea } from "../ui/input";
@@ -330,32 +331,5 @@ function AlertForm({ entry, onDone }: { entry: WatchlistRowView; onDone: () => v
         </Button>
       </DialogFooter>
     </form>
-  );
-}
-
-/** Mini-Verlauf der letzten 30 Tage – rein dekorativ, die Zahlen stehen daneben. */
-function Sparkline({ values, className }: { values: string[]; className?: string }) {
-  const width = 88;
-  const height = 28;
-  if (values.length < 2) return <div className={cn("h-7 w-[88px]", className)} aria-hidden />;
-  const nums = values.map(Number);
-  const min = Math.min(...nums);
-  const max = Math.max(...nums);
-  const span = max - min || 1;
-  const pts = nums.map(
-    (v, i) => `${((i / (nums.length - 1)) * width).toFixed(1)},${(height - 2 - ((v - min) / span) * (height - 4)).toFixed(1)}`,
-  );
-  const up = nums[nums.length - 1] >= nums[0];
-  return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={className} aria-hidden>
-      <polyline
-        points={pts.join(" ")}
-        fill="none"
-        stroke={up ? "var(--up)" : "var(--down)"}
-        strokeWidth={1.5}
-        strokeLinejoin="round"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }

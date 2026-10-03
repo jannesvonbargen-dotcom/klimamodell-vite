@@ -30,8 +30,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Lade-Skelette, Fehler- und 404-Seite
 - [x] 1T am Wochenende als „Letzter Handelstag“
 - [x] Kennzahlen-Kacheln auf schmalen Bildschirmen
-- [ ] Positionsliste: Sparkline je Position (30 Tage)
-- [ ] Monatsüberschriften der Transaktionsliste mit Monatssumme
+- [x] Positionsliste: Sparkline je Position (30 Tage), sortierbar
+- [x] Monatsüberschriften der Transaktionsliste mit Summe der Kontobewegungen
 - [ ] Leerer Zustand der Wachstumswerte-Detailseite ohne Text schöner gestalten
 
 ## 4. Randfälle
@@ -46,7 +46,7 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Transaktionsliste blättert in 100er-Schritten
 - [ ] Wertverlauf „Max“ bei vielen Jahren serverseitig ausdünnen
 - [x] Tabellenansicht für alle Charts („Werte als Tabelle“, ausklappbar)
-- [ ] Kontrastprüfung der Hell-Variante mit dem dataviz-Validator für alle Chartfarben
+- [x] Kontrastprüfung mit dem dataviz-Validator: alle Checks bestanden; drei helle Farben unter 3:1 im Hell-Modus nur im Donut mit Beschriftung
 
 ## 6. Extras
 

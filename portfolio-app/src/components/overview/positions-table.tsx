@@ -7,10 +7,11 @@ import { formatMoney, formatPercent, formatPrice, formatQuantity } from "@/lib/f
 import { cn } from "@/lib/utils";
 import type { PositionRow } from "@/server/portfolio";
 import { Delta, InstrumentAvatar } from "../numbers";
+import { Sparkline } from "../sparkline";
 import { Input } from "../ui/input";
 import { Tooltip } from "../ui/misc";
 
-type SortKey = "name" | "quantity" | "cost" | "value" | "pnl" | "pnlPct" | "day" | "weight";
+type SortKey = "name" | "quantity" | "cost" | "value" | "pnl" | "pnlPct" | "day" | "trend" | "weight";
 
 const COLUMNS: Array<{ key: SortKey; label: string; className?: string }> = [
   { key: "name", label: "Name" },
@@ -19,6 +20,7 @@ const COLUMNS: Array<{ key: SortKey; label: string; className?: string }> = [
   { key: "value", label: "Wert", className: "text-right" },
   { key: "pnl", label: "G/V", className: "text-right" },
   { key: "day", label: "Heute", className: "text-right" },
+  { key: "trend", label: "30 Tage", className: "text-right hidden xl:table-cell" },
   { key: "weight", label: "Gewicht", className: "text-right" },
 ];
 
@@ -38,6 +40,8 @@ function sortValue(p: PositionRow, key: SortKey): number | string {
       return Number(p.unrealizedPct ?? 0);
     case "day":
       return Number(p.dayChangePct ?? 0);
+    case "trend":
+      return p.spark.length > 1 && p.spark[0] > 0 ? p.spark[p.spark.length - 1] / p.spark[0] - 1 : 0;
     case "weight":
       return Number(p.weight ?? 0);
   }
@@ -188,6 +192,11 @@ export function PositionsTable({ positions }: { positions: PositionRow[] }) {
                   <Delta percent={p.dayChangePct} size="sm" className="justify-end" />
                   <div className="tnum text-[12px] text-subtle">
                     {p.dayChangeEUR ? formatMoney(p.dayChangeEUR, "EUR", { signed: true }) : "—"}
+                  </div>
+                </td>
+                <td className="hidden px-4 xl:table-cell">
+                  <div className="flex justify-end">
+                    <Sparkline values={p.spark} width={72} height={24} />
                   </div>
                 </td>
                 <td className="pr-5 pl-4 text-right">

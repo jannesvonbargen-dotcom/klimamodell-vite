@@ -2,6 +2,7 @@
 
 import { AlertTriangleIcon, MoreHorizontalIcon, PencilIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import * as React from "react";
+import { d } from "@/domain/decimal";
 import { TRANSACTION_TYPE_LABELS, type TransactionType } from "@/domain/types";
 import { formatDate, formatMoney, formatPrice, formatQuantity } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -79,15 +80,16 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
   }, [rows, query, type]);
 
   const groups = React.useMemo(() => {
-    const out: Array<{ key: string; label: string; rows: TransactionRowView[] }> = [];
+    const out: Array<{ key: string; label: string; rows: TransactionRowView[]; cash: ReturnType<typeof d> }> = [];
     for (const r of filtered.slice(0, limit)) {
       const key = r.executedAt.slice(0, 7);
       let g = out[out.length - 1];
       if (!g || g.key !== key) {
-        g = { key, label: `${MONTHS[Number(key.slice(5, 7)) - 1]} ${key.slice(0, 4)}`, rows: [] };
+        g = { key, label: `${MONTHS[Number(key.slice(5, 7)) - 1]} ${key.slice(0, 4)}`, rows: [], cash: d(0) };
         out.push(g);
       }
       g.rows.push(r);
+      if (r.cashEUR) g.cash = g.cash.plus(r.cashEUR);
     }
     return out;
   }, [filtered, limit]);
@@ -140,8 +142,11 @@ export function TransactionList({ rows }: { rows: TransactionRowView[] }) {
 
       {groups.map((g) => (
         <section key={g.key} aria-label={g.label} className="flex flex-col gap-1.5">
-          <h2 className="sticky top-14 z-10 bg-background/90 py-1.5 text-[12px] font-semibold tracking-wide text-subtle uppercase backdrop-blur lg:top-0">
-            {g.label}
+          <h2 className="sticky top-14 z-10 flex items-baseline justify-between gap-3 bg-background/90 py-1.5 text-[12px] font-semibold tracking-wide text-subtle uppercase backdrop-blur lg:top-0">
+            <span>{g.label}</span>
+            <span className="tnum font-normal tracking-normal normal-case" title="Summe der Kontobewegungen der angezeigten Buchungen">
+              Konto {formatMoney(g.cash.toString(), "EUR", { signed: true })}
+            </span>
           </h2>
           <Card className="divide-y divide-border overflow-hidden">
             {g.rows.map((r) => (
