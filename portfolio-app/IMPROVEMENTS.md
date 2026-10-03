@@ -26,6 +26,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [ ] Kapitalmaßnahmen: Spin-off und Umtausch (ISIN-Wechsel) geführt erfassen
 - [ ] PDF-Import von Abrechnungen (nice to have)
 
+- [x] Verbindungstest für Kursanbieter und Wechselkurse in den Einstellungen
+
 ## 3. Design-Feinschliff
 
 - [x] Lade-Skelette, Fehler- und 404-Seite

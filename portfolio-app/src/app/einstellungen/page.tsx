@@ -5,6 +5,7 @@ import type * as React from "react";
 import { PageHeader } from "@/components/page-header";
 import {
   ClearCacheButton,
+  ConnectionTest,
   DemoDataButton,
   ExportButtons,
   RestoreBackup,
@@ -62,6 +63,9 @@ export default function SettingsPage() {
             <span>{s.provider.fallback ?? "kein Ersatzanbieter"}</span>
             <span>{s.provider.fxLabel}</span>
           </div>
+        </Row>
+        <Row label="Verbindung" description="Fragt einen Kurs (SAP) und die Wechselkurse direkt beim Anbieter ab – ohne Zwischenspeicher.">
+          <ConnectionTest />
         </Row>
         <Row
           label="API-Keys"

@@ -1,11 +1,29 @@
 "use client";
 
-import { DatabaseBackupIcon, DownloadIcon, FileJsonIcon, FileSpreadsheetIcon, RotateCcwIcon, Trash2Icon, UploadIcon } from "lucide-react";
+import {
+  CheckCircle2Icon,
+  DatabaseBackupIcon,
+  DownloadIcon,
+  FileJsonIcon,
+  FileSpreadsheetIcon,
+  PlugZapIcon,
+  RotateCcwIcon,
+  Trash2Icon,
+  UploadIcon,
+  XCircleIcon,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
-import { clearMarketCacheAction, loadDemoDataAction, removeDemoDataAction, restoreBackupAction, wipeAllDataAction } from "@/app/actions";
+import {
+  checkConnectionsAction,
+  clearMarketCacheAction,
+  loadDemoDataAction,
+  removeDemoDataAction,
+  restoreBackupAction,
+  wipeAllDataAction,
+} from "@/app/actions";
 import { formatDateTime } from "@/lib/format";
 import { Segmented } from "../transaction-dialog";
 import { Button, buttonVariants } from "../ui/button";
@@ -282,5 +300,44 @@ export function WipeDataButton() {
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+export function ConnectionTest() {
+  const [busy, startTransition] = React.useTransition();
+  const [results, setResults] = React.useState<Awaited<ReturnType<typeof checkConnectionsAction>> | null>(null);
+  return (
+    <div className="flex flex-col items-start gap-3 sm:items-end">
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={busy}
+        onClick={() =>
+          startTransition(async () => {
+            setResults(await checkConnectionsAction());
+          })
+        }
+      >
+        <PlugZapIcon /> {busy ? "Teste …" : "Verbindung testen"}
+      </Button>
+      {results && (
+        <ul className="flex flex-col gap-1.5 text-[12px]" aria-live="polite">
+          {results.map((r) => (
+            <li key={r.label} className="flex items-start gap-1.5 sm:justify-end">
+              {r.ok ? (
+                <CheckCircle2Icon className="mt-px size-3.5 shrink-0 text-up" aria-label="OK" />
+              ) : (
+                <XCircleIcon className="mt-px size-3.5 shrink-0 text-down" aria-label="Fehler" />
+              )}
+              <span className="text-left sm:text-right">
+                <span className="font-medium text-foreground">{r.label}</span>
+                <span className="text-muted"> · {r.detail}</span>
+                <span className="tnum text-subtle"> · {r.ms} ms</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

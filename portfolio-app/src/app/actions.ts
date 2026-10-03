@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { removeDemoData, seedDemoData } from "@/db/seed";
 import type { ImportCandidate } from "@/import/types";
 import { backupDatabaseFile, restoreBackup, type RestoreResult, wipeAllData } from "@/server/backup";
+import { checkConnections, type ConnectionCheck } from "@/server/market";
 import { clearMarketCache } from "@/server/settings";
 import {
   confirmExecution,
@@ -213,4 +214,8 @@ export async function removeDemoDataAction(): Promise<void> {
 export async function clearMarketCacheAction(): Promise<void> {
   clearMarketCache();
   refresh();
+}
+
+export async function checkConnectionsAction(): Promise<ConnectionCheck[]> {
+  return checkConnections();
 }

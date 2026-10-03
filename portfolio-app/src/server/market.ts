@@ -507,3 +507,55 @@ export async function getPreviousCloseFx(currencies: string[], today: string = t
   }
   return out;
 }
+
+// ---------------------------------------------------------------------------
+// Verbindungstest (Einstellungen)
+
+export interface ConnectionCheck {
+  label: string;
+  ok: boolean;
+  ms: number;
+  detail: string;
+}
+
+async function timed<T>(fn: () => Promise<T>): Promise<{ value?: T; error?: string; ms: number }> {
+  const start = Date.now();
+  try {
+    const value = await Promise.race([
+      fn(),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Zeitüberschreitung (15 s)")), 15_000)),
+    ]);
+    return { value, ms: Date.now() - start };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : String(error), ms: Date.now() - start };
+  }
+}
+
+/** Fragt Kursanbieter und Wechselkurse direkt ab (ohne Cache) und meldet Ergebnis und Dauer. */
+export async function checkConnections(symbol = "SAP.DE"): Promise<ConnectionCheck[]> {
+  const { primary, fallback, fx } = getProviders();
+  const out: ConnectionCheck[] = [];
+  for (const provider of [primary, fallback].filter((p): p is MarketDataProvider => !!p)) {
+    if (!provider.quotes) continue;
+    const r = await timed(() => provider.quotes!([symbol]));
+    const q = r.value?.get(symbol);
+    out.push({
+      label: `${provider.label} – Kurs ${symbol}`,
+      ok: !!q,
+      ms: r.ms,
+      detail: q
+        ? `${q.price} ${q.currency} (Stand ${new Date(q.asOf).toLocaleString("de-DE", { timeZone: "Europe/Berlin" })})`
+        : (r.error ?? "Kein Kurs geliefert"),
+    });
+  }
+  const f = await timed(() => fx.latest());
+  out.push({
+    label: `${fx.label} – Wechselkurse`,
+    ok: !!f.value && f.value.rates.size > 0,
+    ms: f.ms,
+    detail: f.value
+      ? `${f.value.rates.size} Währungen, Stand ${f.value.date.split("-").reverse().join(".")}${f.value.rates.get("USD") ? ` · 1 € = ${f.value.rates.get("USD")} USD` : ""}`
+      : (f.error ?? "Keine Kurse"),
+  });
+  return out;
+}

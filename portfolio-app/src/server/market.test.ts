@@ -93,3 +93,26 @@ describe("Kursdienst", () => {
     expect(result.quotes.has("ABC")).toBe(false);
   });
 });
+
+describe("Verbindungstest", () => {
+  it("meldet Erfolg und Fehler je Anbieter", async () => {
+    const { checkConnections, overrideProvidersForTest } = await import("./market");
+    const { MockFxProvider } = await import("@/market/providers/mock");
+    overrideProvidersForTest({
+      primary: provider({ label: "Kaputt", quotes: async () => Promise.reject(new Error("HTTP 401")) }),
+      fallback: provider({
+        label: "Ersatz",
+        quotes: async (symbols: string[]) =>
+          new Map(symbols.map((s) => [s, { symbol: s, price: "100", previousClose: "99", currency: "EUR", asOf: "2026-10-02T15:30:00Z" }])),
+      }),
+      fx: new MockFxProvider(),
+    });
+    const checks = await checkConnections("SAP.DE");
+    expect(checks).toHaveLength(3);
+    expect(checks[0]).toMatchObject({ ok: false, detail: "HTTP 401" });
+    expect(checks[1].ok).toBe(true);
+    expect(checks[1].detail).toMatch(/^100 EUR/);
+    expect(checks[2].ok).toBe(true);
+    overrideProvidersForTest(null);
+  });
+});

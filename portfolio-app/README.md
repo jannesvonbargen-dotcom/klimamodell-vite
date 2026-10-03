@@ -88,7 +88,8 @@ cp .env.example .env.local
 - **Währungen:** Basiswährung ist Euro. Kaufkurse werden in der Kaufwährung mit dem Wechselkurs der Buchung gespeichert. Aktuelle
   Werte rechnet die App mit den EZB-Referenzkursen um.
 
-API-Keys werden nur auf dem Server gelesen und nie an den Browser gegeben.
+API-Keys werden nur auf dem Server gelesen und nie an den Browser gegeben. Unter **Einstellungen → Kursdaten → Verbindung testen**
+prüfst du, ob Kursanbieter und Wechselkurse antworten (Ergebnis, Kursstand und Antwortzeit).
 
 ## Trade Republic
 
