@@ -53,3 +53,23 @@ export function inferCurrency(symbol: string): string {
       return "EUR";
   }
 }
+
+/**
+ * Fragt Symbole einzeln ab. Fehler bei einzelnen Symbolen (z. B. nicht im
+ * Tarif enthalten) brechen nicht alles ab – fehlende Symbole übernimmt dann
+ * der Ersatzanbieter. Scheitern alle, wird der erste Fehler geworfen.
+ */
+export async function perSymbol<T>(symbols: string[], fetchOne: (symbol: string) => Promise<T | null>): Promise<Map<string, T>> {
+  const out = new Map<string, T>();
+  let firstError: unknown = null;
+  for (const symbol of symbols) {
+    try {
+      const value = await fetchOne(symbol);
+      if (value) out.set(symbol, value);
+    } catch (error) {
+      firstError ??= error;
+    }
+  }
+  if (out.size === 0 && firstError) throw firstError;
+  return out;
+}

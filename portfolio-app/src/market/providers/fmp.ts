@@ -1,5 +1,5 @@
 import type { Fundamentals, MarketDataProvider, PricePoint, ProviderQuote, SearchResult } from "../types";
-import { dec, fetchJson, inferCurrency } from "./http";
+import { dec, fetchJson, inferCurrency, perSymbol } from "./http";
 
 /**
  * Financial Modeling Prep (API-Key nötig). Der kostenlose Tarif deckt vor
@@ -19,24 +19,22 @@ export class FmpProvider implements MarketDataProvider {
   }
 
   async quotes(symbols: string[]): Promise<Map<string, ProviderQuote>> {
-    const out = new Map<string, ProviderQuote>();
-    for (const symbol of symbols) {
+    return perSymbol(symbols, async (symbol) => {
       const res = await fetchJson<Array<{ symbol: string; name?: string; price?: number; previousClose?: number; timestamp?: number }>>(
         this.url("quote", { symbol }),
         "FMP",
       );
       const q = res[0];
-      if (!q?.price) continue;
-      out.set(symbol, {
+      if (!q?.price) return null;
+      return {
         symbol,
         price: dec(q.price)!,
         previousClose: dec(q.previousClose),
         currency: inferCurrency(symbol),
         asOf: new Date((q.timestamp ?? Date.now() / 1000) * 1000).toISOString(),
         name: q.name,
-      });
-    }
-    return out;
+      };
+    });
   }
 
   async dailyHistory(symbol: string, from: string, to: string): Promise<PricePoint[]> {

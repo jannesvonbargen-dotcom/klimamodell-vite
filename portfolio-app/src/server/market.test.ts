@@ -116,3 +116,33 @@ describe("Verbindungstest", () => {
     overrideProvidersForTest(null);
   });
 });
+
+describe("Ersatzanbieter je Symbol", () => {
+  it("fragt nur die fehlenden Symbole beim Ersatzanbieter ab", async () => {
+    const { getQuotes, overrideProvidersForTest } = await import("./market");
+    const asked: string[][] = [];
+    const q = (symbol: string, price: string): ProviderQuote => ({
+      symbol,
+      price,
+      previousClose: price,
+      currency: "EUR",
+      asOf: "2026-10-02T15:00:00Z",
+    });
+    overrideProvidersForTest({
+      primary: provider({ id: "haupt", quotes: async (symbols) => new Map(symbols.filter((s) => s === "AAA").map((s) => [s, q(s, "1")])) }),
+      fallback: provider({
+        id: "ersatz",
+        quotes: async (symbols) => {
+          asked.push(symbols);
+          return new Map(symbols.map((s) => [s, q(s, "2")]));
+        },
+      }),
+    });
+    const res = await getQuotes(["AAA", "BBB"], { force: true });
+    expect(asked).toEqual([["BBB"]]);
+    expect(res.quotes.get("AAA")?.source).toBe("haupt");
+    expect(res.quotes.get("BBB")?.source).toBe("ersatz");
+    expect(res.errors).toEqual([]);
+    overrideProvidersForTest(null);
+  });
+});

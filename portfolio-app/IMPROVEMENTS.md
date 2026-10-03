@@ -10,6 +10,7 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Beispieldepot zeitweise mit negativem Cash – angepasst und per Test abgesichert
 - [x] Wertpapier-Suchfeld ohne zugänglichen Namen (cmdk überschreibt die ID) – Label über cmdk
 - [x] Befehlspalette wählte bei asynchronen Treffern den falschen Eintrag – Depot-Treffer zuerst
+- [x] Ersatzanbieter sprang nur bei Totalausfall ein – jetzt je fehlendem Symbol (z. B. SAP bei Finnhub-Gratis-Tarif)
 - [x] 2 Cent Rundungsdifferenz zwischen Tagesveränderung und Endpunkt der 1T-Kurve – Wertverlauf rundet je Position wie die Bewertung
 
 ## 2. Fehlende Funktionen

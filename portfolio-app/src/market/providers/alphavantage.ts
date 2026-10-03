@@ -6,7 +6,7 @@ import {
   type ProviderQuote,
   type SearchResult,
 } from "../types";
-import { dec, fetchJson, inferCurrency } from "./http";
+import { dec, fetchJson, inferCurrency, perSymbol } from "./http";
 
 /**
  * Alpha Vantage (API-Key nötig, kostenloser Tarif: 25 Anfragen pro Tag).
@@ -29,20 +29,18 @@ export class AlphaVantageProvider implements MarketDataProvider {
   }
 
   async quotes(symbols: string[]): Promise<Map<string, ProviderQuote>> {
-    const out = new Map<string, ProviderQuote>();
-    for (const symbol of symbols) {
+    return perSymbol(symbols, async (symbol) => {
       const res = await this.call<{ "Global Quote"?: Record<string, string> }>({ function: "GLOBAL_QUOTE", symbol });
       const q = res["Global Quote"];
-      if (!q?.["05. price"]) continue;
-      out.set(symbol, {
+      if (!q?.["05. price"]) return null;
+      return {
         symbol,
         price: dec(q["05. price"])!,
         previousClose: dec(q["08. previous close"]),
         currency: inferCurrency(symbol),
         asOf: new Date(`${q["07. latest trading day"]}T21:00:00Z`).toISOString(),
-      });
-    }
-    return out;
+      };
+    });
   }
 
   async dailyHistory(symbol: string, from: string, to: string): Promise<PricePoint[]> {

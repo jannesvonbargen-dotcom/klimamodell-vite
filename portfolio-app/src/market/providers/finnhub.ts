@@ -1,5 +1,5 @@
 import { type Fundamentals, type MarketDataProvider, ProviderError, type ProviderQuote, type SearchResult } from "../types";
-import { dec, fetchJson, inferCurrency } from "./http";
+import { dec, fetchJson, inferCurrency, perSymbol } from "./http";
 
 /**
  * Finnhub (API-Key nötig, kostenloser Tarif: 60 Anfragen/Minute, US-Werte).
@@ -20,19 +20,18 @@ export class FinnhubProvider implements MarketDataProvider {
   }
 
   async quotes(symbols: string[]): Promise<Map<string, ProviderQuote>> {
-    const out = new Map<string, ProviderQuote>();
-    for (const symbol of symbols) {
+    return perSymbol(symbols, async (symbol) => {
       const q = await fetchJson<{ c?: number; pc?: number; t?: number }>(this.url("quote", { symbol }), "Finnhub");
-      if (!q.c || q.c === 0) continue;
-      out.set(symbol, {
+      // Unbekannte bzw. nicht im Tarif enthaltene Symbole liefern c = 0
+      if (!q.c || q.c === 0) return null;
+      return {
         symbol,
         price: dec(q.c)!,
         previousClose: dec(q.pc),
         currency: inferCurrency(symbol),
         asOf: new Date((q.t ?? Date.now() / 1000) * 1000).toISOString(),
-      });
-    }
-    return out;
+      };
+    });
   }
 
   async search(query: string): Promise<SearchResult[]> {

@@ -195,16 +195,25 @@ export async function getQuotes(symbols: string[], options: { force?: boolean } 
   }
 
   if (toFetch.length > 0) {
-    try {
-      const { value, source } = await withProviders("quotes", (p) => p.quotes!(toFetch));
-      for (const [symbol, q] of value) {
-        writeCache(`quote:${cls}:${symbol}`, q, source);
-        quotes.set(symbol, { ...q, source });
+    // Hauptanbieter zuerst; was er nicht liefert (Fehler oder Symbol nicht im Tarif), fragt der Ersatzanbieter ab
+    const { primary, fallback } = getProviders();
+    let remaining = toFetch;
+    const providerErrors: string[] = [];
+    for (const p of [primary, fallback]) {
+      if (!p?.quotes || remaining.length === 0) continue;
+      try {
+        const value = await limited(p, () => p.quotes!(remaining));
+        for (const [symbol, q] of value) {
+          writeCache(`quote:${cls}:${symbol}`, q, p.id);
+          quotes.set(symbol, { ...q, source: p.id });
+        }
+        if (value.size > 0) lastFetched = Date.now();
+        remaining = remaining.filter((symbol) => !value.has(symbol));
+      } catch (error) {
+        providerErrors.push(error instanceof Error ? error.message : String(error));
       }
-      lastFetched = Date.now();
-    } catch (error) {
-      errors.push(error instanceof Error ? error.message : String(error));
     }
+    if (remaining.length > 0) errors.push(...providerErrors);
     // Nicht geliefert → letzter bekannter Kurs (als veraltet markiert)
     for (const symbol of toFetch) {
       if (quotes.has(symbol)) continue;
