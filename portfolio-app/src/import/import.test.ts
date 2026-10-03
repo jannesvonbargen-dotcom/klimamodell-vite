@@ -66,6 +66,16 @@ describe("Trade-Republic-Transaktionsexport", () => {
     expect(trTimestamp("2026-05-15T00:00:00.000Z")).toBe("2026-05-15");
   });
 
+  it("bietet bei Aktiensplits einen direkten Weg zur Erfassung an", () => {
+    const csv = [
+      "datetime,date,account_type,category,type,asset_class,name,symbol,shares,price,amount,fee,tax,currency,original_amount,original_currency,fx_rate,description,transaction_id",
+      "2024-06-10T05:00:00.000Z,2024-06-10,DEFAULT,CORPORATE_ACTION,SPLIT,STOCK,NVIDIA,US67066G1040,18,,,,,EUR,,,,Aktiensplit,s1",
+    ].join("\n");
+    const { candidates, skipped } = parseTradeRepublic(parseCsv(csv));
+    expect(candidates).toHaveLength(0);
+    expect(skipped[0].action).toEqual({ kind: "split", isin: "US67066G1040", date: "2024-06-10" });
+  });
+
   it("nutzt das Buchungsdatum, wenn die Ortszeit auf den nächsten Tag fällt", () => {
     const csv = [
       "datetime,date,account_type,category,type,asset_class,name,symbol,shares,price,amount,fee,tax,currency,original_amount,original_currency,fx_rate,description,transaction_id",
@@ -96,7 +106,7 @@ describe("Trade-Republic-Transaktionsexport", () => {
     const tax = candidates[7];
     expect(tax.amount).toBe("-2.1");
     expect(skipped).toHaveLength(1);
-    expect(skipped[0].reason).toMatch(/Split/);
+    expect(skipped[0].reason).toMatch(/Aktiensplit/);
   });
 
   it("ergibt dieselbe Kassenwirkung wie amount + fee + tax", () => {

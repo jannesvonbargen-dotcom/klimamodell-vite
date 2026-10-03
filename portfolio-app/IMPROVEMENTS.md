@@ -22,6 +22,7 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Benchmark-Vergleich (MSCI World über EUNL.DE) im Wertverlauf ab 1M, zeitgewichtet seit Beginn des Zeitraums
 - [ ] Benchmark auch für 1T/1W (Intraday-Kurse des Index)
 - [ ] Mehrere Depots/Konten (z. B. TR + zweiter Broker) mit Filter
+- [x] Aktiensplits aus dem Trade-Republic-Export: Link „Split erfassen“ öffnet den vorausgefüllten Dialog der Position
 - [ ] Kapitalmaßnahmen: Spin-off und Umtausch (ISIN-Wechsel) geführt erfassen
 - [ ] PDF-Import von Abrechnungen (nice to have)
 

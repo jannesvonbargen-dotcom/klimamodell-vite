@@ -28,6 +28,8 @@ export async function generateMetadata(props: PageProps<"/position/[isin]">): Pr
 
 export default async function PositionPage(props: PageProps<"/position/[isin]">) {
   const { isin: rawIsin } = await props.params;
+  const search = await props.searchParams;
+  const splitParam = typeof search.split === "string" && /^\d{4}-\d{2}-\d{2}$/.test(search.split) ? search.split : null;
   const isin = decodeURIComponent(rawIsin);
   const [detail, chart] = await Promise.all([getPositionDetail(isin), getInstrumentChart(isin, "1Y")]);
   if (!detail || !chart) notFound();
@@ -58,7 +60,7 @@ export default async function PositionPage(props: PageProps<"/position/[isin]">)
               </div>
             </div>
           </div>
-          <PositionActions instrument={instrument} holds={!!position} splits={detail.splits} />
+          <PositionActions instrument={instrument} holds={!!position} splits={detail.splits} initialSplitDate={splitParam} />
         </div>
       </div>
 

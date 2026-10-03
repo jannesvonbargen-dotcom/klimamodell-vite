@@ -19,14 +19,17 @@ export function PositionActions({
   instrument,
   holds,
   splits,
+  initialSplitDate,
 }: {
   instrument: Instrument;
   holds: boolean;
   splits: Array<{ id: number; effectiveDate: string; ratioFrom: string; ratioTo: string }>;
+  /** Aus dem Import: Split-Dialog direkt mit diesem Datum öffnen. */
+  initialSplitDate?: string | null;
 }) {
   const { openCreate } = useTransactionDialog();
   const [editOpen, setEditOpen] = React.useState(false);
-  const [splitOpen, setSplitOpen] = React.useState(false);
+  const [splitOpen, setSplitOpen] = React.useState(Boolean(initialSplitDate));
   const picked: PickedInstrument & { id: number } = {
     id: instrument.id,
     symbol: instrument.symbol,
@@ -67,7 +70,13 @@ export function PositionActions({
         </MenuContent>
       </Menu>
       <EditInstrumentDialog open={editOpen} onOpenChange={setEditOpen} instrument={instrument} />
-      <SplitDialog open={splitOpen} onOpenChange={setSplitOpen} instrument={instrument} splits={splits} />
+      <SplitDialog
+        open={splitOpen}
+        onOpenChange={setSplitOpen}
+        instrument={instrument}
+        splits={splits}
+        initialDate={initialSplitDate ?? ""}
+      />
     </div>
   );
 }
@@ -174,14 +183,16 @@ function SplitDialog({
   onOpenChange,
   instrument,
   splits,
+  initialDate = "",
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   instrument: Instrument;
   splits: Array<{ id: number; effectiveDate: string; ratioFrom: string; ratioTo: string }>;
+  initialDate?: string;
 }) {
   const router = useRouter();
-  const [date, setDate] = React.useState("");
+  const [date, setDate] = React.useState(initialDate);
   const [from, setFrom] = React.useState("1");
   const [to, setTo] = React.useState("2");
   const [errors, setErrors] = React.useState<Record<string, string>>({});

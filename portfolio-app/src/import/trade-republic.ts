@@ -181,9 +181,15 @@ export function parseTradeRepublic(table: CsvTable): ParseResult {
     }
 
     if (category === "CORPORATE_ACTION") {
-      if (type === "SPLIT")
-        skipped.push({ row: rowNo, reason: "Aktiensplit – bitte in der Positionsansicht als Split erfassen", raw: rawText });
-      else skipped.push({ row: rowNo, reason: `Kapitalmaßnahme ${type} – Geldbetrag steht in einer eigenen Zeile`, raw: rawText });
+      if (type === "SPLIT") {
+        const isin = (r.symbol ?? "").trim().toUpperCase();
+        skipped.push({
+          row: rowNo,
+          reason: "Aktiensplit – bitte das Verhältnis auf der Positionsseite erfassen",
+          raw: rawText,
+          ...(isin ? { action: { kind: "split" as const, isin, date: executedAt.slice(0, 10) } } : {}),
+        });
+      } else skipped.push({ row: rowNo, reason: `Kapitalmaßnahme ${type} – Geldbetrag steht in einer eigenen Zeile`, raw: rawText });
       return;
     }
 

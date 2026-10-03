@@ -70,7 +70,8 @@ export default async function OverviewPage() {
                 </Button>
               }
             >
-              Am {formatDate(oversell.executedAt)} wurden mehr Stücke verkauft als vorhanden – vermutlich fehlt ein Kauf.
+              Am {formatDate(oversell.executedAt)} wurden mehr Stücke verkauft als vorhanden – vermutlich fehlt ein Kauf oder ein
+              Aktiensplit.
             </Notice>
           )}
           {negativeCash && negativeCash.kind === "NEGATIVE_CASH" && (

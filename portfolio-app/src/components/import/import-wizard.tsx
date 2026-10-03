@@ -527,7 +527,19 @@ function PreviewStep({
                 {skipped.map((s) => (
                   <tr key={s.row} className="border-b border-border last:border-0">
                     <td className="tnum px-4 py-2 text-subtle">{s.row}</td>
-                    <td className="px-4 py-2">{s.reason}</td>
+                    <td className="px-4 py-2">
+                      {s.reason}
+                      {s.action?.kind === "split" && (
+                        <a
+                          href={`/position/${encodeURIComponent(s.action.isin)}?split=${s.action.date}`}
+                          target="_blank"
+                          rel="noopener"
+                          className="ml-2 font-medium whitespace-nowrap text-accent underline-offset-4 hover:underline"
+                        >
+                          Split erfassen
+                        </a>
+                      )}
+                    </td>
                     <td className="max-w-md truncate px-4 py-2 text-subtle">{s.raw}</td>
                   </tr>
                 ))}

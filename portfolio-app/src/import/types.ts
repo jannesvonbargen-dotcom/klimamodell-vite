@@ -30,6 +30,8 @@ export interface SkippedRow {
   row: number;
   reason: string;
   raw: string;
+  /** Folgeaktion, die die App anbieten kann (z. B. Split auf der Positionsseite erfassen). */
+  action?: { kind: "split"; isin: string; date: string };
 }
 
 export interface ParseResult {
