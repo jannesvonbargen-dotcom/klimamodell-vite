@@ -333,3 +333,36 @@ function AlertForm({ entry, onDone }: { entry: WatchlistRowView; onDone: () => v
     </form>
   );
 }
+
+/** Opt-in für Systembenachrichtigungen bei Kursalarmen (nur solange die App geöffnet ist). */
+export function NotificationToggle() {
+  const [permission, setPermission] = React.useState<NotificationPermission | "unsupported" | null>(null);
+  React.useEffect(() => {
+    // Erst nach dem Mounten bekannt (im Server-Rendering gibt es kein Notification-Objekt)
+    const value = "Notification" in window ? Notification.permission : "unsupported";
+    const id = requestAnimationFrame(() => setPermission(value));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  if (permission === null || permission === "unsupported") return null;
+  if (permission === "granted")
+    return (
+      <span className="inline-flex items-center gap-1.5 text-[12px] text-subtle">
+        <BellRingIcon className="size-3.5" aria-hidden /> Systembenachrichtigungen an
+      </span>
+    );
+  if (permission === "denied") return <span className="text-[12px] text-subtle">Benachrichtigungen im Browser blockiert</span>;
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={async () => {
+        const result = await Notification.requestPermission();
+        setPermission(result);
+        if (result === "granted")
+          toast.success("Kursalarme erscheinen jetzt auch als Systembenachrichtigung, solange die App geöffnet ist.");
+      }}
+    >
+      <BellIcon /> Benachrichtigungen erlauben
+    </Button>
+  );
+}

@@ -25,6 +25,7 @@ import * as React from "react";
 import { Toaster } from "sonner";
 import { formatTimeBerlin } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { AlertNotifier } from "./watchlist/alert-notifier";
 import { TransactionDialogProvider, useTransactionDialog } from "./transaction-dialog";
 import { Button } from "./ui/button";
 import { Kbd, Tooltip, TooltipProvider } from "./ui/misc";
@@ -241,6 +242,7 @@ function ShellInner({ children, markets, provider, pendingSavings, alertCount }:
       </main>
 
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+      <AlertNotifier enabled />
     </div>
   );
 }

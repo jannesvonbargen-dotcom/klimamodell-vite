@@ -149,10 +149,40 @@ export async function getWatchlist(): Promise<{
   return { entries, errors, isDemo: providerInfo().isDemo, lastFetchedAt };
 }
 
-/** Anzahl ausgelöster Kursalarme (für das Menü). Nutzt nur zwischengespeicherte Kurse. */
-export async function triggeredAlertCount(): Promise<number> {
+export interface TriggeredAlert {
+  id: number;
+  symbol: string;
+  name: string;
+  state: "above" | "below";
+  threshold: string;
+  price: string;
+  currency: string;
+}
+
+/** Ausgelöste Kursalarme (Kurse aus dem Cache bzw. vom Anbieter, 60 s/15 min Gültigkeit). */
+export async function triggeredAlerts(): Promise<TriggeredAlert[]> {
   const rows = listWatchlist().filter((r) => r.alertAbove || r.alertBelow);
-  if (rows.length === 0) return 0;
+  if (rows.length === 0) return [];
   const { quotes } = await getQuotes(rows.map((r) => r.symbol));
-  return rows.filter((r) => alertState(quotes.get(r.symbol)?.price ?? null, r.alertAbove, r.alertBelow)).length;
+  const out: TriggeredAlert[] = [];
+  for (const r of rows) {
+    const q = quotes.get(r.symbol);
+    const state = alertState(q?.price ?? null, r.alertAbove, r.alertBelow);
+    if (!state || !q) continue;
+    out.push({
+      id: r.id,
+      symbol: r.symbol,
+      name: r.name,
+      state,
+      threshold: (state === "above" ? r.alertAbove : r.alertBelow)!,
+      price: q.price,
+      currency: q.currency,
+    });
+  }
+  return out;
+}
+
+/** Anzahl ausgelöster Kursalarme (für das Menü). */
+export async function triggeredAlertCount(): Promise<number> {
+  return (await triggeredAlerts()).length;
 }

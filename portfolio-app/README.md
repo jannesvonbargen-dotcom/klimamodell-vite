@@ -26,7 +26,8 @@ Orders** auf. Alle Daten liegen in einer SQLite-Datei auf deinem Rechner.
   realisierten Gewinnen, Gebühren und gezahlten Steuern.
 - **Solide Wachstumswerte:** Transparente, anpassbare Kriterien mit Begründungskarten (Kennzahlen, Analystenkonsens, Risiken, Quellen
   mit Stand). Detailseiten zeigen These, Risiken und „Was müsste passieren, damit die These falsch ist?“.
-- **Watchlist:** Werte beobachten, mit Kursalarm über bzw. unter einer Schwelle.
+- **Watchlist:** Werte beobachten, mit Kursalarm über bzw. unter einer Schwelle. Solange die App geöffnet ist, meldet sie neu
+  ausgelöste Alarme als Hinweis und – nach Zustimmung – als Systembenachrichtigung.
 - **Einstellungen:** Farbschema, Kursanbieter-Status, vollständige Sicherung (JSON) und CSV-Export, Wiederherstellen, Beispieldaten
   laden oder entfernen, alle Daten löschen.
 - **Bedienung:** `N` erfasst eine Transaktion, `⌘K` bzw. `Strg+K` öffnet die Befehlspalette. Standard ist der dunkle Modus; hell und
@@ -237,7 +238,7 @@ portfolio-app/
 - **Solide Wachstumswerte:** Die mitgelieferten Daten decken zehn US-Großunternehmen ab (Einschränkung des genutzten FMP-Tarifs). Die
   Texte sind redaktionell (KI-gestützt) und müssen nach einer Aktualisierung von Hand gegengelesen werden. Im Demo-Modus bleiben
   Volatilität und maximaler Rückgang ohne Daten.
-- **Kursalarme** erscheinen nur in der App (Watchlist und Menü), es werden keine Benachrichtigungen verschickt.
+- **Kursalarme** werden nur geprüft, solange die App geöffnet ist (alle zwei Minuten); es gibt keine E-Mails oder Push-Nachrichten.
 - **Ein Nutzer, ein Rechner:** keine Synchronisation zwischen Geräten.
 - Das Format der Datumsfelder richtet sich nach der Spracheinstellung des Browsers.
 - Die Browser-Tests laufen mit Chromium; Safari und Firefox sind nur stichprobenartig geprüft.

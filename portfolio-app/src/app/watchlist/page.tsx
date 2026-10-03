@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Notice } from "@/components/overview/parts";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/misc";
-import { AddWatchButton, WatchlistTable, type WatchlistRowView } from "@/components/watchlist/watchlist-ui";
+import { AddWatchButton, NotificationToggle, WatchlistTable, type WatchlistRowView } from "@/components/watchlist/watchlist-ui";
 import { formatDateTimeBerlin, formatPrice } from "@/lib/format";
 import { hasResearch, holdings } from "@/server/research";
 import { getWatchlist } from "@/server/watchlist";
@@ -26,7 +26,14 @@ export default async function WatchlistPage() {
       <PageHeader
         title="Watchlist"
         description="Werte, die du im Blick behalten willst – mit Kursalarm, wenn eine Schwelle über- oder unterschritten wird."
-        actions={rows.length > 0 ? <AddWatchButton /> : undefined}
+        actions={
+          rows.length > 0 ? (
+            <>
+              <NotificationToggle />
+              <AddWatchButton />
+            </>
+          ) : undefined
+        }
       />
       {triggered.map((r) => (
         <div key={r.id} role="status" className="flex items-center gap-2.5 rounded-xl bg-warn-soft px-4 py-3 text-[13px]">
