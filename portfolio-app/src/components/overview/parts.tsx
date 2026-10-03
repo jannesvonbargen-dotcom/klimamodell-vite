@@ -111,7 +111,10 @@ export function QuoteStatus({
       {failing && (
         <span className="inline-flex items-center gap-1 text-warn" role="status">
           <AlertTriangleIcon className="size-3.5" />
-          Kursanbieter nicht erreichbar – letzte bekannte Kurse{lastQuoteAt ? ` (${formatDateTimeBerlin(lastQuoteAt)})` : ""}
+          {lastQuoteAt
+            ? `Kursanbieter nicht erreichbar – letzte bekannte Kurse (${formatDateTimeBerlin(lastQuoteAt)})`
+            : "Kursanbieter nicht erreichbar – bewertet mit den letzten Transaktionskursen"}
+          {missingQuotes > 0 && lastQuoteAt ? ` · ${missingQuotes} ohne Kurs` : ""}
         </span>
       )}
       {missingQuotes > 0 && !failing && <span className="text-warn">{missingQuotes} ohne aktuellen Kurs</span>}

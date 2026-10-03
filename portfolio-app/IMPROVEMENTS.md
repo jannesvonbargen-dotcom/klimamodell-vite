@@ -14,6 +14,8 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Hydration-Fehler auf Wachstumswerte-Detailseiten: kompakte Zahlen („57 Mrd. $“) rundeten in Node und Browser verschieden – eigene, deterministische Formatierung
 - [x] 2 Cent Rundungsdifferenz zwischen Tagesveränderung und Endpunkt der 1T-Kurve – Wertverlauf rundet je Position wie die Bewertung
 
+- [x] Frische Installation geprüft (Klon → npm install → Start ohne .env.local, Kursanbieter offline): Start ohne Konsolen-Rauschen der Yahoo-Bibliothek, ehrliche Hinweise („bewertet mit den letzten Transaktionskursen“, „keine Live-Kurse erhalten“) statt roher englischer Fehlermeldungen
+
 ## 2. Fehlende Funktionen
 
 - [x] Einstellungen: Sicherung/Wiederherstellung (JSON), CSV-Export, Beispieldaten, Daten löschen

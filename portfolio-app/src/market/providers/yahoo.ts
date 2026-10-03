@@ -15,13 +15,34 @@ import {
  * Kurse sind je nach Börse verzögert (meist 15 Minuten).
  */
 
+/**
+ * yahoo-finance2 schreibt bei jedem HTTP-Fehler die angefragte URL fest per
+ * console.error (nicht über den Logger). Die App meldet Fehler selbst – daher
+ * wird genau diese Ausgabe einmalig herausgefiltert. Alles andere bleibt.
+ */
+const YAHOO_URL_LINE = /^https:\/\/query\d\.finance\.yahoo\.com\/\S+$/;
+const globalFlags = globalThis as unknown as { __yahooConsoleFilter?: boolean };
+if (process.env.DEBUG_MARKET !== "1" && !globalFlags.__yahooConsoleFilter) {
+  globalFlags.__yahooConsoleFilter = true;
+  const original = console.error.bind(console);
+  console.error = (...args: unknown[]) => {
+    if (args.length === 1 && typeof args[0] === "string" && YAHOO_URL_LINE.test(args[0])) return;
+    original(...args);
+  };
+}
+
 let client: InstanceType<typeof YahooFinance> | null = null;
 function yf(): InstanceType<typeof YahooFinance> {
   if (!client) {
+    // Die Bibliothek loggt sonst jede fehlgeschlagene Anfrage samt URL – Fehler meldet die App selbst.
+    // Mit DEBUG_MARKET=1 in .env.local sind die Meldungen wieder sichtbar.
+    const debug = process.env.DEBUG_MARKET === "1";
+    const quiet = () => undefined;
     client = new YahooFinance({
       suppressNotices: ["yahooSurvey", "ripHistorical"],
       versionCheck: false,
       validation: { logErrors: false, logOptionsErrors: false },
+      logger: debug ? console : { info: quiet, debug: quiet, dir: quiet, warn: quiet, error: quiet },
     });
   }
   return client;

@@ -51,6 +51,10 @@ export interface ResearchOverview {
   recommended: ResearchEntry[];
   others: ResearchEntry[];
   errors: string[];
+  /** Kursanbieter-Probleme (verständlich formuliert) samt Originalmeldung. */
+  providerIssue: { message: string; detail: string } | null;
+  /** Anzahl Werte, die mit Live-Kurs bewertet wurden. */
+  liveCount: number;
 }
 
 export class ResearchConfigError extends Error {}
@@ -209,7 +213,6 @@ export async function getResearchOverview(): Promise<ResearchOverview> {
     }
   }
   const { live, errors: liveErrors } = await loadLive(companies, today);
-  errors.push(...liveErrors);
   const held = holdings();
   const watched = watchedKeys();
   const entries = companies.map((c) => buildEntry(c, config, today, live.get(c.symbol), held, watched));
@@ -224,6 +227,13 @@ export async function getResearchOverview(): Promise<ResearchOverview> {
     recommended: entries.filter((e) => e.verdict.recommended).sort(byScore),
     others: entries.filter((e) => !e.verdict.recommended).sort(byScore),
     errors: [...new Set(errors)],
+    providerIssue: liveErrors.length
+      ? {
+          message: "Kursanbieter nicht erreichbar – wo kein aktueller Kurs vorliegt, gilt die Momentaufnahme zum Datenstand.",
+          detail: [...new Set(liveErrors)].join(" · ").slice(0, 400),
+        }
+      : null,
+    liveCount: entries.filter((e) => e.metrics.priceSource === "live").length,
   };
 }
 

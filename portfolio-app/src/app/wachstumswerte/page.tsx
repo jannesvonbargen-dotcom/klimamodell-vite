@@ -51,12 +51,23 @@ export default async function GrowthPage() {
           </span>
           <span aria-hidden>·</span>
           <span>
-            {data.live ? `Kurse live von ${data.providerLabel}` : "Kurse: Momentaufnahme zum Datenstand (Demo-Modus ohne Live-Kurse)"}
+            {!data.live
+              ? "Kurse: Momentaufnahme zum Datenstand (Demo-Modus ohne Live-Kurse)"
+              : data.liveCount === all.length
+                ? `Kurse live von ${data.providerLabel}`
+                : data.liveCount > 0
+                  ? `Kurse live von ${data.providerLabel} für ${data.liveCount} von ${all.length} Werten, sonst Momentaufnahme`
+                  : "Kurse: Momentaufnahme zum Datenstand (keine Live-Kurse erhalten)"}
           </span>
         </p>
         {data.errors.map((e) => (
           <Notice key={e}>{e}</Notice>
         ))}
+        {data.providerIssue && (
+          <Notice>
+            <span title={data.providerIssue.detail}>{data.providerIssue.message}</span>
+          </Notice>
+        )}
       </div>
 
       <section aria-labelledby="rec-heading" className="flex flex-col gap-4">
