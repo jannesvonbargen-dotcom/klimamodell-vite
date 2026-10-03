@@ -7,7 +7,8 @@ import type { SearchResult } from "./types";
  */
 export interface CatalogEntry {
   isin: string;
-  wkn: string;
+  /** null, wenn die WKN nicht sicher bekannt ist. */
+  wkn: string | null;
   symbol: string;
   name: string;
   kind: "STOCK" | "ETF";
@@ -85,6 +86,28 @@ export const CATALOG: CatalogEntry[] = [
     sector: "Kommunikation",
     country: "USA",
     domain: "meta.com",
+  },
+  {
+    isin: "US81762P1021",
+    wkn: "A1JX4P",
+    symbol: "NOW",
+    name: "ServiceNow Inc.",
+    kind: "STOCK",
+    currency: "USD",
+    sector: "Technologie",
+    country: "USA",
+    domain: "servicenow.com",
+  },
+  {
+    isin: "US7811541090",
+    wkn: null,
+    symbol: "RBRK",
+    name: "Rubrik Inc. (A)",
+    kind: "STOCK",
+    currency: "USD",
+    sector: "Technologie",
+    country: "USA",
+    domain: "rubrik.com",
   },
   {
     isin: "US88160R1014",
@@ -634,6 +657,16 @@ export const CATALOG: CatalogEntry[] = [
     wkn: "A12GVR",
     symbol: "XMME.DE",
     name: "Xtrackers MSCI Emerging Markets UCITS ETF 1C",
+    kind: "ETF",
+    currency: "EUR",
+    sector: null,
+    country: "Schwellenländer",
+  },
+  {
+    isin: "LU1681045370",
+    wkn: null,
+    symbol: "AEEM.PA",
+    name: "Amundi MSCI Emerging Markets Swap UCITS ETF EUR Acc",
     kind: "ETF",
     currency: "EUR",
     sector: null,

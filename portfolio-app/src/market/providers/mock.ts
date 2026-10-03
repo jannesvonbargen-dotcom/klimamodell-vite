@@ -75,6 +75,9 @@ const LEVELS: Record<string, number> = {
   "SPYI.DE": 260,
   "XMME.DE": 64,
   "IQQH.DE": 7.5,
+  "AEEM.PA": 7.95,
+  NOW: 105,
+  RBRK: 80,
 };
 
 /**

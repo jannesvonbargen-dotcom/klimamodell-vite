@@ -90,6 +90,7 @@ export function detectPreset(headers: string[]): PresetId {
   const h = headers.map((x) => x.toLowerCase());
   const has = (...names: string[]) => names.every((n) => h.includes(n));
   if (has("datetime", "category", "type", "amount", "currency")) return "trade_republic";
+  if (has("datum", "typ", "beschreibung", "betrag (eur)")) return "trade_republic_statement";
   if (has("datum", "uhrzeit", "typ", "betrag", "wechselkurs", "transaktions-id", "quelle")) return "app_backup";
   if (has("buchungswährung") || has("wertpapiername") || has("ticker-symbol")) return "portfolio_performance";
   if ((has("datum", "typ", "wert") || has("date", "type", "value")) && (h.includes("isin") || h.includes("notiz") || h.includes("note")))

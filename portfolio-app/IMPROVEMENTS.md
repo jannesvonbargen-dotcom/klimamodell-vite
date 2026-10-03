@@ -68,3 +68,6 @@ Performance & Barrierefreiheit → Extras. Erledigtes bleibt zur Nachvollziehbar
 - [x] Mac-App ohne Browser (Electron): eigenes Fenster und Dock-Symbol, deutsche Menüleiste mit ⌘1–⌘7, Startbildschirm, Daten in ~/Library/Application Support/Depot, Konfiguration.env statt .env.local, Datenordner-Knopf in den Einstellungen; Paket ohne Entwicklerwerkzeuge und echtes Electron-Fenster getestet (Start, Neustart mit erhaltenen Daten, Beenden samt Server, Doppelstart, Menü, externe Links)
 - [ ] Mac-App verkleinern (~0,8 GB): Next.js-„standalone“-Ausgabe statt vollständiger node_modules, sobald sie die SQLite-Bindung zuverlässig mitnimmt
 - [x] Mac-App: Fenstergröße und -position beim nächsten Start wiederherstellen (fällt auf Standard zurück, wenn der Bildschirm fehlt)
+- [x] Trade-Republic-Kontoauszug (CSV mit Datum/Typ/Beschreibung/Saldo) wird erkannt; Gegenprobe Cash = Endsaldo, Hinweis bei Auszügen, die nicht bei Kontoeröffnung beginnen
+- [x] Import-Seite vereinfacht: ein Weg für Trade Republic, Vorschau „Dein Depot nach dem Import“ (Cash, Einstand, Positionen, Gewinne, Steuern, Gebühren, Ergebnis), Beispieldepot wird auf Wunsch vorher entfernt, Detailtabelle eingeklappt, Spaltenzuordnung nur noch für unbekannte Formate
+- [x] Neue Wertpapiere übernehmen Namen und Währung vom Kursanbieter statt Börsenkürzeln wie „RUBRIK INC. A DL-,001“

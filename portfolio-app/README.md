@@ -17,7 +17,7 @@ und analysieren kannst. Die App gibt **keine Orders** auf. Alle Daten liegen in 
 - **Transaktionen:** Kauf, Verkauf, Dividende, Ein- und Auszahlung, Gebühr, Steuer, Zinsen und Sparplan-Ausführung. Stückzahlen mit bis
   zu 6 Nachkommastellen. Suche nach Name, Ticker, ISIN oder WKN mit Kursvorschlag zum Datum. Standardgebühr 1 €.
   Bearbeiten und Löschen mit „Rückgängig“; Verkäufe von mehr Stücken als gehalten werden verhindert.
-- **CSV-Import:** Trade-Republic-Transaktionsexport (automatisch erkannt), pytr, Portfolio Performance und beliebige CSV-Dateien mit
+- **CSV-Import:** Trade-Republic-Kontoauszug und -Transaktionsexport (automatisch erkannt, mit Saldo-Gegenprobe), pytr, Portfolio Performance und beliebige CSV-Dateien mit
   Spaltenzuordnung. Vor dem Import gibt es eine Vorschau mit Warnungen. Duplikate werden über Datum, ISIN, Stückzahl und Betrag
   erkannt, jeder Import lässt sich rückgängig machen.
 - **Sparpläne:** Fällige Ausführungen erscheinen als Vorschlag zum Bestätigen oder Überspringen.
@@ -128,17 +128,30 @@ prüfst du, ob Kursanbieter und Wechselkurse antworten (Ergebnis, Kursstand und 
 
 ## Trade Republic
 
-Trade Republic bietet keine offizielle API für Privatkunden. Die App setzt deshalb auf den **CSV-Transaktionsexport** und die manuelle
-Erfassung. Eine inoffizielle Konto-Synchronisation ist bewusst nicht eingebaut.
+Trade Republic bietet keine offizielle API für Privatkunden. Die App liest deshalb die **CSV-Dateien aus der Trade-Republic-App**
+und erlaubt die manuelle Erfassung. Eine inoffizielle Konto-Synchronisation ist bewusst nicht eingebaut. Beide Exporte werden
+automatisch erkannt:
 
-1. In der Trade-Republic-App: **Profil → Kontoauszüge → Transaktionsexport** und eine CSV-Datei für den gewünschten Zeitraum
-   erstellen.
-2. In der Depot-App unter **Import** die Datei hineinziehen. Das Format wird automatisch erkannt (Käufe, Verkäufe, Sparpläne,
-   Dividenden, Zinsen, Steuern, Ein- und Auszahlungen; Kartenzahlungen werden als Auszahlung gebucht).
-3. Die Vorschau prüfen: neue Buchungen, Duplikate, Warnungen (z. B. Verkauf ohne passenden Kauf). Dann importieren.
+- **Kontoauszug** (Profil → Kontoauszüge → Kontoauszug als CSV; Spalten Datum, Typ, Beschreibung, ISIN, Stück, Betrag, Saldo)
+- **Transaktionsexport** (Profil → Kontoauszüge → Transaktionsexport)
 
-Der Export lässt sich jederzeit erneut importieren; bereits vorhandene Buchungen werden übersprungen. Unter **Import → Bisherige
-Importe** lässt sich ein Import vollständig rückgängig machen.
+So geht's:
+
+1. Die CSV-Datei unter **Import** hineinziehen.
+2. Die Vorschau zeigt, wie das Depot danach aussieht: Cash, Einstand, offene Positionen, realisierte Gewinne, Zinsen, Steuern,
+   Gebühren und das Ergebnis bisher. Beim Kontoauszug gleicht die App das Cash mit dem **Endsaldo des Auszugs** ab
+   („Gegenprobe bestanden“). Weicht es ab, nennt sie die wahrscheinliche Ursache, z. B. einen Auszug, der nicht bei der
+   Kontoeröffnung beginnt.
+3. Ist noch das Beispieldepot geladen, ist **„Beispieldepot vorher entfernen“** voreingestellt. Vorher legt die App eine Sicherung an.
+4. Importieren.
+
+Der Kontoauszug nennt je Buchung nur den Betrag, der aufs Konto ging. Die App nimmt deshalb pro Kauf/Verkauf die übliche
+Order-Gebühr von 1 € an (Sparpläne kostenlos) und sagt das in der Vorschau. Einstand, Gewinne und Cash hängen davon nicht ab.
+Beim Verkauf einbehaltene Steuern stecken im Erlös, Dividenden sind netto. Steuerkorrekturen und -erstattungen werden als
+Steuerbuchungen übernommen, Kulanzgutschriften als Einzahlung.
+
+Dateien lassen sich jederzeit erneut oder überlappend importieren; bereits vorhandene Buchungen werden übersprungen. Unter
+**Import → Bisherige Importe** lässt sich ein Import vollständig rückgängig machen.
 
 Weitere Formate:
 

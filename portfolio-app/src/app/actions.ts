@@ -22,7 +22,15 @@ import {
   updateWatchlistItem,
   type WatchlistInput,
 } from "@/server/watchlist";
-import { commitImport, type CommitResult, type ImportPreview, previewImport, restoreImportBatch, undoImportBatch } from "@/server/import";
+import {
+  commitImport,
+  type CommitResult,
+  type ImportOptions,
+  type ImportPreview,
+  previewImport,
+  restoreImportBatch,
+  undoImportBatch,
+} from "@/server/import";
 import {
   type ActionResult,
   createTransaction,
@@ -67,12 +75,17 @@ export async function restoreTransactionAction(id: number): Promise<ActionResult
 
 // Import -------------------------------------------------------------------
 
-export async function previewImportAction(candidates: ImportCandidate[]): Promise<ImportPreview> {
-  return previewImport(candidates.slice(0, 20_000));
+export async function previewImportAction(candidates: ImportCandidate[], options: ImportOptions = {}): Promise<ImportPreview> {
+  return previewImport(candidates.slice(0, 20_000), { replaceDemo: options.replaceDemo === true });
 }
 
-export async function commitImportAction(candidates: ImportCandidate[], fileName: string, preset: string): Promise<CommitResult> {
-  const result = await commitImport(candidates.slice(0, 20_000), fileName, preset);
+export async function commitImportAction(
+  candidates: ImportCandidate[],
+  fileName: string,
+  preset: string,
+  options: ImportOptions = {},
+): Promise<CommitResult> {
+  const result = await commitImport(candidates.slice(0, 20_000), fileName, preset, { replaceDemo: options.replaceDemo === true });
   refresh();
   return result;
 }

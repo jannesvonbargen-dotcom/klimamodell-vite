@@ -34,9 +34,24 @@ export interface SkippedRow {
   action?: { kind: "split"; isin: string; date: string };
 }
 
+/** Gegenprobe über den laufenden Saldo eines Kontoauszugs. */
+export interface StatementBalance {
+  from: string;
+  to: string;
+  /** Saldo vor der ersten Buchung der Datei (0 = Auszug beginnt bei Kontoeröffnung). */
+  opening: string;
+  /** Saldo nach der letzten Buchung. */
+  closing: string;
+  /** Jede Zeile ergibt sich aus Vorzeile + Betrag. */
+  consistent: boolean;
+}
+
 export interface ParseResult {
   candidates: ImportCandidate[];
   skipped: SkippedRow[];
+  statement?: StatementBalance;
+  /** Hinweise zu Annahmen beim Einlesen (z. B. angenommene Gebühren). */
+  notes?: string[];
 }
 
 export const IMPORT_FIELDS = [
@@ -93,10 +108,11 @@ export interface ColumnMapping {
   defaultCurrency: string;
 }
 
-export type PresetId = "trade_republic" | "pytr" | "portfolio_performance" | "app_backup" | "custom";
+export type PresetId = "trade_republic" | "trade_republic_statement" | "pytr" | "portfolio_performance" | "app_backup" | "custom";
 
 export const PRESET_LABELS: Record<PresetId, string> = {
   trade_republic: "Trade Republic – Transaktionsexport",
+  trade_republic_statement: "Trade Republic – Kontoauszug",
   pytr: "pytr – export_transactions",
   portfolio_performance: "Portfolio Performance – CSV-Export",
   app_backup: "CSV-Sicherung dieser App",

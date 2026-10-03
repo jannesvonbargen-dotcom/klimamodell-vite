@@ -1,13 +1,23 @@
 import { and, eq, inArray, isNotNull, isNull } from "drizzle-orm";
 import { getDb } from "@/db/client";
-import { importBatches, transactions } from "@/db/schema";
+import { importBatches, transactions, type TransactionRow } from "@/db/schema";
 import { d } from "@/domain/decimal";
 import { computeLedger, grossAmount } from "@/domain/ledger";
-import type { Transaction } from "@/domain/types";
+import { TRANSACTION_TYPES, type Transaction, type TransactionType } from "@/domain/types";
 import { validateFields } from "@/domain/validation";
 import type { ImportCandidate } from "@/import/types";
+import { removeDemoData } from "@/db/seed";
 import { catalogByIsin } from "@/market/catalog";
-import { dedupeKey, getInstrumentByIsin, listSplits, listTransactions, upsertInstrument } from "./repo";
+import { backupDatabaseFile } from "./backup";
+import {
+  dedupeKey,
+  getInstrument,
+  getInstrumentByIsin,
+  listSplits,
+  listTransactionRows,
+  toTransaction as rowToTransaction,
+  upsertInstrument,
+} from "./repo";
 import { searchInstruments } from "./market";
 
 /** Serverseitiger Teil des CSV-Imports: Vorschau, Duplikate, Speichern, Rückgängig. */
@@ -22,12 +32,37 @@ export interface PreviewRow extends ImportCandidate {
   instrumentKnown: boolean;
 }
 
+/** So sähe das Depot nach dem Import aus (Einstand, ohne aktuelle Kurse). */
+export interface ImportOutcome {
+  cashEUR: string;
+  investedCostEUR: string;
+  realizedEUR: string;
+  interestEUR: string;
+  dividendsNetEUR: string;
+  /** Netto gezahlte Steuern (negativ = Erstattungen überwiegen). */
+  taxesEUR: string;
+  feesEUR: string;
+  depositsEUR: string;
+  withdrawalsEUR: string;
+  positions: Array<{ isin: string | null; name: string; quantity: string; costEUR: string }>;
+}
+
+export interface ImportOptions {
+  /** Beispieldepot vor dem Import entfernen. */
+  replaceDemo?: boolean;
+}
+
 export interface ImportPreview {
   rows: PreviewRow[];
   newInstruments: Array<{ isin: string | null; symbol: string | null; name: string | null }>;
   counts: { new: number; duplicate: number; invalid: number };
+  /** Neue Zeilen je Typ mit Summe der Kassenwirkung. */
+  byType: Array<{ type: TransactionType; count: number; cashEUR: string }>;
   cashEffectEUR: string;
   warnings: string[];
+  /** Anzahl der Beispiel-Buchungen in der Datenbank und ob sie ersetzt werden. */
+  demo: { transactions: number; replaced: boolean };
+  after: ImportOutcome;
 }
 
 function instrumentKey(c: ImportCandidate): string | null {
@@ -67,20 +102,20 @@ function toTransaction(c: ImportCandidate, id: number, instrumentId: number | nu
   };
 }
 
-function existingKeys(): { dedupe: Set<string>; external: Set<string> } {
-  const rows = getDb()
-    .select({ key: transactions.dedupeKey, ext: transactions.externalId })
-    .from(transactions)
-    .where(isNull(transactions.deletedAt))
-    .all();
+function existingKeys(rows: TransactionRow[]): { dedupe: Set<string>; external: Set<string> } {
   return {
-    dedupe: new Set(rows.map((r) => r.key).filter((k): k is string => !!k)),
-    external: new Set(rows.map((r) => r.ext).filter((k): k is string => !!k)),
+    dedupe: new Set(rows.map((r) => r.dedupeKey).filter((k): k is string => !!k)),
+    external: new Set(rows.map((r) => r.externalId).filter((k): k is string => !!k)),
   };
 }
 
-export function previewImport(candidates: ImportCandidate[]): ImportPreview {
-  const keys = existingKeys();
+export function previewImport(candidates: ImportCandidate[], options: ImportOptions = {}): ImportPreview {
+  const allRows = listTransactionRows();
+  const demoCount = allRows.filter((r) => r.source === "seed").length;
+  const replaceDemo = !!options.replaceDemo && demoCount > 0;
+  const baseRows = replaceDemo ? allRows.filter((r) => r.source !== "seed") : allRows;
+  // Ohne Beispieldepot, wenn es ersetzt wird
+  const keys = existingKeys(baseRows);
   const rows: PreviewRow[] = [];
   const newInstruments = new Map<string, { isin: string | null; symbol: string | null; name: string | null }>();
   const warnings: string[] = [];
@@ -116,7 +151,7 @@ export function previewImport(candidates: ImportCandidate[]): ImportPreview {
   }
 
   // Gesamtverlauf mit den neuen Zeilen prüfen (z. B. fehlende Einzahlungen, Verkauf ohne Kauf)
-  const existing = listTransactions();
+  const existing = baseRows.map(rowToTransaction);
   const instrumentIds = new Map<string, number>();
   let nextId = -1;
   const simulated = rows
@@ -143,6 +178,27 @@ export function previewImport(candidates: ImportCandidate[]): ImportPreview {
     warnings.push("Das Cash-Konto würde negativ – enthält die Datei auch die Einzahlungen?");
   }
 
+  // Namen für die Positionsliste: vorhandene Wertpapiere aus der DB, neue aus der Datei
+  const newNames = new Map<number, { isin: string | null; name: string }>();
+  for (const r of rows) {
+    const key = instrumentKey(r);
+    const id = key ? instrumentIds.get(key) : undefined;
+    if (id !== undefined && !newNames.has(id)) newNames.set(id, { isin: r.isin, name: catalogName(r) });
+  }
+  const positions = [...ledger.positions.values()]
+    .filter((p) => p.quantity.gt(0))
+    .map((p) => {
+      const known = p.instrumentId > 0 ? getInstrument(p.instrumentId) : null;
+      const info = known ? { isin: known.isin, name: known.name } : (newNames.get(p.instrumentId) ?? { isin: null, name: "Wertpapier" });
+      return { ...info, quantity: p.quantity.toString(), costEUR: p.costEUR.toFixed(2) };
+    })
+    .sort((a, b) => Number(b.costEUR) - Number(a.costEUR));
+
+  const byType = TRANSACTION_TYPES.map((type) => {
+    const list = rows.filter((r) => r.status === "new" && r.type === type);
+    return { type, count: list.length, cashEUR: list.reduce((sum, r) => sum.plus(r.cashEUR ?? 0), d(0)).toFixed(2) };
+  }).filter((t) => t.count > 0);
+
   return {
     rows,
     newInstruments: [...newInstruments.values()],
@@ -151,9 +207,28 @@ export function previewImport(candidates: ImportCandidate[]): ImportPreview {
       duplicate: rows.filter((r) => r.status === "duplicate").length,
       invalid: rows.filter((r) => r.status === "invalid").length,
     },
+    byType,
     cashEffectEUR: cash.toString(),
     warnings,
+    demo: { transactions: demoCount, replaced: replaceDemo },
+    after: {
+      cashEUR: ledger.cashEUR.toFixed(2),
+      investedCostEUR: positions.reduce((sum, p) => sum.plus(p.costEUR), d(0)).toFixed(2),
+      realizedEUR: ledger.realizedEUR.toFixed(2),
+      interestEUR: ledger.interestEUR.toFixed(2),
+      dividendsNetEUR: ledger.dividendsNetEUR.toFixed(2),
+      taxesEUR: ledger.taxesEUR.toFixed(2),
+      feesEUR: ledger.feesEUR.toFixed(2),
+      depositsEUR: ledger.depositsEUR.toFixed(2),
+      withdrawalsEUR: ledger.withdrawalsEUR.toFixed(2),
+      positions,
+    },
   };
+}
+
+/** Anzeigename eines neuen Wertpapiers: Katalog vor dem (oft abgekürzten) Namen aus der Datei. */
+function catalogName(c: ImportCandidate): string {
+  return (c.isin ? catalogByIsin(c.isin)?.name : undefined) ?? c.name ?? c.isin ?? c.symbol ?? "Wertpapier";
 }
 
 /** Findet ein passendes Kurssymbol für eine ISIN (Katalog → Anbieter-Suche → ISIN als Platzhalter). */
@@ -182,12 +257,14 @@ async function resolveInstrument(c: ImportCandidate) {
       currency: catalog.currency,
       sector: catalog.sector,
       country: catalog.country,
-      wkn: catalog.wkn,
+      wkn: catalog.wkn ?? c.wkn,
     };
   }
   let symbol = c.symbol ?? null;
   let kind: "STOCK" | "ETF" = c.assetClass === "ETF" ? "ETF" : "STOCK";
   let sector: string | null = null;
+  let name = c.name;
+  let providerCurrency: string | null = null;
   if (!symbol && c.isin) {
     try {
       const results = (await Promise.race([
@@ -201,14 +278,17 @@ async function resolveInstrument(c: ImportCandidate) {
         symbol = pick.symbol;
         kind = pick.kind === "ETF" ? "ETF" : kind;
         sector = pick.sector;
+        // Anbieternamen sind meist lesbarer als Börsenkürzel wie „RUBRIK INC. A DL-,001“
+        name = pick.name || name;
+        providerCurrency = pick.currency;
       }
     } catch {
       // offline – ISIN als Platzhalter, Symbol lässt sich später ändern
     }
   }
   const finalSymbol = symbol ?? c.isin!;
-  const currency = !symbol ? "EUR" : finalSymbol.includes(".") ? (finalSymbol.endsWith(".L") ? "GBp" : "EUR") : "USD";
-  return { isin, symbol: finalSymbol, name: c.name ?? finalSymbol, kind, currency, sector, country: null, wkn: c.wkn };
+  const currency = providerCurrency ?? (!symbol ? "EUR" : finalSymbol.includes(".") ? (finalSymbol.endsWith(".L") ? "GBp" : "EUR") : "USD");
+  return { isin, symbol: finalSymbol, name: name ?? finalSymbol, kind, currency, sector, country: null, wkn: c.wkn };
 }
 
 export interface CommitResult {
@@ -218,7 +298,16 @@ export interface CommitResult {
   instrumentsCreated: number;
 }
 
-export async function commitImport(candidates: ImportCandidate[], fileName: string, preset: string): Promise<CommitResult> {
+export async function commitImport(
+  candidates: ImportCandidate[],
+  fileName: string,
+  preset: string,
+  options: ImportOptions = {},
+): Promise<CommitResult> {
+  if (options.replaceDemo && listTransactionRows().some((r) => r.source === "seed")) {
+    await backupDatabaseFile("vor-import");
+    removeDemoData();
+  }
   const preview = previewImport(candidates);
   const toImport = preview.rows.filter((r) => r.status === "new");
 

@@ -97,11 +97,15 @@ test("Trade-Republic-CSV importieren und Duplikate beim zweiten Mal erkennen", a
   const file = path.join(__dirname, "fixtures", "trade-republic.csv");
   await page.goto("/import");
   await page.locator("#csv-file").setInputFiles(file);
-  await expect(page.getByText(/Trade Republic/).first()).toBeVisible();
-  const importButton = page.getByRole("button", { name: /\d+ Transaktionen importieren/ });
-  await expect(importButton).toBeVisible();
+  await expect(page.getByText("Trade Republic – Transaktionsexport")).toBeVisible();
+  // Beispieldepot behalten – die folgenden Tests bauen darauf auf
+  const keepDemo = page.getByRole("switch", { name: "Beispieldepot vorher entfernen" });
+  await keepDemo.click();
+  await expect(keepDemo).toHaveAttribute("aria-checked", "false");
+  const importButton = page.getByRole("button", { name: /\d+ Buchungen importieren/ });
+  await expect(importButton).toBeEnabled();
   await importButton.click();
-  await expect(page.getByText(/Transaktionen importiert/).first()).toBeVisible();
+  await expect(page.getByText(/Buchungen importiert/).first()).toBeVisible();
 
   await page.getByRole("button", { name: "Weitere Datei" }).click();
   await page.locator("#csv-file").setInputFiles(file);
